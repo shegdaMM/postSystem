@@ -98,7 +98,7 @@ export default {
           label: 'USERS', icon: 'fas fa-users', to: '/users'
         },
         {
-          label: 'POSTS', icon: 'fas fa-file-alt', to: '/'
+          label: 'POSTS', icon: 'fas fa-file-alt', to: '/posts'
         }
       ],
       showUser: false

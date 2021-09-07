@@ -1,15 +1,11 @@
 <template>
-{{PostsAside}}
+  gdfgdf
 </template>
 
 <script>
-
 export default {
-  name: 'Home',
-  components: [
-  ],
-  mounted () {
-  }
+    name: 'RightAside'
+
 };
 </script>
 

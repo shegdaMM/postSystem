@@ -72,6 +72,7 @@ export default {
             });
               }
           );
+          this.$store.commit('onloadProcess', false);
         },
         goto (current) {
           this.currentItem = current;

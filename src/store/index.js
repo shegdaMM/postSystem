@@ -36,6 +36,9 @@ export default createStore({
       if (state.id) {
         return state.id;
       }
+    },
+    getAllUser (state) {
+      return state.usersIDMap;
     }
   }
 }
