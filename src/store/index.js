@@ -27,9 +27,10 @@ export default createStore({
   modules: {
   },
   getters: {
-    getUserByID (state, key) {
+    getUserByID: (state) => (key) => {
       if (key && state.usersIDMap) {
-       return state.usersIDMap.get(key);
+        const name = state.usersIDMap.get(key);
+        return name;
       }
     },
     getLoginId (state) {

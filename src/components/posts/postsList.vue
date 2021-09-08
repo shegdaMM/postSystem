@@ -4,20 +4,17 @@
           Sorry, we not have posts...
       </h2>
   </template>
-{{this.posts}}
   <template v-if="havePosts">
       <ul class="postsList">
           <li class="postsList__item postsItem" v-for="post in posts" :key="post._id">
-              <keep-alive>
-                  <post-by-id :post="post" />
-              </keep-alive>
+                  <postItem :post="post" />
           </li>
       </ul>
   </template>
 </template>
 
 <script>
-import postById from '../../views/posts/PostById.vue';
+import postItem from '../../components/posts/PostItem.vue';
 
 export default {
     name: 'post-list',
@@ -25,7 +22,7 @@ export default {
         posts: Array
     },
     components: {
-        postById
+        postItem
     },
     methods: {
     },
