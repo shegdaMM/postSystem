@@ -92,6 +92,8 @@ export default {
             let url = '/posts?limit=5';
             if (startPossition) {
                 url = url + `&skip=${(startPossition - 1) * 5}`;
+            } else {
+                this.currentItem = 1;
             }
             if (this.filter) {
                 if (this.filter.search) {

@@ -13,7 +13,8 @@
 export default {
     name: 'post-by-id',
     props: {
-        post: Object
+        post: Object,
+        postId: String
     }
 };
 </script>
