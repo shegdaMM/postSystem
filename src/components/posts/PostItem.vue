@@ -19,15 +19,21 @@
         </header>
         <main class="main">
             <section class="control" v-if="makeEdit">
-                <a @click="removePost" class="removePost" title="remove post">
-                    <i class="fas fa-trash-alt"></i> remove
-                </a>
+                <span>
                 <router-link :to="{name: 'EditPost', params: { 'id': post._id }}" >
                     <i class="fas fa-pen"></i> edit
                 </router-link>
-                <router-link :to="{name: 'EditPost', params: { 'id': post._id }}" >
-                    <i class="fas fa-image"></i> update image
-                </router-link>
+                <a>
+                    <span onclick="uploadfile.click()">
+                        <i class="fas fa-cloud-upload-alt"></i> update image
+                        <input type="file" class="p-button-rounded"
+                        alt="upload avatar" ref="file" style="display: none" id="uploadfile" @change="sendImage($event)">
+                    </span>
+                </a>
+                </span>
+                <a @click="removePost" class="removePost" title="remove post">
+                    <i class="fas fa-trash-alt"></i> remove
+                </a>
             </section>
             <h2>{{post.title}}</h2>
             <div class="main-wrapper">
@@ -37,7 +43,9 @@
                 </section>
 
                 <section class="post__description">
-                    {{post.description}}
+
+                    <span v-if="!isPostPage" >{{post.description}} </span>
+                    <span v-if="isPostPage" >{{post.fullText}} </span>
                 </section>
             </div>
         </main>
@@ -173,7 +181,54 @@ export default {
             }
         },
         removePost () {
-            // remove
+            this.$store.commit('onloadProcess', true);
+            const resp = userService.deleteResponceJwt(`/posts/${this.post._id}`);
+            resp.then(
+                (result) => {
+                    this.$toast.open({
+                        message: 'You delete your account ! ',
+                        type: 'info',
+                        duration: 10000
+                    });
+
+                    this.$emit('update-post');
+            },
+            (error) => {
+                    this.$store.commit('onloadProcess', false);
+                    this.$toast.open({
+                        message: `${error}`,
+                        type: 'error',
+                        duration: 5000
+                    });
+            });
+            this.$store.commit('onloadProcess', false);
+        },
+        sendImage (event) {
+            this.$store.commit('onloadProcess', true);
+            if (this.$refs.file.files[0]) {
+                const formData = new FormData();
+                formData.append('image', this.$refs.file.files[0]);
+                const response = userService.putResponseJwtImg(`/posts/upload/${this.post._id}`, formData);
+                response.then(
+                    (result) => {
+                        this.$emit('update-post');
+                        this.$toast.open({
+                            message: 'You updated post image',
+                            type: 'info',
+                            duration: 5000
+                        });
+                },
+                (error) => {
+                        this.$store.commit('onloadProcess', false);
+                        this.$toast.open({
+                            message: `${error}`,
+                            type: 'error',
+                            duration: 5000
+                        });
+                    }
+                );
+            }
+            this.$store.commit('onloadProcess', false);
         }
     },
     mounted () {
@@ -261,6 +316,24 @@ a {
             flex-grow: 3;
             margin: 0 0.5rem 0rem;
             flex-shrink: 1;
+        }
+    }
+
+    .control {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.2rem 0.2rem;
+
+        a{
+            font-size: 0.8rem;
+            padding: 0.2rem 0.5rem;
+            background-color: rgba(255, 255, 255, 0.561);
+            border-radius: 0.5rem;
+            margin: 0 0.2rem;
+            height: 100%;
+        }
+        .removePost{
+            color: rgba(255, 0, 0, 0.664);
         }
     }
 }

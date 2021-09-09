@@ -55,7 +55,9 @@ export default {
             filter: {
                 search: null,
                 userId: null
-            }
+            },
+
+            startPossition: 0
         };
     },
     computed: {
@@ -91,9 +93,10 @@ export default {
         getPosts (startPossition) {
             let url = '/posts?limit=5';
             if (startPossition) {
-                url = url + `&skip=${(startPossition - 1) * 5}`;
+                this.startPossition = startPossition - 1;
+                url = url + `&skip=${(this.startPossition) * 5}`;
             } else {
-                this.currentItem = 1;
+                url = url + `&skip=${(this.startPossition) * 5}`;
             }
             if (this.filter) {
                 if (this.filter.search) {
