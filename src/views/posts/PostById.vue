@@ -1,20 +1,15 @@
 <template>
-  <article class="postsItem__wrapper">
-                <p>{{post._id}}</p>
-                <h2>{{post.title}}</h2>
-                <main>
-                    <section class="post__description">
-                        {{post.description}}
-                    </section>
-                </main>
-    </article>
+    <main class="post-wrapper">
+        <postItem :post="post" @update-post="update" :isPostPage="true" />
+    </main>
 </template>
 
 <script>
-// import userService from '../services/user.service';
+import userService from '../../services/user.service';
+import postItem from '../../components/posts/PostItem.vue';
 
 export default {
-    name: 'post-by-id',
+    name: 'PostById',
     data () {
         return {
             post: {
@@ -30,17 +25,40 @@ export default {
             }
         };
     },
+    components: {
+        postItem
+    },
     props: {
         id: String
     },
+    computed: {
+    },
     methods: {
+        update () {
+            this.getPostFromApi();
+        },
+        getPostFromApi () {
+            this.$store.commit('onloadProcess', true);
+            const response = userService.getResponse(`/posts/${this.id}`);
+            response.then(
+            (data) => {
+                this.post = data.data;
+            },
+            (error) => {
+                this.$toast.open({
+                        message: error,
+                        type: 'error',
+                        duration: 5000
+                });
+            }
+            );
+            this.$store.commit('onloadProcess', false);
+        }
     },
     mounted () {
-        if (!this.id) {
             this.$store.commit('onloadProcess', true);
             this.getPostFromApi();
             this.$store.commit('onloadProcess', false);
-        }
     }
 };
 </script>

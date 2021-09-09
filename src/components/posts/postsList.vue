@@ -7,7 +7,7 @@
   <template v-if="havePosts">
       <ul class="postsList">
           <li class="postsList__item postsItem" v-for="post in posts" :key="post._id">
-                  <postItem :post="post" @update-post="update" :isPostPage="true" />
+                  <postItem :post="post" @update-post="update" :isPostPage="false" />
           </li>
       </ul>
   </template>

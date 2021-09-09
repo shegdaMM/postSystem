@@ -151,7 +151,7 @@ export default {
     },
     removeUser () {
       this.$store.commit('onloadProcess', true);
-     /* const resp = userService.deleteResponceJwt(`/users/${this.ID}`);
+      const resp = userService.deleteResponceJwt(`/users/${this.ID}`);
       resp.then(
         (result) => {
             this.$toast.open({
@@ -169,9 +169,8 @@ export default {
             });
           }
                 );
-      */
-      // localStorage.removeItem('token');
-      // this.$store.commit('setLoginID', null);
+      localStorage.removeItem('token');
+      this.$store.commit('setLoginID', null);
       this.$store.commit('onloadProcess', false);
       this.$router.push({ path: '/' });
     }
