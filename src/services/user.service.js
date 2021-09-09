@@ -140,6 +140,23 @@ class UserService {
       throw e.message;
     }
   }
+
+  async putResponseJwtLike (url, res) {
+    this.authHeader();
+    try {
+      const responce = await axios({
+        method: 'put',
+        url: `${API_URL}${url}`,
+        data: res,
+        headers: {
+           Authorization: `Bearer ${this.token}`
+        }
+      });
+      return responce;
+    } catch (e) {
+      throw e.message;
+    }
+  }
 }
 
 export default new UserService();

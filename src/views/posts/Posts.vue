@@ -3,7 +3,7 @@
         <main class="posts-main">
             {{this.filter}}<br>
             <keep-alive>
-                <posts-list :posts="posts" />
+                <posts-list :posts="posts"  @update-post="update" />
             </keep-alive>
         <!-- pagination -->
         <section class="pagination" v-if="pagenationCount > 1">
@@ -121,6 +121,10 @@ export default {
               }
           );
             this.$store.commit('onloadProcess', false);
+        },
+        update () {
+            // update
+            this.getPosts();
         }
     },
     mounted () {

@@ -1,4 +1,5 @@
 <template>
+{{post._id}}
     <article class="postsItem__wrapper">
         <header class="header">
                     <div>
@@ -17,11 +18,24 @@
                     </div>
         </header>
         <main class="main">
+            <section class="control" v-if="makeEdit">
+                <a @click="removePost" class="removePost" title="remove post">
+                    <i class="fas fa-trash-alt"></i> remove
+                </a>
+                <router-link :to="{name: 'EditPost', params: { 'id': post._id }}" >
+                    <i class="fas fa-pen"></i> edit
+                </router-link>
+                <router-link :to="{name: 'EditPost', params: { 'id': post._id }}" >
+                    <i class="fas fa-image"></i> update image
+                </router-link>
+            </section>
             <h2>{{post.title}}</h2>
             <div class="main-wrapper">
                 <section class="post__image-wrapper" v-if="post.image">
                     <img :src="`${API_URL}${post.image}`" :alt="post.description" class="post__image">
+                    <a @click="updateImage" class="updateImage" v-if="makeEdit"></a>
                 </section>
+
                 <section class="post__description">
                     {{post.description}}
                 </section>
@@ -30,7 +44,7 @@
         <footer class="footer">
             <section class="footer__control">
                 <div class="likes">
-                    <a class="text" @click="setLike">
+                    <a class="text" @click="setLikes" :class="{'like-active' : !this.isLikePost}">
                         <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTAgNTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUwIDUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBzdHlsZT0iZmlsbDojQzAzQTJCOyIgZD0iTTI0Ljg1LDEwLjEyNmMyLjAxOC00Ljc4Myw2LjYyOC04LjEyNSwxMS45OS04LjEyNWM3LjIyMywwLDEyLjQyNSw2LjE3OSwxMy4wNzksMTMuNTQzDQoJYzAsMCwwLjM1MywxLjgyOC0wLjQyNCw1LjExOWMtMS4wNTgsNC40ODItMy41NDUsOC40NjQtNi44OTgsMTEuNTAzTDI0Ljg1LDQ4TDcuNDAyLDMyLjE2NWMtMy4zNTMtMy4wMzgtNS44NC03LjAyMS02Ljg5OC0xMS41MDMNCgljLTAuNzc3LTMuMjkxLTAuNDI0LTUuMTE5LTAuNDI0LTUuMTE5QzAuNzM0LDguMTc5LDUuOTM2LDIsMTMuMTU5LDJDMTguNTIyLDIsMjIuODMyLDUuMzQzLDI0Ljg1LDEwLjEyNnoiLz4NCjxwYXRoIHN0eWxlPSJmaWxsOiNFRDcxNjE7IiBkPSJNNiwxOC4wNzhjLTAuNTUzLDAtMS0wLjQ0Ny0xLTFjMC01LjUxNCw0LjQ4Ni0xMCwxMC0xMGMwLjU1MywwLDEsMC40NDcsMSwxcy0wLjQ0NywxLTEsMQ0KCWMtNC40MTEsMC04LDMuNTg5LTgsOEM3LDE3LjYzMSw2LjU1MywxOC4wNzgsNiwxOC4wNzh6Ii8+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==">
                     </a>
                     <div v-if="likesCount > 0" @click="showLikes = !showLikes">
@@ -62,18 +76,19 @@
 </template>
 
 <script>
+import userService from '../../services/user.service';
 
 export default {
     name: 'post-item',
     data () {
         return {
             API_URL: process.env.VUE_APP_URL.replace('/api/v1', ''),
-            showLikes: false,
-            isLikePost: false
+            showLikes: false
         };
     },
     props: {
-        post: Object
+        post: Object,
+        isPostPage: Boolean
     },
     computed: {
         likesCount () {
@@ -84,6 +99,23 @@ export default {
                 result = 0;
             }
             return result;
+        },
+        isLikePost () {
+            let result;
+            if ((this.post.likes) && (this.$store.state.loginID._id)) {
+                this.post.likes.forEach(element => {
+                    if (element === this.$store.state.loginID._id) {
+                        result = true;
+                    }
+                });
+            } else result = false;
+            return result;
+        },
+        makeEdit () {
+            if ((this.isPostPage) && (this.$store.state.loginID._id === this.post.postedBy)) {
+                return true;
+            }
+            return false;
         }
     },
     methods: {
@@ -102,9 +134,46 @@ export default {
             return userName;
         },
         setLikes () {
-            if (this.$store.state.loginID._id === this.post.postedBy) {
-                console.log('ok');
-            } else {}
+            if (!(this.$store.state.loginID._id === this.post.postedBy)) {
+                this.$store.commit('onloadProcess', true);
+                const response = userService.putResponseJwtLike(`/posts/like/${this.post._id}`);
+                response.then(
+                    (result) => {
+                        let message;
+                        if (!(this.isLikePost)) {
+                            message = 'You add like for post';
+                        } else {
+                            message = 'You remove like for post';
+                        }
+
+                        this.$toast.open({
+                            message: message,
+                            type: 'info',
+                            duration: 5000
+                        });
+
+                        this.$emit('update-post');
+                    },
+                    (error) => {
+                        this.$store.commit('onloadProcess', false);
+                        this.$toast.open({
+                            message: `${error}`,
+                            type: 'error',
+                            duration: 5000
+                        });
+                    }
+                );
+                this.$store.commit('onloadProcess', false);
+            } else {
+                this.$toast.open({
+                            message: 'You not can add like for your posts',
+                            type: 'info',
+                            duration: 5000
+                });
+            }
+        },
+        removePost () {
+            // remove
         }
     },
     mounted () {
@@ -115,6 +184,9 @@ export default {
 <style lang="scss" scoped>
 a {
     color: #028165;
+}
+.like-active {
+    filter: opacity(25%);
 }
 .isRemove {
     display: none;
@@ -144,11 +216,11 @@ a {
     justify-content: space-between;
     font-family: "Bebas Neue", cursive;
     color: rgba(0, 0, 0, 0.781);
-
+    flex-wrap: wrap;
     border-bottom: 0.15rem #028165 solid;
 
     & > div {
-
+        text-align: center;
     }
     span {
         padding: 0 0.2rem;
@@ -170,15 +242,25 @@ a {
         border-radius: 0.5rem;
         margin: 0 0 1rem 0;
         display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
 
         .post__image-wrapper {
             max-width: 300px;
-            margin: 0 1rem 0rem 0;
+            margin: 0 0.5rem 0rem;
             height: 100%;
+            flex-basis: 250px;
+            flex-grow: 1;
+            flex-shrink: 1;
+            text-align: center;
         }
 
         .post__description {
             height: 100%;
+            flex-basis: 400px;
+            flex-grow: 3;
+            margin: 0 0.5rem 0rem;
+            flex-shrink: 1;
         }
     }
 }

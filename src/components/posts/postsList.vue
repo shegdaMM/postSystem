@@ -7,7 +7,7 @@
   <template v-if="havePosts">
       <ul class="postsList">
           <li class="postsList__item postsItem" v-for="post in posts" :key="post._id">
-                  <postItem :post="post" />
+                  <postItem :post="post" @update-post="update" :isPostPage="true" />
           </li>
       </ul>
   </template>
@@ -25,6 +25,9 @@ export default {
         postItem
     },
     methods: {
+        update () {
+            this.$emit('update-post');
+        }
     },
     computed: {
         havePosts () {
@@ -46,6 +49,5 @@ export default {
         text-align: center;
     }
     .postsList {
-
     }
 </style>
