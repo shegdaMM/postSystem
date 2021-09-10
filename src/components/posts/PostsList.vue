@@ -7,14 +7,14 @@
   <template v-if="havePosts">
       <ul class="postsList">
           <li class="postsList__item postsItem" v-for="post in posts" :key="post._id">
-                  <postItem :post="post" @update-post="update" :isPostPage="false" />
+                  <post-item :post="post" @update-post="update" :isPostPage="false" />
           </li>
       </ul>
   </template>
 </template>
 
 <script>
-import postItem from '../../components/posts/PostItem.vue';
+import postItem from './PostItem.vue';
 
 export default {
     name: 'post-list',
@@ -24,6 +24,7 @@ export default {
     components: {
         postItem
     },
+    emits: ['update-post'],
     methods: {
         update () {
             this.$emit('update-post');
@@ -47,7 +48,5 @@ export default {
 <style lang="scss" scoped>
     .postsNotHave{
         text-align: center;
-    }
-    .postsList {
     }
 </style>

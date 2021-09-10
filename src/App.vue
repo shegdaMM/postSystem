@@ -34,14 +34,19 @@ export default {
   created () {
      if (localStorage.getItem('token')) {
       this.$store.commit('onloadProcess', true);
-      setTimeout(() => {}, 10000);
+      setTimeout(() => {}, 1000);
       GetLoginID()
       .then(
         (data) => {
           this.$store.commit('setLoginID', data.data);
         },
         (error) => {
-          console.log(error);
+          this.$toast.open({
+              message: 'NOT LOG IN',
+              type: 'info',
+              duration: 5000
+          });
+          error.toString();
         })
         .catch(
           (error) => {

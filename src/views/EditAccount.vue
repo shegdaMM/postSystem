@@ -88,6 +88,9 @@ export default {
       };
   },
   async mounted () {
+    if (!this.$store.state.loginID._id) {
+          this.$router.push({ path: '/' });
+    }
     this.$store.commit('onloadProcess', true);
     await userService.getResponse(`/users/${this.id}`).then(
         (data) => {
@@ -130,7 +133,6 @@ export default {
               this.$router.push({ name: 'UserById', params: { id: this.user._id } });
           },
           (error) => {
-              console.log(error);
               this.$toast.open({
                     message: error,
                     type: 'error',

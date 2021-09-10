@@ -1,12 +1,8 @@
 <template>
     <div class="posts-wrapper">
         <main class="posts-main">
-            {{this.filter}}<br>
-            <keep-alive>
                 <posts-list :posts="posts"  @update-post="update" />
-            </keep-alive>
-        <!-- pagination -->
-        <section class="pagination" v-if="pagenationCount > 1">
+        <section v-if="pagenationCount > 1" class="pagination">
         <a @click="prevPage" title="previous" class="pagination__item">
           <i class="fas fa-angle-left"></i>
         </a>
@@ -37,9 +33,9 @@
 </template>
 
 <script>
-import userService from '../../services/user.service';
-import postAside from '../../components/posts/AsidePosts.vue';
-import postsList from '../../components/posts/postsList.vue';
+import userService from '@/services/user.service';
+import postAside from '@/components/posts/AsidePosts.vue';
+import postsList from '@/components/posts/PostsList.vue';
 
 export default {
     name: 'Posts',

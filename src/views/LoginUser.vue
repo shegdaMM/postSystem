@@ -1,7 +1,7 @@
 <template>
 <h1> Information about your account in the system </h1>
     <user-by-id :id="id" v-if="!!id"/>
- </template>
+</template>
 
 <script>
 import UserById from '../components/UserById.vue';
@@ -22,6 +22,9 @@ export default {
         }
     },
   mounted () {
+      if (!this.$store.state.loginID._id) {
+          this.$router.push({ path: '/' });
+      }
   }
 };
 </script>

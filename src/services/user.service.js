@@ -32,9 +32,11 @@ class UserService {
         },
         async function (error) {
           const originalRequest = error.config;
-          if (error.response.status === 403 && !originalRequest._retry) {
-            originalRequest._retry = true;
-            await this.authHeader();
+          if (error.response) {
+            if (error.response.status === 403 && !originalRequest._retry) {
+              originalRequest._retry = true;
+              await this.authHeader();
+            }
           }
           return Promise.reject(error);
         });

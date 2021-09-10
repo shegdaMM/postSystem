@@ -1,41 +1,46 @@
 <template>
     <main class="post-wrapper">
-        <postItem :post="post" @update-post="update" :isPostPage="true" />
+         <post-item :post="post" :isPostPage="true" v-if="false"/>
+        {{post}}
     </main>
 </template>
 
 <script>
 import userService from '../../services/user.service';
-import postItem from '../../components/posts/PostItem.vue';
+import PostItem from '../../components/posts/PostItem.vue';
 
 export default {
     name: 'PostById',
     data () {
         return {
             post: {
-                _id: null,
-                title: null,
-                fullText: null,
-                description: null,
-                dateCreated: null,
-                image: null,
                 likes: [],
-                postedBy: null,
-                __v: null
+                _id: '',
+                title: '',
+                fullText: '',
+                description: '',
+                dateCreated: '',
+                postedBy: '',
+                __v: '',
+                image: ''
             }
         };
     },
     components: {
-        postItem
+      PostItem
     },
     props: {
-        id: String
+        id: {
+            type: String,
+            required: true
+        }
     },
     computed: {
     },
+    emits: ['update-post'],
     methods: {
         update () {
-            this.getPostFromApi();
+            this.getPostFromApi(this.id);
         },
         getPostFromApi () {
             this.$store.commit('onloadProcess', true);
@@ -56,9 +61,9 @@ export default {
         }
     },
     mounted () {
-            this.$store.commit('onloadProcess', true);
-            this.getPostFromApi();
-            this.$store.commit('onloadProcess', false);
+        this.$store.commit('onloadProcess', true);
+        this.getPostFromApi();
+        this.$store.commit('onloadProcess', false);
     }
 };
 </script>

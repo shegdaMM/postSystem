@@ -1,5 +1,14 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Home from '../views/Home.vue';
+import LOGIN from '../views/Auth.vue';
+import Registration from '../views/Registration.vue';
+import LoginUser from '../views/LoginUser.vue';
+import Users from '../views/Users.vue';
+import EditAccount from '../views/EditAccount.vue';
+import UserById from '../components/UserById.vue';
+import Posts from '../views/posts/Posts.vue';
+import PostById from '../views/posts/PostById.vue';
+import EditPost from '../views/posts/EditPost.vue';
 
 const routes = [
   {
@@ -9,51 +18,51 @@ const routes = [
   },
   {
     path: '/login',
-    name: 'LOG IN',
-    component: () => import('../views/Auth.vue')
+    name: 'LOG-IN',
+    component: LOGIN
   },
   {
     path: '/registration',
     name: 'Registration',
-    component: () => import('../views/Registration.vue')
+    component: Registration
   },
   {
     path: '/this-user',
     name: 'LoginUser',
-    component: () => import('../views/LoginUser.vue')
+    component: LoginUser
   },
   {
     path: '/users',
     name: 'Users',
-    component: () => import('../views/Users.vue')
+    component: Users
   },
   {
     path: '/edit-user/:id',
     name: 'EditAccount',
-    component: () => import('../views/EditAccount.vue'),
+    component: EditAccount,
     props: true
   },
   {
     path: '/users/:id',
     name: 'UserById',
-    component: () => import('../components/UserById.vue'),
+    component: UserById,
     props: true
   },
   {
     path: '/posts',
     name: 'Posts',
-    component: () => import('../views/posts/Posts.vue')
+    component: Posts
   },
   {
     path: '/post/:id',
     name: 'PostById',
-    component: '../views/posts/PostById.vue',
+    component: PostById,
     props: true
   },
   {
     path: '/e-post/:id',
     name: 'EditPost',
-    component: () => import('../views/posts/EditPost.vue'),
+    component: EditPost,
     props: true
   }
 

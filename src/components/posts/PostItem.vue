@@ -1,5 +1,4 @@
 <template>
-{{post._id}}
     <article class="postsItem__wrapper">
         <header class="header">
                     <div>
@@ -66,7 +65,7 @@
                     </div>
                 </div>
                 <div class="moreLink">
-                     <router-link :to="{ name: 'PostById', params: { id: post._id }}">
+                     <router-link :to="{ name: 'PostById', params: { id: this.post._id }}">
                         More details
                      </router-link>
                 </div>
@@ -81,13 +80,14 @@
             </ul>
         </footer>
     </article>
+    {{post._id}}
 </template>
 
 <script>
 import userService from '../../services/user.service';
 
 export default {
-    name: 'post-item',
+    name: 'PostItem',
     data () {
         return {
             API_URL: process.env.VUE_APP_URL.replace('/api/v1', ''),
@@ -100,11 +100,12 @@ export default {
     },
     computed: {
         likesCount () {
-            let result;
+            let result = 0;
             if (this.post.likes) {
-                result = this.post.likes.length;
-            } else {
-                result = 0;
+                this.post.likes.forEach((id) => {
+                        if (this.getNameByID(id) !== 'Removed User') result++;
+                    }
+                );
             }
             return result;
         },
@@ -120,8 +121,10 @@ export default {
             return result;
         },
         makeEdit () {
-            if ((this.isPostPage) && (this.$store.state.loginID._id === this.post.postedBy)) {
-                return true;
+            if (this.post.postedBy) {
+                if ((this.isPostPage) && (this.$store.state.loginID._id === this.post.postedBy)) {
+                    return true;
+                }
             }
             return false;
         }
