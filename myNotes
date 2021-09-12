@@ -1,0 +1,20 @@
+// user .env:
+process.env.API_URL
+
+// message 
+this.$store.commit('onloadProcess', true);
+this.$store.commit('onloadProcess', false);
+
+// users
+
+if (!localStorage.getItem('token')) {
+      this.$router.push({ name: 'Login' });
+    }
+
+this.$store.state.*
+
+v-if="this.$store.state.loginID._id === this.ID"
+
+// axios get image binary  ??????????????????????
+
+

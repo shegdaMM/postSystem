@@ -1,0 +1,17 @@
+// It's highly recommended to change the default colors
+// to match your app's branding.
+
+// src/css/quasar.variables.sass
+
+$primary   : #ffffff;
+$secondary : #00af89;
+$accent    : #0013e0;
+
+$dark      : #4d4949;
+
+$positive  : #0cc236;
+$negative  : #C10015;
+$info      : #31CCEC;
+$warning   : #fab700;
+
+@import '~quasar-variables-styl';
