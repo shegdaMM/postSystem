@@ -1,0 +1,39 @@
+<template>
+<div class="spinner-wrapper" v-if="loadProcess === true">
+  <q-spinner-cube color="white" size="4rem"/>
+ </div>
+</template>
+
+<script>
+
+export default {
+  name: 'app-loader',
+  components: {
+  },
+  computed: {
+    loadProcess () {
+      return this.$store.getters.loadProcess;
+    }
+  }
+};
+
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped lang="scss">
+.spinner-wrapper{
+  position: absolute;
+  width: 100vw;
+  height: 100vh;
+
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 95, 51, 0.9);
+  z-index: 5;
+
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  align-items: center;
+}
+</style>

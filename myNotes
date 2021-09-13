@@ -17,4 +17,10 @@ v-if="this.$store.state.loginID._id === this.ID"
 
 // axios get image binary  ??????????????????????
 
+state.qAlert.open({
+        message: 'test!',
+        type: 'info',
+        duration: 5000
+});
+
 
