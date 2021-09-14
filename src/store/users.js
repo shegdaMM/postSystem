@@ -109,15 +109,12 @@ export default {
             const apiurl = `${IMG_URL}${payload.avatar}`;
             try {
                 if (payload.avatar) {
-                    var http = new XMLHttpRequest();
-                    await http.open('HEAD', apiurl, false);
-                    http.send();
-                    if (http.status !== 404) {
+                    const res = await fetch(apiurl, { method: 'HEAD' });
+                    if (res.status !== 404) {
                         result = payload.avatar;
                     }
                 }
             } catch (error) {
-                commit('errorMessage', 'You not have avatar <br> Please unload your avatar!');
             }
             commit('onloadProcess');
             return result;

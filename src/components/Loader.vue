@@ -23,8 +23,9 @@ export default {
 <style scoped lang="scss">
 .spinner-wrapper{
   position: absolute;
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 
   top: 0;
   bottom: 0;
@@ -35,5 +36,6 @@ export default {
   justify-content: center;
   align-content: center;
   align-items: center;
+
 }
 </style>

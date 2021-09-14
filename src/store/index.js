@@ -5,6 +5,7 @@ import createPersistedState from 'vuex-persistedstate';
 // import axios from 'axios';
 import users from './users.js';
 import auth from './auth.js';
+import posts from './posts.js';
 
 // const API_URL = process.env.VUE_APP_URL;
 
@@ -55,6 +56,6 @@ export default createStore({
   actions: {
   },
   modules: {
-    users, auth
+    users, auth, posts
   }
 });
