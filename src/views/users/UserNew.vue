@@ -1,6 +1,6 @@
 <template>
 <h1> Create new account in system </h1>
-<q-form class="edit-form" @submit="createUser">
+<q-form class="edit-form" @submit.stop="createUser">
 <div class="user-info">
   <q-input class="form-input" filled v-model="user.email" type="email" label="email" hint="Enter valid email"
       :rules="[val => !!val || 'Email is missing', isValidEmail]" ref="email"

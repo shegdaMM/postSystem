@@ -1,8 +1,10 @@
 <template>
-    <section class="user-wrap">
-     <user-logo :avatar="currentUser.avatar" :name="this.currentUser.name" :ID="this.currentUser._id" class="user-logo"
+    <section class="user-wrap" v-if="thisUser">
+      <user-logo
+       :avatar="thisUser.avatar ? thisUser.avatar : ''"
+       :name="this.thisUser.name" :ID="this.thisUser._id" class="user-logo"
             @user-update="userUpdate" @remove-user="removeUserDialog"/>
-        <v-user :user="currentUser" :ID="this.currentUser._id" class="user-info"/>
+        <v-user :user="thisUser" :ID="this.thisUser._id" class="user-info"/>
     </section>
 </template>
 
@@ -72,8 +74,8 @@
 </style>
 
 <script>
-import vUser from '../components/vUser.vue';
-import UserLogo from '../components/UserLogo.vue';
+import vUser from './vUser.vue';
+import UserLogo from './UserLogo.vue';
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
@@ -82,23 +84,35 @@ export default {
       return {
       };
   },
+  emits: ['user-update'],
   props: {
       uid: {
-        type: String,
-        required: true
+        type: String
+      },
+      user: {
+        type: Object
       }
   },
   components: {
-     vUser, UserLogo
+    vUser, UserLogo
   },
   computed: {
-    ...mapGetters(['currentUser'])
-
+    ...mapGetters(['currentUser']),
+    thisUser () {
+      let result;
+      if (this.user) {
+        result = this.user;
+      } else {
+        result = this.currentUser;
+      }
+      return result;
+    }
   },
   methods: {
     ...mapActions(['getUserById']),
     async userUpdate () {
-      await this.getUserById({ id: this.uid });
+      await this.getUserById({ id: this.uid ? this.uid : this.user._id });
+      this.$emit('user-update');
     },
     removeUserDialog () {
       this.$q.dialog({
@@ -113,11 +127,14 @@ export default {
       });
     },
     async removeUser () {
-      await this.removeUserById({ id: this.uid });
+      await this.removeUserById({ id: this.uid ? this.uid : this.user._id });
+      this.$emit('user-update');
     }
   },
   async mounted () {
-    await this.getUserById({ id: this.uid });
+     if (this.uid) {
+      await this.getUserById({ id: this.uid });
+     }
   }
 };
 </script>

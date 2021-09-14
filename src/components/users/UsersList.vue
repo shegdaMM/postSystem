@@ -1,8 +1,8 @@
 <template>
     <section class="user-list-wrapper">
         <div class="user-item-wrapper" v-for="user in users" :key="user._id">
-            <user-by-id v-if="(user._id)" :key="user._id" :propsUser="user" :id="user._id"/>
-            <span class="user-item-link" @click="this.$router.push({ name: 'UserById', params: { id: user._id } })">
+            <user-by-id :user="user" v-if="user._id" @user-update="$emit('user-update')"/>
+            <span class="user-item-link" @click="this.$router.push({ name: 'UserById', params: { uid: user._id } })">
               More
             </span>
         </div>
@@ -16,9 +16,9 @@ export default {
   components: { UserById },
   name: 'user-list',
   props: {
-      users: Object,
-      id: String
-  }
+      users: Array
+  },
+  emits: ['user-update']
 };
 </script>
 

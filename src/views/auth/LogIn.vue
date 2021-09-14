@@ -30,7 +30,7 @@
           </template>
         </q-input>
 
-        <p class="text-center">Don’t have an account? <router-link to="/registration">Sign up now.</router-link></p>
+        <p class="text-center">Don’t have an account? <router-link to="/user-new">Sign up now.</router-link></p>
         <div class="login-btn-group">
           <q-btn class="my-btn" label="Submit" type="submit" color="primary" icon="fas fa-sign-in-alt" />
           <q-btn label="Reset" @click.stop="reset" type="reset" color="primary" flat class="q-ml-sm my-btn" icon="fas fa-trash-alt"/>

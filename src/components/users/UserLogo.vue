@@ -1,7 +1,7 @@
 <template>
 <div class="avatar-wrapper">
     <div class="avatar-view">
-        <img :key="ID" :src="currentUserAvatar ? currentUserAvatar : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
+        <img :src="image ? `${IMG_URL}${image}` : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
        <template v-if="this.$store.getters.loggedInUser._id === this.ID">
           <span onclick="uploadfile.click()" class="avatar-button">
               <i class="fas fa-cloud-upload-alt"></i>
@@ -24,6 +24,54 @@
     </div>
 </div>
 </template>
+
+<script>
+import { mapGetters, mapActions } from 'vuex';
+
+export default {
+  name: 'UserLogo',
+  data () {
+    return {
+      file: null,
+      image: null,
+      IMG_URL: process.env.VUE_APP_IMG_URL,
+      defaultAvatar: process.env.VUE_APP_DEFAULTAVATAR
+    };
+  },
+  emits: ['remove-user', 'user-update'],
+  components: {
+  },
+  props: {
+    avatar: String,
+    name: String,
+    ID: String
+  },
+  computed: {
+    ...mapGetters(['currentUserAvatar'])
+  },
+  methods: {
+      ...mapActions(['getCurrentUserAvatar', 'putCurrentUserAvatar']),
+      removeUser () {
+        this.$emit('remove-user');
+      },
+      editUser () {
+        console.log(`/user-edit/${this.ID}`);
+        this.$router.push({ name: 'UserEdit', params: { uid: this.ID } });
+      },
+      async sendAvatar (event) {
+        if (this.$refs.file.files[0]) {
+            const formData = new FormData();
+            formData.append('avatar', this.$refs.file.files[0]);
+            const result = await this.putCurrentUserAvatar({ id: this.ID, data: formData });
+            if (result) this.$emit('user-update');
+        }
+      }
+  },
+  async mounted () {
+    this.image = await this.getCurrentUserAvatar({ avatar: this.avatar });
+  }
+};
+</script>
 
 <style lang="scss" scoped>
     .avatar {
@@ -73,50 +121,3 @@
 
     }
 </style>
-
-<script>
-import { mapGetters, mapActions } from 'vuex';
-
-export default {
-  name: 'UserLogo',
-  data () {
-    return {
-      file: null,
-      newFile: null,
-      defaultAvatar: process.env.VUE_APP_DEFAULTAVATAR
-    };
-  },
-  emots: ['remove-user', 'user-update'],
-  components: {
-  },
-  props: {
-    avatar: String,
-    name: String,
-    ID: String
-  },
-  computed: {
-    ...mapGetters(['currentUserAvatar'])
-  },
-  methods: {
-      ...mapActions(['getCurrentUserAvatar', 'putCurrentUserAvatar']),
-      removeUser () {
-        this.$emit('remove-user');
-      },
-      editUser () {
-        console.log(`/user-edit/${this.ID}`);
-        this.$router.push({ name: 'UserEdit', params: { uid: this.ID } });
-      },
-      async sendAvatar (event) {
-        if (this.$refs.file.files[0]) {
-            const formData = new FormData();
-            formData.append('avatar', this.$refs.file.files[0]);
-            const result = await this.putCurrentUserAvatar({ id: this.ID, data: formData });
-            if (result) this.$emit('user-update');
-        }
-      }
-  },
-  async mounted () {
-    await this.getCurrentUserAvatar({ avatar: this.avatar });
-  }
-};
-</script>

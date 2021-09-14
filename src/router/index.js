@@ -7,6 +7,7 @@ import Users from '@/views/users/Users.vue';
 import UserEdit from '@/views/users/UserEdit.vue';
 import ThisUser from '@/views/users/ThisUser.vue';
 import UserNew from '../views/users/UserNew.vue';
+import UserById from '@/components/users/UserById.vue';
 
 const routes = [
   {
@@ -50,6 +51,12 @@ const routes = [
     path: '/user-new/',
     name: 'UserNew',
     component: UserNew
+  },
+  {
+    path: '/user/:uid',
+    name: 'UserById',
+    component: UserById,
+    props: true
   }
 ];
 
@@ -58,7 +65,7 @@ const router = createRouter({
   routes
 });
 
-router.beforeEach((to, from, next) => {
+ router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (store.getters.loggedInUser) {
       next();

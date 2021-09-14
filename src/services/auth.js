@@ -8,13 +8,10 @@ export default function axiosSetUp () {
     // axios.defaults.baseURL = API_URL;
     axios.interceptors.request.use(
       function (config) {
-        const token = store.state.access_token;
+        const token = store.state.auth.access_token;
         if (token) {
           config.headers = {
-            Authorization: `Bearer ${token}`,
-            Accept: 'application/json',
-            'Content-Type': 'application/json',
-            'Access-Control-Allow-Origin': '*'
+            Authorization: `Bearer ${token}`
           };
         }
         return config;
@@ -29,7 +26,6 @@ export default function axiosSetUp () {
         return response;
       },
       async function (error) {
-        // Any status codes that falls outside the range of 2xx cause this function to trigger
         // Do something with response error
         const originalRequest = error.config;
         if (error.response.status === 401) {
