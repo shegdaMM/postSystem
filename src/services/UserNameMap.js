@@ -24,43 +24,36 @@ export default class UserNameMap {
 
     static async updateUser (id) {
         let result = '';
-        const user = UserNameMap.map[id];
-        if (!user) {
-                const Url = `${API_URL}/users/${id}`;
-                try {
-                    await axios.get(Url).then(response => {
-                        if (response.status === 200) {
-                            const user = response.data.data;
-                            UserNameMap.map[user._id] = { name: user.name, email: user.email, update: Date.now() };
-                            result = user.name | user.email;
-                            console.log(result);
-                            console.log(UserNameMap.map[user._id]);
-                        }
-                    });
-                } catch (e) {
-                    result = '';
+        const Url = `${API_URL}/users/${id}`;
+        try {
+            await axios.get(Url).then(response => {
+                if (response.status === 200) {
+                    const user = response.data;
+                    UserNameMap.map[id] = { name: user.name, email: user.email, update: Date.now() };
+                    result = user.name ? user.name : user.email;
                 }
-        };
+            });
+        } catch (e) {
+            result = '';
+        }
         return result;
     };
 
     static async getUserName (id) {
         if (UserNameMap.map) {
-            UserNameMap.updateAllMap();
+           await UserNameMap.updateAllMap();
         }
         let userName = '';
-        const user = UserNameMap.map[id];
-        console.log('id', id);
-        if (user) {
+        if (id in UserNameMap.map) {
+            const user = UserNameMap.map[id];
             // if we apdate user more 10 minuts
             if ((Date.now - user.update) < 600000) {
-                console.log('user');
-                userName = user;
+                userName = user.name ? user.name : user.email;
             } else {
-                userName = UserNameMap.updateUser(id);
+                userName = await UserNameMap.updateUser(id);
             }
         } else {
-            userName = UserNameMap.updateUser(id);
+            userName = await UserNameMap.updateUser(id);
         }
         return userName;
     };

@@ -1,13 +1,12 @@
 <template>
-<article class="postsItem__wrapper">
-    {{post}}
-   <header class="header" v-if="post">
+<article class="postsItem__wrapper" v-if="post">
+   <header class="header">
         <div>
-            <span v-if="this.getNameByID(post.postedBy) !== ''">
+            <span v-if="this.post.postedBy">
                 <span class="text">Posted by:</span>
                 <span class="insert">
-                    <router-link :to="{ name: 'UserById', params: { id: this.post.postedBy }}">
-                        {{ this.getNameByID(post.postedBy) }}
+                    <router-link :to="{ name: 'UserById', params: { uid: this.post.postedBy }}">
+                        {{ postedBy }}
                      </router-link>
                 </span>
             </span>
@@ -28,7 +27,8 @@ export default {
         return {
             API_IMG: process.env.VUE_APP_IMG_URL,
             showLikes: false,
-            UserNameMap: UserNameMap
+            UserNameMap: UserNameMap,
+            postedBy: ''
         };
     },
     props: {
@@ -39,6 +39,8 @@ export default {
         }
     },
     emits: ['post-update'],
+    computed: {
+    },
     methods: {
         getDate () {
             const date = new Date(this.post.dateCreated);
@@ -47,12 +49,18 @@ export default {
             const result = date.getUTCDate() + '.' + mounth + '.' + date.getUTCFullYear();
             return result;
         },
-        getNameByID (id) {
-            const userName = UserNameMap.getUserName(id);
-            return userName;
+        async getNameByID (id) {
+            const result = await UserNameMap.getUserName(id);
+            return result;
         }
     },
-    mounted () {
+    async mounted () {
+        this.$store.commit('onloadProcess');
+        if (this.post.dateCreated) {
+            const result = await UserNameMap.getUserName(this.post.postedBy);
+            this.postedBy = result;
+        }
+        this.$store.commit('onloadProcess');
     }
 };
 </script>
