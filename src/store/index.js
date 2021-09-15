@@ -13,29 +13,14 @@ export default createStore({
   plugins: [createPersistedState({ paths: ['auth'] })],
   // namespaced: true,
   state: {
-    qAlert: null,
     // for loader component
-    loadProcess: false,
+    loadProcess: false
     // userId : userName
-    usersIDMap: new Map()
   },
   getters: {
-    qalert (state) {
-      return state.qAlert;
-    },
     loadProcess (state) {
       // $q.notify('Some other message');
       return state.loadProcess;
-    },
-    // set userid to map
-    getUserByID: (state) => (key) => {
-      if (key && state.usersIDMap) {
-        const name = state.usersIDMap.get(key);
-        return name;
-      }
-    },
-    getAllUser (state) {
-      return state.usersIDMap;
     }
   },
   mutations: {

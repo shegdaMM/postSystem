@@ -1,34 +1,35 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import store from '../store';
-import Home from '../views/Home.vue';
-import LogIn from '../views/auth/LogIn.vue';
-import Posts from '@/views/posts/Posts.vue';
-import Users from '@/views/users/Users.vue';
+import TheHome from '../views/TheHome.vue';
+import TheLogIn from '../views/auth/TheLogIn.vue';
+import ThePosts from '@/views/posts/ThePosts.vue';
+import TheUsers from '@/views/users/TheUsers.vue';
 import UserEdit from '@/views/users/UserEdit.vue';
 import ThisUser from '@/views/users/ThisUser.vue';
 import UserNew from '../views/users/UserNew.vue';
 import UserById from '@/components/users/UserById.vue';
+import PostById from '@/views/posts/PostById';
 
 const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    name: 'TheHome',
+    component: TheHome
   },
   {
     path: '/login',
-    name: 'LogIn',
-    component: LogIn
+    name: 'TheLogIn',
+    component: TheLogIn
   },
   {
     path: '/posts',
-    name: 'Posts',
-    component: Posts
+    name: 'ThePosts',
+    component: ThePosts
   },
   {
     path: '/users',
-    name: 'Users',
-    component: Users
+    name: 'TheUsers',
+    component: TheUsers
   },
   {
     path: '/user-edit/:uid',
@@ -56,6 +57,12 @@ const routes = [
     path: '/user/:uid',
     name: 'UserById',
     component: UserById,
+    props: true
+  },
+  {
+    path: '/post/:uid',
+    name: 'PostById',
+    component: PostById,
     props: true
   }
 ];

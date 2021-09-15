@@ -29,7 +29,7 @@
 import { mapGetters, mapActions } from 'vuex';
 
 export default {
-  name: 'UserLogo',
+  name: 'AppUserLogo',
   data () {
     return {
       file: null,

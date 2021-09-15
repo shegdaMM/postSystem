@@ -1,5 +1,7 @@
 import router from '../router/index';
 import axios from 'axios';
+import UserNameMap from '../services/UserNameMap.js';
+
 const API_URL = process.env.VUE_APP_URL;
 // eslint-disable-next-line no-unused-vars
 const IMG_URL = process.env.VUE_APP_IMG_URL;
@@ -8,7 +10,8 @@ export default {
         userAlert: null,
         currentUser: null,
         usersListSize: 0,
-        currentUserList: []
+        currentUserList: [],
+        userNameById: new Map()
     },
     getters: {
         userAlert (state) {
@@ -22,6 +25,14 @@ export default {
         },
         currentUserList (state) {
             return state.currentUserList;
+        },
+        // map
+        userNameById: (state) => (key) => {
+            if (key && state.usersIDMap) {
+              let name = state.usersIDMap.get(key);
+              if (!name) { name = ''; }
+              return name;
+            }
         }
     },
     mutations: {
@@ -42,6 +53,7 @@ export default {
               duration: 5000
             });
         },
+        // user
         setUserById (state, user) {
             if (user) {
                 state.currentUser = user;
@@ -72,6 +84,7 @@ export default {
         }
     },
     actions: {
+        // user
         getUserById: async ({ commit, dispatch }, payload) => {
             commit('onloadProcess');
             const Url = `${API_URL}/users/${payload.id}`;
@@ -95,6 +108,8 @@ export default {
                   if (response.status === 200) {
                     commit('deleteUserById');
                     commit('GoodMessage', 'You remove your account');
+                    // remove from map
+                    UserNameMap.removeUser(payload.id);
                     router.push({ path: '/' });
                   }
                 });
@@ -197,6 +212,9 @@ export default {
         },
         clearUsersList: ({ commit, dispatch }, payload) => {
             commit('removeUsersList');
+        },
+        clearCurrentUser: ({ commit, dispatch }, payload) => {
+            commit('deleteUserById');
         }
     }
 };

@@ -6,28 +6,28 @@
         <router-view />
       </div>
     </q-page-container>
-    <loader v-if="this.$store.getters.loadProcess" />
+    <app-loader v-if="this.$store.getters.loadProcess" />
   </q-layout>
 </template>
 
 <script>
 // import { ref } from 'vue';
-import Loader from './components/Loader';
-import AppHeader from './components/Appheader.vue';
+import AppLoader from './components/AppLoader';
+import AppHeader from './components/AppHeader.vue';
 
 export default {
   name: 'App',
   components: {
-    Loader, AppHeader
+    AppLoader, AppHeader
   },
   data () {
     return {
     };
   },
   mounted () {
-    this.$store.commit('setAlert', this.$toast);
     this.$store.commit('setUserAlert', this.$toast);
     this.$store.commit('setAuthAlert', this.$toast);
+    this.$store.commit('setPostAlert', this.$toast);
   }
 };
 </script>

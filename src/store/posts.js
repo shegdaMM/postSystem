@@ -1,8 +1,8 @@
-/* import router from '../router/index';
 import axios from 'axios';
+import router from '../router/index';
 
 const API_URL = process.env.VUE_APP_URL;
-const IMG_URL = process.env.VUE_APP_IMG_URL; */
+// const IMG_URL = process.env.VUE_APP_IMG_URL;
 
 export default {
     state: {
@@ -43,6 +43,15 @@ export default {
               duration: 5000
             });
         },
+        setPostById (state, post) {
+            if (post) {
+                state.currentPost = post;
+            }
+        },
+        deletePostById (state) {
+            // remove with map...
+            state.currentPost = null;
+        },
         setPostsListSize (state, count) {
             if (count) {
                 state.postsListSize = count;
@@ -59,6 +68,39 @@ export default {
         }
     },
     actions: {
-
+        getPostById: async ({ commit, dispatch }, payload) => {
+            commit('onloadProcess');
+            const Url = `${API_URL}/posts/${payload.id}`;
+            try {
+                await axios.get(Url).then(response => {
+                    if (response.status === 200) {
+                      commit('setPostById', response.data);
+                    }
+                  });
+                } catch (e) {
+                  // error
+                  commit('errorMessage', e);
+                }
+              commit('onloadProcess');
+        },
+        removePostById: async ({ commit, dispatch }, payload) => {
+            commit('onloadProcess');
+                const Url = `${API_URL}/posts/${payload.id}`;
+            try {
+                await axios.delete(Url).then(response => {
+                  if (response.status === 200) {
+                    commit('deletePostById');
+                    commit('GoodMessage', 'You remove your post');
+                    router.push({ path: '/posts' });
+                  }
+                });
+              } catch (e) {
+                commit('errorMessage', e);
+              }
+            commit('onloadProcess');
+        },
+        clearCurrentPost: ({ commit, dispatch }, payload) => {
+            commit('deletePostById');
+        }
     }
 };
