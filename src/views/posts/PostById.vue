@@ -1,7 +1,11 @@
 <template>
     <div class="post-wrapper" v-if="currentPost">
-        <app-post :post="thisPost" :isPostPage="isPostPage"/>
-        {{thisPost}}
+        <app-post
+            :post="thisPost"
+            :isPostPage="isPostPage"
+            @post-update="updatePost"
+            @remove-post="removePostDialog"
+        />
     </div>
 </template>
 
@@ -15,7 +19,7 @@ export default {
         return {
         };
     },
-    emits: ['post-update'],
+    emits: ['post-update', 'remove-post'],
     components: {
        AppPost
     },
@@ -37,9 +41,11 @@ export default {
             let result;
             if (this.post) {
                 result = this.post;
-            } else {
+            }
+            if (this.uid) {
                 result = this.currentPost;
             }
+
             return result;
         }
     },
@@ -60,6 +66,13 @@ export default {
         async removePost () {
             await this.removePostById({ id: this.uid ? this.uid : this.post._id });
             this.$emit('post-update');
+        },
+        async updatePost () {
+            if (this.uid) {
+                await this.getPostById({ id: this.uid });
+            } else {
+                await this.getPostById({ id: this.post._id });
+            }
         }
     },
     async mounted () {

@@ -53,7 +53,7 @@ export default {
             duration: 5000
             });
         },
-        errorMessage (state, message) {
+        AuthErrorMessage (state, message) {
             state.authAlert.open({
             message: message,
             type: 'error',
@@ -81,10 +81,10 @@ export default {
             if (Array.isArray(err.error)) {
               for (let i = 0; i < err.error.length; i++) {
                 const el = err.error[i];
-                commit('errorMessage', el.message);
+                commit('AuthErrorMessage', el.message);
               }
             } else {
-                commit('errorMessage', err.error);
+                commit('AuthErrorMessage', err.error);
               }
             }
           commit('onloadProcess');
@@ -95,7 +95,7 @@ export default {
           // eslint-disable-next-line dot-notation
           delete axios.defaults.headers.common['Authorization'];
           api();
-          commit('errorMessage', 'Log out is finished');
+          commit('AuthErrorMessage', 'Log out is finished');
           router.push({ path: '/' });
         },
         fetchUser: async ({ commit }) => {
@@ -108,7 +108,7 @@ export default {
             });
           } catch (e) {
             // error
-            commit('errorMessage', e.error);
+            commit('AuthErrorMessage', e.error);
           }
         }
       }

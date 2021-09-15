@@ -1,21 +1,6 @@
 <template>
 <article class="postsItem__wrapper" v-if="post">
-   <header class="header">
-        <div>
-            <span v-if="this.post.postedBy">
-                <span class="text">Posted by:</span>
-                <span class="insert">
-                    <router-link :to="{ name: 'UserById', params: { uid: this.post.postedBy }}">
-                        {{ postedBy }}
-                     </router-link>
-                </span>
-            </span>
-        </div>
-        <div>
-            <span class="text">Created on:</span>
-            <time :datetime="this.post.dateCreated" class="insert">{{ this.getDate() }}</time>
-        </div>
-    </header>
+    <app-post-header :post="this.post" :postedBy="postedBy" />
     <main class="main">
             <section class="control" v-if="makeEdit">
                 <span>
@@ -30,7 +15,7 @@
                     </span>
                 </a>
                 </span>
-                <a @click="removePost" class="removePost" title="remove post">
+                <a @click="$emit('remove-post')" class="removePost" title="remove post">
                     <i class="fas fa-trash-alt"></i> remove
                 </a>
             </section>
@@ -48,19 +33,28 @@
                 </section>
             </div>
         </main>
-
+    <app-post-footer
+        :likesCount="likesCount"
+        :post="post"
+        :makeEdit="makeEdit"
+        :likes="likes"
+        :isLikePost="isLikePost"
+        @setLikes="setLikes"
+     />
 </article>
 </template>
 
 <script>
 import UserNameMap from '@/services/UserNameMap';
+import { mapActions } from 'vuex';
+import AppPostHeader from '@/components/posts/AppPostHeader';
+import AppPostFooter from '@/components/posts/AppPostFooter';
 
 export default {
   data () {
         return {
             API_IMG: process.env.VUE_APP_IMG_URL,
             showLikes: false,
-            makeEdit: this.post.postedBy === this.$store.getters.loggedInUser._id,
             UserNameMap: UserNameMap,
             postedBy: '',
             likes: {}
@@ -74,19 +68,54 @@ export default {
         }
     },
     emits: ['post-update'],
+    components: {
+        AppPostHeader, AppPostFooter
+    },
     computed: {
+        likesCount () {
+            return this.post.likes.length;
+        },
+        makeEdit () {
+            if (this.post.postedBy) {
+                if ((this.isPostPage) && (this.$store.getters.loggedInUser._id === this.post?.postedBy)) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        isLikePost () {
+            let result;
+            if ((this.post.likes) && (this.$store.getters.loggedInUser._id)) {
+                this.post.likes.forEach(element => {
+                    if (element === this.$store.getters.loggedInUser._id) {
+                        result = true;
+                    }
+                });
+            } else result = false;
+            return result;
+        }
     },
     methods: {
-        getDate () {
-            const date = new Date(this.post.dateCreated);
-            let mounth = date.getUTCMonth() + 1;
-            if (mounth < 10) mounth = '0' + mounth;
-            const result = date.getUTCDate() + '.' + mounth + '.' + date.getUTCFullYear();
-            return result;
-        },
+        ...mapActions(['updatePostImage', 'likeToPost']),
         async getNameByID (id) {
             const result = await UserNameMap.getUserName(id);
             return result;
+        },
+        async sendImage (event) {
+            if (this.$refs.file.files[0]) {
+                const formData = new FormData();
+                formData.append('image', this.$refs.file.files[0]);
+                await this.updatePostImage({ id: this.post._id, image: formData });
+                this.$emit('post-update');
+            }
+        },
+        async setLikes () {
+            if (!(this.$store.getters.loggedInUser._id === this.post?.postedBy)) {
+                const result = await this.likeToPost({ id: this.post._id });
+                if (result) {
+                    this.$emit('post-update');
+                }
+            }
         }
     },
     async mounted () {
@@ -107,9 +136,6 @@ export default {
 <style lang="scss" scoped>
 a {
     color: #028165;
-}
-.like-active {
-    filter: opacity(25%);
 }
 .isRemove {
     display: none;
@@ -134,29 +160,11 @@ a {
     clip-path: polygon(0 1rem, 1.5rem 0, calc(100% - 1.5rem) 0, 100% 1rem, 100% calc(100% - 1rem), calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 calc(100% - 1rem));
 }
 
-.header {
-    display: flex;
-    justify-content: space-between;
-    font-family: "Bebas Neue", cursive;
-    color: rgba(0, 0, 0, 0.781);
-    flex-wrap: wrap;
-    border-bottom: 0.15rem #028165 solid;
-
-    & > div {
-        text-align: center;
-    }
-    span {
-        padding: 0 0.2rem;
-    }
-    a{
-        color: #028165;
-    }
-}
-
 .main {
 
     h2 {
         margin: 0.5rem 0.2rem;
+        word-break: break-all;
     }
 
     .main-wrapper {
@@ -184,6 +192,7 @@ a {
             flex-grow: 3;
             margin: 0 0.5rem 0rem;
             flex-shrink: 1;
+            word-break: break-all;
         }
     }
 
@@ -202,73 +211,6 @@ a {
         }
         .removePost{
             color: rgba(255, 0, 0, 0.664);
-        }
-    }
-}
-
-.footer {
-    display: flex;
-    flex-direction: column;
-    font-family: "Bebas Neue", cursive;
-    color: rgba(0, 0, 0, 0.781);
-
-    border-top: 0.15rem #028165 solid;
-    padding: 0.5rem;
-}
-
-.footer__control {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-
-    .likes {
-        padding: 0 1.5rem 0 0rem;
-        width: 3.5rem;
-
-        position: relative;
-
-        .insert {
-            position: absolute;
-            display: inline-block;
-            top: -0.2rem;
-            right: 0rem;
-            width: 1.5rem;
-            text-align: center;
-            font-weight: 700;
-            color: #028165;
-        }
-
-        .showLikeList {
-                display: inline-block;
-                position: absolute;
-                bottom: 0;
-                right: 0;
-                width: 1.5rem;
-                color: #028165;
-                text-align: center;
-        }
-    }
-    .moreLink {
-        padding: 0 0.25rem;
-        color: #028165;
-    }
-}
-
-.likesList {
-    display: flex;
-    flex-wrap: wrap;
-
-    list-style-type: none;
-
-    .likesItem {
-        padding: 0.1rem 0.5rem;
-        background: rgba(255, 255, 255, 0.561);
-        border-radius: 0.5rem 0.5rem 0.3rem 0.5rem;
-        margin: 0.2rem 0.5rem 0.2rem 0;
-
-        a{
-            display: block;
-            height: 100%;
         }
     }
 }

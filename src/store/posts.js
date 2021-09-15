@@ -29,14 +29,14 @@ export default {
         setPostAlert (state, postAlert) {
             state.postAlert = postAlert;
         },
-        errorMessage (state, message) {
+        PostErrorMessage (state, message) {
             state.postAlert.open({
               message: message,
               type: 'error',
               duration: 5000
             });
         },
-        GoodMessage (state, message) {
+        PostGoodMessage (state, message) {
             state.postAlert.open({
               message: message,
               type: 'success',
@@ -79,7 +79,9 @@ export default {
                   });
                 } catch (e) {
                   // error
-                  commit('errorMessage', e);
+                  if (payload.id) {
+                    commit('PostErrorMessage', e);
+                  }
                 }
               commit('onloadProcess');
         },
@@ -90,17 +92,56 @@ export default {
                 await axios.delete(Url).then(response => {
                   if (response.status === 200) {
                     commit('deletePostById');
-                    commit('GoodMessage', 'You remove your post');
+                    commit('PostGoodMessage', 'You remove your post');
                     router.push({ path: '/posts' });
                   }
                 });
               } catch (e) {
-                commit('errorMessage', e);
+                commit('PostErrorMessage', e);
               }
             commit('onloadProcess');
         },
         clearCurrentPost: ({ commit, dispatch }, payload) => {
             commit('deletePostById');
+        },
+        updatePostImage: async ({ commit, dispatch }, payload) => {
+            let resultStatus;
+            const Url = `${API_URL}/posts/upload/${payload.id}`;
+            try {
+                await axios({
+                    method: 'put',
+                    url: Url,
+                    data: payload.image,
+                    headers: {
+                      'Content-Type': 'multipart/form-data'
+                    }
+                })
+                .then(response => {
+                    resultStatus = response.data.image;
+                    commit('PostGoodMessage', 'You update this post image!');
+                });
+            } catch (error) {
+                resultStatus = false;
+                commit('PostErrorMessage', 'You not update post image!');
+            }
+            return resultStatus;
+        },
+        likeToPost: async ({ commit, dispatch }, payload) => {
+            let resultStatus;
+            const Url = `${API_URL}/posts/like/${payload.id}`;
+            try {
+                await axios({
+                    method: 'put',
+                    url: Url
+                })
+                .then(response => {
+                    resultStatus = true;
+                });
+            } catch (error) {
+                resultStatus = false;
+                commit('PostErrorMessage', 'You not add/remove like<br> to this post!');
+            }
+            return resultStatus;
         }
     }
 };

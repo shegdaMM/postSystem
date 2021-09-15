@@ -39,14 +39,14 @@ export default {
         setUserAlert (state, userAlert) {
             state.userAlert = userAlert;
         },
-        errorMessage (state, message) {
+        UserErrorMessage (state, message) {
             state.userAlert.open({
               message: message,
               type: 'error',
               duration: 5000
             });
         },
-        GoodMessage (state, message) {
+        UserGoodMessage (state, message) {
             state.userAlert.open({
               message: message,
               type: 'success',
@@ -96,7 +96,9 @@ export default {
                 });
               } catch (e) {
                 // error
-                commit('errorMessage', e);
+                if (payload.id) {
+                    commit('UserErrorMessage', e);
+                }
               }
             commit('onloadProcess');
         },
@@ -107,14 +109,14 @@ export default {
                 await axios.delete(Url).then(response => {
                   if (response.status === 200) {
                     commit('deleteUserById');
-                    commit('GoodMessage', 'You remove your account');
+                    commit('UserGoodMessage', 'You remove your account');
                     // remove from map
                     UserNameMap.removeUser(payload.id);
                     router.push({ path: '/' });
                   }
                 });
               } catch (e) {
-                commit('errorMessage', e);
+                commit('UserErrorMessage', e);
               }
             commit('onloadProcess');
         }, // CROS problems...
@@ -150,11 +152,11 @@ export default {
                     resultStatus = true;
                     commit('setUserById', response.data);
                     commit('setCurrentUserAvatar', response.data.avatar);
-                    commit('GoodMessage', 'You update your avatar!');
+                    commit('UserGoodMessage', 'You update your avatar!');
                 });
             } catch (error) {
                 resultStatus = false;
-                commit('errorMessage', 'You not updadte avatar!');
+                commit('UserErrorMessage', 'You not update avatar!');
             }
             return resultStatus;
         },
@@ -172,11 +174,11 @@ export default {
                 await axios.patch(Url, send).then(response => {
                     if (response.status === 200) {
                         commit('updateCurrentUser', response.data);
-                        commit('GoodMessage', 'You update your account');
+                        commit('UserGoodMessage', 'You update your account');
                     }
                 });
             } catch (error) {
-                commit('errorMessage', error);
+                commit('UserErrorMessage', error);
             }
             commit('onloadProcess');
         },
@@ -186,12 +188,12 @@ export default {
             try {
                 await axios.post(Url, payload).then(response => {
                     if (response.status === 200) {
-                        commit('GoodMessage', 'You create new account <br> Please login in system');
+                        commit('UserGoodMessage', 'You create new account <br> Please login in system');
                         router.push({ path: '/login' });
                     }
                 });
             } catch (error) {
-                commit('errorMessage', error);
+                commit('UserErrorMessage', error);
             }
             commit('onloadProcess');
         },
@@ -206,7 +208,7 @@ export default {
                     }
                 });
             } catch (error) {
-                commit('errorMessage', error);
+                commit('UserErrorMessage', error);
             }
             commit('onloadProcess');
         },
