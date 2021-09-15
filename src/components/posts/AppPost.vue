@@ -1,31 +1,34 @@
 <template>
 <article class="postsItem__wrapper">
-   <header class="header">
-              <!--      <div>
-                        <span v-if="this.getNameByID(post.postedBy) !== 'Removed User'">
-                            <span class="text">Posted by:</span>
-                            <span class="insert">
-                                <router-link :to="{ name: 'UserById', params: { id: this.post.postedBy }}">
-                                {{ this.getNameByID(post.postedBy) }}
-                                </router-link>
-                            </span>
-                        </span>
-                    </div>
-                    <div>
-                        <span class="text">Created on:</span>
-                        <time :datetime="this.post.dateCreated" class="insert">{{ this.getDate() }}</time>
-                    </div>
-                -->
-        </header>
+    {{post}}
+   <header class="header" v-if="post">
+        <div>
+            <span v-if="this.getNameByID(post.postedBy) !== ''">
+                <span class="text">Posted by:</span>
+                <span class="insert">
+                    <router-link :to="{ name: 'UserById', params: { id: this.post.postedBy }}">
+                        {{ this.getNameByID(post.postedBy) }}
+                     </router-link>
+                </span>
+            </span>
+        </div>
+        <div>
+            <span class="text">Created on:</span>
+            <time :datetime="this.post.dateCreated" class="insert">{{ this.getDate() }}</time>
+        </div>
+    </header>
 </article>
 </template>
 
 <script>
+import UserNameMap from '@/services/UserNameMap';
+
 export default {
   data () {
         return {
             API_IMG: process.env.VUE_APP_IMG_URL,
-            showLikes: false
+            showLikes: false,
+            UserNameMap: UserNameMap
         };
     },
     props: {
@@ -36,6 +39,19 @@ export default {
         }
     },
     emits: ['post-update'],
+    methods: {
+        getDate () {
+            const date = new Date(this.post.dateCreated);
+            let mounth = date.getUTCMonth() + 1;
+            if (mounth < 10) mounth = '0' + mounth;
+            const result = date.getUTCDate() + '.' + mounth + '.' + date.getUTCFullYear();
+            return result;
+        },
+        getNameByID (id) {
+            const userName = UserNameMap.getUserName(id);
+            return userName;
+        }
+    },
     mounted () {
     }
 };

@@ -1,6 +1,6 @@
 <template>
     <div class="post-wrapper">
-        <app-post :post="thisPost"/>
+        <app-post :post="thisPost" :isPostPage="isPostPage"/>
     </div>
 </template>
 
@@ -24,6 +24,10 @@ export default {
         },
         post: {
             type: Object
+        },
+        isPostPage: {
+            type: Boolean,
+            default: false
         }
     },
     computed: {
