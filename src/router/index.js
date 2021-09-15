@@ -9,6 +9,7 @@ import ThisUser from '@/views/users/ThisUser.vue';
 import UserNew from '../views/users/UserNew.vue';
 import UserById from '@/components/users/UserById.vue';
 import PostById from '@/views/posts/PostById';
+import PostEdit from '@/views/posts/PostEdit';
 
 const routes = [
   {
@@ -63,6 +64,12 @@ const routes = [
     path: '/post/:uid',
     name: 'PostById',
     component: PostById,
+    props: true
+  },
+  {
+    path: '/post-edit/:uid',
+    name: 'PostEdit',
+    component: PostEdit,
     props: true
   }
 ];

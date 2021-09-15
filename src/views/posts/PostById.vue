@@ -1,9 +1,7 @@
 <template>
     <div class="post-wrapper" v-if="currentPost">
-        ----
         <app-post :post="thisPost" :isPostPage="isPostPage"/>
         {{thisPost}}
-        ---
     </div>
 </template>
 

@@ -16,6 +16,39 @@
             <time :datetime="this.post.dateCreated" class="insert">{{ this.getDate() }}</time>
         </div>
     </header>
+    <main class="main">
+            <section class="control" v-if="makeEdit">
+                <span>
+                <router-link :to="{ name: 'PostEdit', params: { pid: post._id }}" >
+                    <i class="fas fa-pen"></i> edit
+                </router-link>
+                <a>
+                    <span onclick="uploadfile.click()">
+                        <i class="fas fa-cloud-upload-alt"></i> update image
+                        <input type="file" class="p-button-rounded"
+                        alt="upload avatar" ref="file" style="display: none" id="uploadfile" @change="sendImage($event)">
+                    </span>
+                </a>
+                </span>
+                <a @click="removePost" class="removePost" title="remove post">
+                    <i class="fas fa-trash-alt"></i> remove
+                </a>
+            </section>
+            <h2>{{post.title}}</h2>
+            <div class="main-wrapper">
+                <section class="post__image-wrapper" v-if="post.image">
+                    <img :src="`${API_IMG}${post.image}`" :alt="post.description" class="post__image">
+                    <a @click="updateImage" class="updateImage" v-if="makeEdit"></a>
+                </section>
+
+                <section class="post__description">
+
+                    <span v-if="!isPostPage" >{{post.description}} </span>
+                    <span v-if="isPostPage" >{{post.fullText}} </span>
+                </section>
+            </div>
+        </main>
+
 </article>
 </template>
 
@@ -27,8 +60,10 @@ export default {
         return {
             API_IMG: process.env.VUE_APP_IMG_URL,
             showLikes: false,
+            makeEdit: this.post.postedBy === this.$store.getters.loggedInUser._id,
             UserNameMap: UserNameMap,
-            postedBy: ''
+            postedBy: '',
+            likes: {}
         };
     },
     props: {
@@ -59,6 +94,10 @@ export default {
         if (this.post.dateCreated) {
             const result = await UserNameMap.getUserName(this.post.postedBy);
             this.postedBy = result;
+            this.post.likes.forEach(async (likeUserId) => {
+                const name = await UserNameMap.getUserName(likeUserId);
+                this.likes[likeUserId] = name;
+            });
         }
         this.$store.commit('onloadProcess');
     }
