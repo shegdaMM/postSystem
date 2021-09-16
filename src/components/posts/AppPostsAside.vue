@@ -14,14 +14,14 @@
             <a @click="statusAside = false" class="hide-btn">
                 <div><i class="fas fa-chevron-right"></i></div>
             </a>
-            <button class="addPost-btn">
+            <button class="addPost-btn"
+                @click="$router.push('/post-new')">
                 <i class="fas fa-plus"></i>
                 add new Post
             </button>
             <div class="search-wrapper">
                 <input type="search" placeholder="Search post..." v-model="search" @input="filter($event)">
             </div>
-            <!-- :class="{'users__item--active' : user[0] == this.userId} -->
             <h2>Search user posts:</h2>
             <ul class="users">
                 <li class="users__item" v-for="user in usersList" :key="user[0]">
@@ -38,6 +38,8 @@
 </template>
 
 <script>
+// import { mapGetters, mapActions } from 'vuex';
+
 export default {
     name: 'post-aside',
     data () {
@@ -48,6 +50,7 @@ export default {
             debounce: null
         };
     },
+    emits: ['filter'],
     props: {
          usersList: Object
     },
@@ -68,7 +71,7 @@ export default {
             setTimeout(() => {}, 200);
             const data = {
                 search: this.search,
-                userId: this.userId
+                postedBy: this.userId
             };
                 this.$emit('filter', data);
         }

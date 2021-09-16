@@ -217,6 +217,19 @@ export default {
         },
         clearCurrentUser: ({ commit, dispatch }, payload) => {
             commit('deleteUserById');
+        }, // api for users names
+        getUserNameById: async ({ commit, dispatch }, payload) => {
+            let result;
+            if (payload) {
+                result = await UserNameMap.getUserName(payload);
+                console.log(result);
+            } else {
+                if (!UserNameMap.map) {
+                   await UserNameMap.updateAllMap();
+                }
+                result = UserNameMap.map;
+            }
+            return result || '';
         }
     }
 };

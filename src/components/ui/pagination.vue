@@ -3,11 +3,15 @@
         <a @click="prevPage" title="previous" class="pagination__item" v-if="pagenationCount > 4">
           <i class="fas fa-angle-left"></i>
         </a>
-        <a  @click="goto(1)"
-        class="pagination__item" :class="{'pagination__item-active': 1 == this.currentItem}">
+        <a @click="goto(1)"
+        class="pagination__item"
+        :class="{'pagination__item-active': 1 == this.currentItem}"
+        v-if="pagenationCount > 2"
+        >
             <span> {{ 1 }} </span>
         </a>
-        <span class="pagination__item pagination__item--more" v-if="this.currentItem > 3">...</span>
+        <span class="pagination__item pagination__item--more"
+        v-if="this.currentItem > 3">...</span>
         <template v-for="i in pagenationCount" :key="i">
           <a @click="goto(i)" v-if="(!(i!=1) ^ (i!= pagenationCount)) &&  ((i >= currentItem - 2) && ((i <= currentItem + 2)))"
           class="pagination__item" :class="{'pagination__item-active': i == this.currentItem}">
@@ -16,7 +20,9 @@
         </template>
         <span class="pagination__item pagination__item--more" v-if="this.currentItem < (pagenationCount - 3)">...</span>
         <a @click="goto(pagenationCount)"
-        class="pagination__item" :class="{'pagination__item-active': pagenationCount == this.currentItem}">
+        class="pagination__item"
+        :class="{'pagination__item-active': pagenationCount == this.currentItem}"
+        v-if="pagenationCount > 2">
             <span> {{ pagenationCount }} </span>
         </a>
         <a @click="nextPage" title="next" class="pagination__item" v-if="pagenationCount > 4">

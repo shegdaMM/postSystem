@@ -171,6 +171,7 @@ a {
     h2 {
         margin: 0.5rem 0.2rem;
         word-break: break-all;
+        font-size: 1.2rem;
     }
 
     .main-wrapper {

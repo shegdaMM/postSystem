@@ -11,7 +11,7 @@
       <pagination :itemOnPage="itemOnPage" :listSize="postsListSize" @list-update="getPostsListByParams"/>
     </main>
     <aside>
-      <app-posts-aside />
+      <app-posts-aside @filter="getFilter" />
     </aside>
   </div>
 </template>
@@ -96,6 +96,14 @@ export default {
         search: this.filter.search || null,
         postedBy: this.filter.postedBy || null
       });
+    },
+    getFilter (data) {
+      if (data?.search) {
+        this.filter.search = data?.search;
+      }
+      if (data?.postedBy) {
+        this.filter.postedBy = data?.postedBy;
+      }
     }
   },
   mounted () {

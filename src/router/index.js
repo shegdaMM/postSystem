@@ -10,6 +10,7 @@ import UserNew from '../views/users/UserNew.vue';
 import UserById from '@/components/users/UserById.vue';
 import PostById from '@/views/posts/PostById';
 import PostEdit from '@/views/posts/PostEdit';
+import ThePostCreate from '@/views/posts/ThePostCreate';
 
 const routes = [
   {
@@ -22,11 +23,7 @@ const routes = [
     name: 'TheLogIn',
     component: TheLogIn
   },
-  {
-    path: '/posts',
-    name: 'ThePosts',
-    component: ThePosts
-  },
+  // users
   {
     path: '/users',
     name: 'TheUsers',
@@ -60,6 +57,12 @@ const routes = [
     component: UserById,
     props: true
   },
+  // posts
+  {
+    path: '/posts',
+    name: 'ThePosts',
+    component: ThePosts
+  },
   {
     path: '/post/:uid',
     name: 'PostById',
@@ -71,6 +74,11 @@ const routes = [
     name: 'PostEdit',
     component: PostEdit,
     props: true
+  },
+  {
+    path: '/post-new/',
+    name: 'ThePostCreate',
+    component: ThePostCreate
   }
 ];
 
