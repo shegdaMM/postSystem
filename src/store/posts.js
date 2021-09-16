@@ -142,6 +142,12 @@ export default {
                 commit('PostErrorMessage', 'You not add/remove like<br> to this post!');
             }
             return resultStatus;
+        },
+        getPostsList: async ({ commit, dispatch }, payload) => {
+            commit('onloadProcess');
+            const Url = `${API_URL}/users?limit=${payload.limit}&skip=${payload.skip}&search=${payload.search}&search=${payload.postedBy}`;
+            
+            commit('onloadProcess');
         }
     }
 };

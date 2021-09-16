@@ -73,6 +73,7 @@ export default {
             } else {
                 await this.getPostById({ id: this.post._id });
             }
+            this.$emit('post-update');
         }
     },
     async mounted () {
