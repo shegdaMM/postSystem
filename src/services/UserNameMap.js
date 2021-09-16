@@ -6,6 +6,10 @@ const API_URL = process.env.VUE_APP_URL;
 export default class UserNameMap {
     static map = {};
 
+    static timer = setInterval(() => {
+        localStorage.setItem('UserNameApp', UserNameMap.map);
+    }, 600000)
+
     static async updateAllMap () {
         const Url = `${API_URL}/users?limit=0`;
             try {
@@ -16,6 +20,7 @@ export default class UserNameMap {
                             UserNameMap.map[user._id] = { name: user.name, email: user.email, update: Date.now() };
                         });
                     }
+                    localStorage.setItem('UserNameApp', UserNameMap.map);
                 });
             } catch (error) {
                 store.commit('errorMessage', error);
@@ -40,8 +45,12 @@ export default class UserNameMap {
     };
 
     static async getUserName (id) {
-        if (UserNameMap.map) {
-           await UserNameMap.updateAllMap();
+        if (!UserNameMap.map) {
+            if (localStorage.getItem('UserNameApp')) {
+                UserNameMap.map = JSON.parse(localStorage.getItem('UserNameApp'));
+            } else {
+                await UserNameMap.updateAllMap();
+            }
         }
         let userName = '';
         if (id in UserNameMap.map) {

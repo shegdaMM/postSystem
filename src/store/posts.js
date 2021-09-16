@@ -82,8 +82,9 @@ export default {
                   if (payload.id) {
                     commit('PostErrorMessage', e);
                   }
+                } finally {
+                    commit('onloadProcess');
                 }
-              commit('onloadProcess');
         },
         removePostById: async ({ commit, dispatch }, payload) => {
             commit('onloadProcess');
@@ -98,14 +99,16 @@ export default {
                 });
               } catch (e) {
                 commit('PostErrorMessage', e);
-              }
-            commit('onloadProcess');
+              } finally {
+                commit('onloadProcess');
+            }
         },
         clearCurrentPost: ({ commit, dispatch }, payload) => {
             commit('deletePostById');
         },
         updatePostImage: async ({ commit, dispatch }, payload) => {
             let resultStatus;
+            commit('onloadProcess');
             const Url = `${API_URL}/posts/upload/${payload.id}`;
             try {
                 await axios({
@@ -123,6 +126,8 @@ export default {
             } catch (error) {
                 resultStatus = false;
                 commit('PostErrorMessage', 'You not update post image!');
+            } finally {
+                commit('onloadProcess');
             }
             return resultStatus;
         },
@@ -168,11 +173,15 @@ export default {
                   if (payload) {
                     commit('PostErrorMessage', e);
                   }
+            } finally {
+                commit('onloadProcess');
             }
-            commit('onloadProcess');
         },
         clearPostsList: ({ commit, dispatch }, payload) => {
             commit('removePostsList');
+        }, // not realize
+        createPost: async ({ commit, dispatch }, payload) => {
+            //
         }
     }
 };

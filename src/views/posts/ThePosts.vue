@@ -118,5 +118,10 @@ export default {
 </script>
 
 <style>
-
+    .posts-wrapper{
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-template-rows: 1fr;
+      min-height: calc(100vh - 100px);
+    }
 </style>

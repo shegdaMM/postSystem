@@ -125,7 +125,6 @@ export default {
         }
     },
     async mounted () {
-        this.$store.commit('onloadProcess');
         if (this.post.dateCreated) {
             if (this.post?.postedBy) {
                 const result = await UserNameMap.getUserName(this.post.postedBy);
@@ -136,7 +135,6 @@ export default {
                 this.likes[likeUserId] = name;
             });
         }
-        this.$store.commit('onloadProcess');
     }
 };
 </script>
