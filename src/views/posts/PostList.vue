@@ -55,4 +55,7 @@ export default {
  .postsNotHave{
         text-align: center;
   }
+  .post-list {
+      list-style-type: none;
+  }
 </style>

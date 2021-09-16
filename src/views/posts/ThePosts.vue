@@ -1,16 +1,18 @@
 <template>
   <div class="posts-wrapper">
-    <h1>All POSTS IN SYSTEM</h1>
-    <input type="text" v-model="filter.search">
-    <input type="text" v-model="filter.postedBy">
-    {{'f' + filter.currentItem}}
     <main class="posts-main">
+      <h1>All POSTS IN SYSTEM</h1>
+      <input type="text" v-model="filter.search">
+      <input type="text" v-model="filter.postedBy">
       <post-list
         @post-update="getPostsListByParams"
         :postList="currentPostsList"
       />
       <pagination :itemOnPage="itemOnPage" :listSize="postsListSize" @list-update="getPostsListByParams"/>
     </main>
+    <aside>
+      <app-posts-aside />
+    </aside>
   </div>
 </template>
 
@@ -18,6 +20,7 @@
 import Pagination from '../../components/ui/pagination.vue';
 import { mapGetters, mapActions } from 'vuex';
 import PostList from '@/views/posts/PostList';
+import AppPostsAside from '@/components/posts/AppPostsAside';
 
 export default {
   data () {
@@ -36,7 +39,7 @@ export default {
     };
   },
   components: {
-    Pagination, PostList
+    Pagination, PostList, AppPostsAside
   },
   computed: {
     ...mapGetters(['postsListSize', 'currentPostsList'])

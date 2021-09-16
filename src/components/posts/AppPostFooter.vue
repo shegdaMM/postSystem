@@ -25,9 +25,11 @@
             </section>
             <ul class="likesList" v-if="showLikes">
               <li class="likesItem" v-for="like in post.likes" :key="like">
-                        <router-link :to="{ name: 'UserById', params: { pid: like }}" v-if="likes[like]" class="likeLink">
+                    <span v-if="likes[like]">
+                        <router-link :to="{ name: 'UserById', params: { uid: like }}" class="likeLink">
                             {{likes[like]}}
                         </router-link>
+                    </span>
                 </li>
             </ul>
         </footer>
@@ -116,14 +118,17 @@ a {
     list-style-type: none;
 
     .likesItem {
-        padding: 0.1rem 0.5rem;
-        background: rgba(255, 255, 255, 0.561);
-        border-radius: 0.5rem 0.5rem 0.3rem 0.5rem;
         margin: 0.2rem 0.5rem 0.2rem 0;
 
         a{
             display: block;
             height: 100%;
+        }
+        span {
+            display: inline-block;
+            padding: 0.1rem 0.5rem;
+            background: rgba(255, 255, 255, 0.561);
+            border-radius: 0.5rem 0.5rem 0.3rem 0.5rem;
         }
     }
 }
