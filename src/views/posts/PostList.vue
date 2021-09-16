@@ -1,13 +1,23 @@
-<template>
+<template v-if="isLoad">
 <div class="post-list-wrapper">
-    <ul class="post-list">
-        <li class="post-list_item" >
-            <post-by-id
-                :uid="'6139d6b3c46d5405b3586a23'"
-                :isPostPage="false"
-            />
-        </li>
-    </ul>
+    <template v-if="!havePosts">
+        <h2 class="postsNotHave">
+            Sorry, we not have posts...
+        </h2>
+    </template>
+    <template v-if="havePosts">
+       <ul class="post-list">
+            <li class="post-list_item"
+                v-for="post in postList"
+                :key="post._id">
+                <post-by-id
+                    :post="post"
+                    :isPostPage="false"
+                    @post-update="this.$emit('post-update')"
+                />
+            </li>
+        </ul>
+  </template>
 </div>
 </template>
 
@@ -17,12 +27,32 @@ export default {
     components: {
         PostById
     },
+    emits: ['post-update'],
     props: {
         postList: Array
+    },
+    data () {
+        return {
+            isLoad: false
+        };
+    },
+    computed: {
+        havePosts () {
+            let result = false;
+            if (this.postList) {
+                result = this.postList.length > 0;
+            }
+            return result;
+        }
+    },
+    mounted () {
+            this.isLoad = true;
     }
 };
 </script>
 
 <style>
-
+ .postsNotHave{
+        text-align: center;
+  }
 </style>

@@ -8,7 +8,7 @@ export default {
     state: {
         postAlert: null,
         currentPost: null,
-        postsListSize: 100,
+        postsListSize: 0,
         currentPostsList: []
     },
     getters: {
@@ -145,9 +145,34 @@ export default {
         },
         getPostsList: async ({ commit, dispatch }, payload) => {
             commit('onloadProcess');
-            const Url = `${API_URL}/users?limit=${payload.limit}&skip=${payload.skip}&search=${payload.search}&search=${payload.postedBy}`;
-            
+            let isAdd = false;
+            let url = `${API_URL}/posts`;
+            if (payload?.search) {
+                url += `${isAdd ? '&' : '?'}search=${payload?.search}`;
+                isAdd = true;
+            }
+            if (payload?.postedBy) {
+                url += `${isAdd ? '&' : '?'}postedBy=${payload?.postedBy}`;
+                isAdd = true;
+            }
+            url += `${isAdd ? '&' : '?'}limit=${payload?.limit || 0}&skip=${payload?.skip || 0}`;
+            try {
+                await axios.get(url).then(response => {
+                    if (response.status === 200) {
+                      commit('setPostsListSize', response.data.pagination.total);
+                      commit('setCurrentPostsList', response.data.data);
+                    }
+                  });
+                } catch (e) {
+                  // error
+                  if (payload) {
+                    commit('PostErrorMessage', e);
+                  }
+            }
             commit('onloadProcess');
+        },
+        clearPostsList: ({ commit, dispatch }, payload) => {
+            commit('removePostsList');
         }
     }
 };

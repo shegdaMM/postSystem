@@ -1,5 +1,5 @@
 <template>
-    <div class="post-wrapper" v-if="currentPost">
+    <div class="post-wrapper" v-if="thisPost">
         <app-post
             :post="thisPost"
             :isPostPage="isPostPage"
@@ -41,8 +41,7 @@ export default {
             let result;
             if (this.post) {
                 result = this.post;
-            }
-            if (this.uid) {
+            } else if (this.uid) {
                 result = this.currentPost;
             }
 

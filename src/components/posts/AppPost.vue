@@ -39,7 +39,7 @@
         :makeEdit="makeEdit"
         :likes="likes"
         :isLikePost="isLikePost"
-        @setLikes="setLikes"
+        @set-likes="setLikes"
      />
 </article>
 </template>
@@ -115,14 +115,22 @@ export default {
                 if (result) {
                     this.$emit('post-update');
                 }
+            } else {
+              this.$toast.open({
+              message: 'You not can set like<br>to your post',
+              type: 'info',
+              duration: 5000
+            });
             }
         }
     },
     async mounted () {
         this.$store.commit('onloadProcess');
         if (this.post.dateCreated) {
-            const result = await UserNameMap.getUserName(this.post.postedBy);
-            this.postedBy = result;
+            if (this.post?.postedBy) {
+                const result = await UserNameMap.getUserName(this.post.postedBy);
+                this.postedBy = result;
+            }
             this.post.likes.forEach(async (likeUserId) => {
                 const name = await UserNameMap.getUserName(likeUserId);
                 this.likes[likeUserId] = name;
