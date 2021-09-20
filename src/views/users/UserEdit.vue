@@ -1,15 +1,15 @@
 <template>
 <h1> Edit your account in the system </h1>
 <div class="info">
-  <div class="user-text" v-if="currentUser.dateCreated">
+  <div class="user-text" v-if="currentUser?.dateCreated">
     <span class="discriptoin">ACCOUNT CREATED:</span>
     <span class="user__dateCreated">{{currentUser.dateCreated}}</span>
   </div>
   <div class="user-text">
     <span class="discriptoin">ID:</span>
-    <span class="user__id" v-if="currentUser._id">{{currentUser._id}}</span>
+    <span class="user__id" v-if="currentUser?._id">{{currentUser._id}}</span>
   </div>
-  <div class="user-text" v-if="currentUser.email">
+  <div class="user-text" v-if="currentUser?.email">
     <span class="discriptoin">EMAIL:</span>
     <span class="user__email"><a :href="'mailto:' + currentUser.email">{{currentUser.email}}</a></span>
   </div>

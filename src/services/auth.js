@@ -28,7 +28,7 @@ export default function axiosSetUp () {
       async function (error) {
         // Do something with response error
         const originalRequest = error.config;
-        if (error.response.status === 401 || error.response.status === 503) {
+        if (error.response.status === 401 || error.response.status === 403) {
           store.commit('clearUserData');
           router.push('/login');
           return Promise.reject(error);

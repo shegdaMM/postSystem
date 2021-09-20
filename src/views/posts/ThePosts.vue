@@ -79,7 +79,6 @@ export default {
           }
         }
         const url = `${window.location.pathname}` + `${item || ''}` + `${search || ''}` + `${postedBy || ''}`;
-        console.log(url);
         window.history.pushState(
           null, document.title, url
         );

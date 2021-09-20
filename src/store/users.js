@@ -156,7 +156,6 @@ export default {
                 .then(response => {
                     resultStatus = true;
                     commit('setUserById', response.data);
-                    commit('setCurrentUserAvatar', response.data.avatar);
                     commit('UserGoodMessage', 'You update your avatar!');
                 });
             } catch (error) {
