@@ -10,9 +10,9 @@
       />
       <pagination :itemOnPage="itemOnPage" :listSize="postsListSize" @list-update="getPostsListByParams"/>
     </main>
-    <aside>
+    <div class="asideList">
       <app-posts-aside @filter="getFilter" />
-    </aside>
+    </div>
   </div>
 </template>
 
