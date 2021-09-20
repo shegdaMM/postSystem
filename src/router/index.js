@@ -70,7 +70,7 @@ const routes = [
     props: true
   },
   {
-    path: '/post-edit/:uid',
+    path: '/post-edit/:pid',
     name: 'PostEdit',
     component: PostEdit,
     props: true

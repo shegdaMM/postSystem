@@ -15,7 +15,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="moreLink" v-if="!makeEdit">
+                <div class="moreLink" v-if="!isPostPage">
                      <router-link :to="
                      { name: 'PostById', params: { uid: this.post._id }}
                      ">
@@ -48,7 +48,8 @@ export default {
         post: Object,
         makeEdit: Boolean,
         likes: Object,
-        isLikePost: Boolean
+        isLikePost: Boolean,
+        isPostPage: Boolean
     },
     computed: {
     }

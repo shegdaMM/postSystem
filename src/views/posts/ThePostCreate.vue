@@ -3,7 +3,7 @@
       <app-title-page>
         CREATE NEW POST
       </app-title-page>
-      <app-post-edit @form-submit="createPost">
+      <app-post-edit @form-submit="createNewPost">
         CREATE
       </app-post-edit>
   </div>
@@ -12,13 +12,16 @@
 <script>
 import AppTitlePage from '../../components/ui/AppTitlePage.vue';
 import AppPostEdit from '@/components/posts/AppPostEdit';
+import { mapActions } from 'vuex';
+
 export default {
   components: {
     AppTitlePage, AppPostEdit
   },
   methods: {
-    createPost (data) {
-      
+    ...mapActions(['createPost']),
+    async createNewPost (data) {
+      await this.createPost(data);
     }
   }
 };

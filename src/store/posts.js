@@ -65,6 +65,11 @@ export default {
         removePostsList (state) {
             state.currentPostsList = [];
             state.postsListSize = 0;
+        },
+        updateCurrentPost (state, post) {
+            if (post) {
+                state.currentPost = post;
+            }
         }
     },
     actions: {
@@ -181,7 +186,40 @@ export default {
             commit('removePostsList');
         }, // not realize
         createPost: async ({ commit, dispatch }, payload) => {
-            //
+            commit('onloadProcess');
+            const Url = `${API_URL}/posts`;
+            try {
+                await axios.post(Url, payload).then(response => {
+                    if (response.status === 200) {
+                        commit('PostGoodMessage', 'You create post');
+                        router.push({ path: `/post/${response.data._id}` });
+                    }
+                });
+            } catch (error) {
+                commit('PostErrorMessage', error);
+            }
+            commit('onloadProcess');
+        },
+        patchCurrentPost: async ({ commit, dispatch }, payload) => {
+            commit('onloadProcess');
+            const Url = `${API_URL}/posts/${payload._id}`;
+            const send = {
+                title: payload.title || '',
+                fullText: payload.fullText || '',
+                description: payload.description || ''
+            };
+            try {
+                await axios.patch(Url, send).then(response => {
+                    if (response.status === 200) {
+                        commit('updateCurrentPost', response.data);
+                        commit('PostGoodMessage', 'You update post');
+                        router.push({ path: `/post/${response.data._id}` });
+                    }
+                });
+            } catch (error) {
+                commit('PostErrorMessage', error);
+            }
+            commit('onloadProcess');
         }
     }
 };

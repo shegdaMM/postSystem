@@ -49,38 +49,47 @@
             </Field>
             <ErrorMessage name="FullText" class="error"/>
          </div>
-      <button>
-          <slot></slot>
-      </button>
+         <div class="my-btn">
+            <app-button @submit="submit">
+                <slot></slot>
+            </app-button>
+         </div>
   </Form>
 </template>
 
 <script>
 import { Field, Form, ErrorMessage } from 'vee-validate';
+import AppButton from '../ui/AppButton.vue';
 export default {
     components: {
         Field,
         Form,
-        ErrorMessage
+        ErrorMessage,
+        AppButton
     },
     data () {
         return {
             post: {
-                title: '',
-                description: '',
-                fullText: ''
+                title: this.thisPost?.title,
+                description: this.thisPost?.description,
+                fullText: this.thisPost?.fullText
             }
         };
     },
+    props: {
+        thisPost: {
+            type: Object
+        }
+    },
     computed: {
         statusTitle () {
-            return this.post.title.length || 0;
+            return this.post?.title?.length || 0;
         },
         statusDescription () {
-            return this.post.description.length || 0;
+            return this.post?.description?.length || 0;
         },
         statusFullText () {
-            return this.post.fullText.length || 0;
+            return this.post?.fullText?.length || 0;
         }
     },
     emits: ['form-submit'],
@@ -107,6 +116,11 @@ export default {
                 resultMsg = 'Text should not be more than 400 characters long';
             }
             return resultMsg || 'This is required';
+        }
+    },
+    mounted () {
+        if (this.thisPost.title) {
+            this.post = this.thisPost;
         }
     }
 };
@@ -138,5 +152,9 @@ export default {
             color: red;
             padding: 0 0 0 0.5rem;
         }
+    }
+    .my-btn {
+        display: flex;
+        justify-content: center;
     }
 </style>

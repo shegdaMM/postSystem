@@ -38,6 +38,7 @@
         :post="post"
         :makeEdit="makeEdit"
         :likes="likes"
+        :isPostPage="isPostPage"
         :isLikePost="isLikePost"
         @set-likes="setLikes"
      />
