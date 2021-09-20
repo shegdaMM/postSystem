@@ -1,5 +1,7 @@
 <template>
-<h1> Create new account in system </h1>
+<app-title-page>
+  Create new account in system
+</app-title-page>
 <q-form class="edit-form" @submit.stop="createUser">
 <div class="user-info">
   <q-input class="form-input" filled v-model="user.email" type="email" label="email" hint="Enter valid email"
@@ -50,8 +52,10 @@
 // :disabled="checkState"
 // :class="{'blocked' : checkState}"
 import { mapActions } from 'vuex';
+import AppTitlePage from '../../components/ui/AppTitlePage.vue';
 
 export default {
+  components: { AppTitlePage },
   name: 'EditAccount',
   props: {
   },

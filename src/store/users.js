@@ -11,7 +11,7 @@ export default {
         currentUser: null,
         usersListSize: 0,
         currentUserList: [],
-        userNameById: new Map()
+        userNameList: ''
     },
     getters: {
         userAlert (state) {
@@ -27,7 +27,7 @@ export default {
             return state.currentUserList;
         },
         // map
-        userNameById: (state) => (key) => {
+        userNameList: (state) => (key) => {
             if (key && state.usersIDMap) {
               let name = state.usersIDMap.get(key);
               if (!name) { name = ''; }
@@ -81,6 +81,11 @@ export default {
         removeUsersList (state) {
             state.currentUserList = [];
             state.usersListSize = 0;
+        },
+        setUserNameList (state, list) {
+            if (list) {
+                state.userNameList = list;
+            }
         }
     },
     actions: {
@@ -222,6 +227,7 @@ export default {
             let result;
             if (payload) {
                 result = await UserNameMap.getUserName(payload);
+                commit('setUserNameList', result);
                 console.log(result);
             } else {
                 if (!UserNameMap.map) {

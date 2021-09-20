@@ -24,7 +24,8 @@ export default class UserNameMap {
                 });
             } catch (error) {
                 store.commit('errorMessage', error);
-            }
+        }
+        return UserNameMap.map;
     };
 
     static async updateUser (id) {

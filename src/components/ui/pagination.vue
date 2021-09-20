@@ -13,7 +13,7 @@
         <span class="pagination__item pagination__item--more"
         v-if="this.currentItem > 3">...</span>
         <template v-for="i in pagenationCount" :key="i">
-          <a @click="goto(i)" v-if="(!(i!=1) ^ (i!= pagenationCount)) &&  ((i >= currentItem - 2) && ((i <= currentItem + 2)))"
+          <a @click="goto(i)" v-if="(!(i!=1) ^ (i!= pagenationCount)) &&  ((i >= currentItem - seeOnPage) && ((i <= currentItem +  seeOnPage)))"
           class="pagination__item" :class="{'pagination__item-active': i == this.currentItem}">
                 <span> {{ i }} </span>
           </a>
@@ -43,13 +43,21 @@ export default {
     props: {
         listSize: {
             type: Number,
-            defult: 0,
+            default: 0,
             required: true
         },
         itemOnPage: {
             type: Number,
-            defult: 10,
+            default: 10,
             required: true
+        },
+        seeOnPage: {
+            type: Number,
+            default: 2
+        },
+        propCurrentItem: {
+            type: Number,
+            default: 0
         }
     },
     computed: {
@@ -64,7 +72,7 @@ export default {
         },
         nextPage () {
           if ((this.currentItem + 1) <= this.pagenationCount) {
-            this.goto(this.currentItem);
+            this.goto(this.currentItem + 1);
           }
         },
         prevPage () {
@@ -74,7 +82,11 @@ export default {
         }
     },
     mounted () {
-        this.goto(1);
+        if (this.propCurrentItem) {
+            this.goto(this.propCurrentItem);
+        } else {
+            this.goto(1);
+        }
     }
 };
 </script>

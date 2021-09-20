@@ -1,0 +1,76 @@
+<template>
+   <ul class="users" v-if="userList">
+       <li class="users__item" v-for="user in userList" :key="user[0]">
+           <input type="radio" :id="user[0]" :value="user[0]" v-model="userId" style="display: none;">
+            <label :for="user[0]" @click="$emit('filter', this.userId)">
+                <a @click="userId = user[0]"><i class="far fa-user" :class="{'fas': user[0] === this.$store.getters.loggedInUser._id}"></i> {{user[1].name || user[1].email}}</a>
+            </label>
+            <span @click="$emit('filter'), userId=''" class="unCheckUserId" v-if="id == user[0]"><i class="fas fa-times"></i></span>
+       </li>
+    </ul>
+</template>
+
+<script>
+
+export default {
+    props: {
+        userList: {
+            type: Array,
+            require: true
+        },
+        id: String
+    },
+    emits: ['filter'],
+    data () {
+        return {
+            userId: this.ChangeUserId
+        };
+    }
+};
+</script>
+
+<style lang="scss" scoped>
+     .users__item {
+        list-style-type: none;
+        position: relative;
+
+         .unCheckUserId {
+            display: inline-block;
+            font-weight: 700;
+            font-size: 1rem;
+            margin: 0.1rem auto 0.5rem 0;
+            color: red;
+            position: absolute;
+            top: -1px;
+            right: 1rem;
+            height: 100%;
+            z-index: 5;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 0 0.5rem;
+        }
+        a{
+            width: 100%;
+            padding: 0.25rem 1.3rem 0.25rem 0.5rem;
+            margin: 0.25rem 0.1rem 0.25rem 0;
+            background: #ffffff;
+            color: #00795e;
+            font-weight: 500;
+            display: block;
+            border-radius: 0.8rem;
+        }
+        input {
+            position: absolute;
+            right: 1rem;
+            height: 100%;
+            background: #00af89;
+        }
+        label {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+     }
+</style>

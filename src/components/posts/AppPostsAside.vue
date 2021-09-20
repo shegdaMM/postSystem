@@ -22,9 +22,9 @@
             <div class="search-wrapper">
                 <input type="search" placeholder="Search post..." v-model="search" @input="filter($event)">
             </div>
-            <div class="usersState" ref="userStatus">
-            </div>
-           
+            <app-post-aside-users-list-wrapper
+                @filter-user="filterUser"
+            />
         </div>
         </template>
     </aside>
@@ -32,8 +32,10 @@
 
 <script>
 // import { mapGetters, mapActions } from 'vuex';
+import AppPostAsideUsersListWrapper from './AppPostAsideUsersListWrapper.vue';
 
 export default {
+    components: { AppPostAsideUsersListWrapper },
     name: 'post-aside',
     data () {
         return {
@@ -56,12 +58,20 @@ export default {
         filter (event) {
             clearTimeout(this.debounce);
             this.debounce = setTimeout(() => {
-                this.search = event.target.value;
+                this.search = event.target.value || '';
                 this.sendResponce();
             }, 1000);
         },
+        filterUser (userId) {
+            if (userId) {
+                this.userId = userId;
+                this.sendResponce();
+            } else {
+                this.userId = '';
+                this.sendResponce();
+            }
+        },
         sendResponce () {
-            setTimeout(() => {}, 200);
             const data = {
                 search: this.search,
                 postedBy: this.userId
@@ -77,7 +87,7 @@ export default {
 
 <style lang="scss" scoped>
     .posts-control{
-         max-width: 300px;
+         max-width: 320px;
          padding: 1rem 0.5rem 1rem 1rem;
          background: rgba(255, 255, 255, 0.671);
          border-radius: 1rem 0 0 1rem;

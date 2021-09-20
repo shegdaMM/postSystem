@@ -82,8 +82,10 @@ export default {
     }
   },
   async mounted () {
+    if (this.uid) {
       await this.getUserById({ id: this.uid });
       this.user = this.currentUser;
+    }
   }
 };
 </script>

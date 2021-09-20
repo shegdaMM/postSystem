@@ -1,14 +1,18 @@
 <template>
   <div class="posts-wrapper">
     <main class="posts-main">
-      <h1>All POSTS IN SYSTEM</h1>
-      <input type="text" v-model="filter.search">
-      <input type="text" v-model="filter.postedBy">
+      <app-title-page>
+        All POSTS IN SYSTEM
+      </app-title-page>
       <post-list
         @post-update="getPostsListByParams"
         :postList="currentPostsList"
       />
-      <pagination :itemOnPage="itemOnPage" :listSize="postsListSize" @list-update="getPostsListByParams"/>
+      <pagination
+        :itemOnPage="itemOnPage"
+        :listSize="postsListSize"
+        @list-update="getPostsListByParams"
+      />
     </main>
     <div class="asideList">
       <app-posts-aside @filter="getFilter" />
@@ -21,6 +25,7 @@ import Pagination from '../../components/ui/pagination.vue';
 import { mapGetters, mapActions } from 'vuex';
 import PostList from '@/views/posts/PostList';
 import AppPostsAside from '@/components/posts/AppPostsAside';
+import AppTitlePage from '../../components/ui/AppTitlePage.vue';
 
 export default {
   data () {
@@ -39,7 +44,10 @@ export default {
     };
   },
   components: {
-    Pagination, PostList, AppPostsAside
+    Pagination,
+    PostList,
+    AppPostsAside,
+    AppTitlePage
   },
   computed: {
     ...mapGetters(['postsListSize', 'currentPostsList'])
@@ -98,18 +106,22 @@ export default {
       });
     },
     getFilter (data) {
-      if (data?.search) {
-        this.filter.search = data?.search;
+      if (data.search) {
+        this.filter.search = data?.search || '';
+      } else {
+        this.filter.search = '';
       }
-      if (data?.postedBy) {
+      if (data.postedBy) {
         this.filter.postedBy = data?.postedBy;
+      } else {
+        this.filter.postedBy = '';
       }
     }
   },
-  mounted () {
-    const windowData = Object.fromEntries(new URL(window.location).searchParams.entries());
+  async mounted () {
+    const windowData = await Object.fromEntries(new URL(window.location).searchParams.entries());
     if (windowData) {
-        this.filter.currentItem = windowData.currentItem || 0;
+      this.filter.currentItem = windowData.currentItem || 0;
       if (windowData.search) {
         this.filter.search = windowData.search;
       }
