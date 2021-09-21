@@ -6,7 +6,9 @@
             @post-update="updatePost"
             @remove-post="removePostDialog"
         />
-        <app-comments :postId="thisPost._id"/>
+        <app-comments
+        :postId="thisPost._id"
+        v-if="isPostPage"/>
     </div>
 </template>
 
@@ -77,6 +79,7 @@ export default {
             }
             this.$emit('post-update');
         }
+
     },
     async mounted () {
         if (this.uid) {

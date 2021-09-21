@@ -14,6 +14,7 @@
     @filter="filterUser"
     :currentUser="currentUser"
     />
+    <span v-if="!usersFullList">Loading...</span>
    <pagination
         @list-update="loadUserList"
         :listSize="usersFullList.length"

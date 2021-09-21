@@ -4,8 +4,9 @@
       <app-title-page>
         All POSTS IN SYSTEM
       </app-title-page>
+      <span v-if="!currentPostsList">Loading...</span>
       <post-list
-        @post-update="getPostsListByParams"
+        @post-update="getPostsListByParams(filter.currentItem)"
         :postList="currentPostsList"
       />
       <pagination
@@ -34,12 +35,12 @@ export default {
     return {
       itemOnPage: 5,
       filter: {
-        currentItem: 1,
+        currentItem: '',
         search: '',
         postedBy: ''
       },
       oldFilter: {
-        currentItem: 1,
+        currentItem: '',
         search: '',
         postedBy: ''
       }
@@ -52,10 +53,7 @@ export default {
     AppTitlePage
   },
   computed: {
-    ...mapGetters(['postsListSize', 'currentPostsList']),
-    currentStart () {
-      return (this.filter.currentItem + 1) * this.itemOnPage;
-    }
+    ...mapGetters(['postsListSize', 'currentPostsList'])
   },
   watch: {
     filter: {
@@ -71,17 +69,11 @@ export default {
           search = (isAdd ? '&' : '?') +
           `search=${this.filter.search}`;
           isAdd = true;
-          if (this.filter.search !== this.oldFilter.search) {
-            this.filter.currentItem = 1;
-          }
         }
         if (this.filter.postedBy) {
           postedBy = (isAdd ? '&' : '?') +
           `postedBy=${this.filter.postedBy}`;
           isAdd = true;
-          if (this.filter.postedBy !== this.oldFilter.postedBy) {
-            this.filter.currentItem = 1;
-          }
         }
         const url = `${window.location.pathname}` + `${item || ''}` + `${search || ''}` + `${postedBy || ''}`;
         window.history.pushState(
@@ -90,11 +82,11 @@ export default {
         // run
           if (this.filter.postedBy !== this.oldFilter.postedBy) {
             this.oldFilter.postedBy = this.filter.postedBy;
-            this.getPostsListByParams();
+            this.getPostsListByParams(1);
           }
           if (this.filter.search !== this.oldFilter.search) {
             this.oldFilter.search = this.filter.search;
-            this.getPostsListByParams();
+            this.getPostsListByParams(1);
           }
       },
       deep: true
@@ -129,7 +121,6 @@ export default {
     const windowData = await Object.fromEntries(new URL(window.location).searchParams.entries());
     if (windowData) {
       this.filter.currentItem = windowData.currentItem;
-      console.log(this.filter.currentItem);
       if (windowData.search) {
         this.filter.search = windowData.search;
       }
