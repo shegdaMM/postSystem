@@ -5,7 +5,7 @@
             <label :for="user[0]" @click="$emit('filter', this.userId)">
                 <a @click="userId = user[0]"><i class="far fa-user" :class="{'fas': user[0] === this.$store.getters.loggedInUser._id}"></i> {{user[1].name || user[1].email}}</a>
             </label>
-            <span @click="$emit('filter'), userId=''" class="unCheckUserId" v-if="id == user[0]"><i class="fas fa-times"></i></span>
+            <span @click="$emit('filter'), userId=''" class="unCheckUserId" v-if="currentUser === user[0]"><i class="fas fa-times"></i></span>
        </li>
     </ul>
 </template>
@@ -18,7 +18,7 @@ export default {
             type: Array,
             require: true
         },
-        id: String
+        currentUser: String
     },
     emits: ['filter'],
     data () {
@@ -60,6 +60,11 @@ export default {
             font-weight: 500;
             display: block;
             border-radius: 0.8rem;
+
+            i{
+                float: left;
+                padding: 0.3rem 0.2rem 0 0;
+            }
         }
         input {
             position: absolute;
@@ -71,6 +76,7 @@ export default {
             display: block;
             width: 100%;
             height: 100%;
+            word-wrap: break-word;
         }
      }
 </style>

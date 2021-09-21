@@ -3,16 +3,16 @@
        USERS LIST
    </app-title-page>
    <app-users-list
-    :user-list="usersFullList.filter(item => item[0] === userId)"
-    v-if="userId"
-    :id="userId"
+    :user-list="usersFullList.filter(item => item[0] === currentUser)"
+    v-if="currentUser"
+    :currentUser="currentUser"
     @filter="filterUser"
     />
    <app-users-list
     :user-list="usersList"
     v-if="usersFullList"
-    :id="userId"
     @filter="filterUser"
+    :currentUser="currentUser"
     />
    <pagination
         @list-update="loadUserList"
@@ -43,11 +43,14 @@ export default {
             userId: ''
         };
     },
+    props: {
+        currentUser: String
+    },
     computed: [
     ],
     methods: {
         loadUserList (current) {
-            this.usersList = this.usersFullList.slice(current, current + 15);
+            this.usersList = this.usersFullList.slice((current - 1) * 14, ((current - 1) * 14) + 14);
         },
         filterUser (userId) {
             if (userId) {

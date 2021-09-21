@@ -32,11 +32,10 @@
 </template>
 
 <script>
-// @user-update="$emit('user-update')"
 export default {
     data () {
         return {
-            currentItem: 1
+            currentItem: this.propCurrentItem
         };
     },
     emits: ['list-update'],
@@ -68,7 +67,7 @@ export default {
     methods: {
          goto (current) {
           this.currentItem = current;
-          this.$emit('list-update', (current - 1) * this.itemOnPage);
+          this.$emit('list-update', current);
         },
         nextPage () {
           if ((this.currentItem + 1) <= this.pagenationCount) {

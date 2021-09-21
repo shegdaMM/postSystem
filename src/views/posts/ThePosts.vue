@@ -12,10 +12,12 @@
         :itemOnPage="itemOnPage"
         :listSize="postsListSize"
         @list-update="getPostsListByParams"
+        v-if="currentPostsList.length > 0"
+        :propCurrentItem="filter.currentItem"
       />
     </main>
     <div class="asideList">
-      <app-posts-aside @filter="getFilter" />
+      <app-posts-aside @filter="getFilter" :currentFilter="filter"/>
     </div>
   </div>
 </template>
@@ -32,12 +34,12 @@ export default {
     return {
       itemOnPage: 5,
       filter: {
-        currentItem: 0,
+        currentItem: 1,
         search: '',
         postedBy: ''
       },
       oldFilter: {
-        currentItem: 0,
+        currentItem: 1,
         search: '',
         postedBy: ''
       }
@@ -50,7 +52,10 @@ export default {
     AppTitlePage
   },
   computed: {
-    ...mapGetters(['postsListSize', 'currentPostsList'])
+    ...mapGetters(['postsListSize', 'currentPostsList']),
+    currentStart () {
+      return (this.filter.currentItem + 1) * this.itemOnPage;
+    }
   },
   watch: {
     filter: {
@@ -67,7 +72,7 @@ export default {
           `search=${this.filter.search}`;
           isAdd = true;
           if (this.filter.search !== this.oldFilter.search) {
-            this.filter.currentItem = 0;
+            this.filter.currentItem = 1;
           }
         }
         if (this.filter.postedBy) {
@@ -75,7 +80,7 @@ export default {
           `postedBy=${this.filter.postedBy}`;
           isAdd = true;
           if (this.filter.postedBy !== this.oldFilter.postedBy) {
-            this.filter.currentItem = 0;
+            this.filter.currentItem = 1;
           }
         }
         const url = `${window.location.pathname}` + `${item || ''}` + `${search || ''}` + `${postedBy || ''}`;
@@ -83,12 +88,14 @@ export default {
           null, document.title, url
         );
         // run
-        if (this.filter.postedBy !== this.oldFilter.postedBy ||
-        this.filter.search !== this.oldFilter.search) {
-          this.oldFilter.postedBy = this.filter.postedBy;
-          this.oldFilter.search = this.filter.search;
-          this.getPostsListByParams();
-        }
+          if (this.filter.postedBy !== this.oldFilter.postedBy) {
+            this.oldFilter.postedBy = this.filter.postedBy;
+            this.getPostsListByParams();
+          }
+          if (this.filter.search !== this.oldFilter.search) {
+            this.oldFilter.search = this.filter.search;
+            this.getPostsListByParams();
+          }
       },
       deep: true
     }
@@ -97,9 +104,10 @@ export default {
     ...mapActions(['getPostsList', 'clearPostsList']),
     async getPostsListByParams (custum) {
       this.filter.currentItem = custum;
+      const poss = (custum - 1) * this.itemOnPage;
       await this.getPostsList({
         limit: this.itemOnPage || 5,
-        skip: this.filter.currentItem || 0,
+        skip: poss || 0,
         search: this.filter.search || null,
         postedBy: this.filter.postedBy || null
       });
@@ -113,14 +121,15 @@ export default {
       if (data.postedBy) {
         this.filter.postedBy = data?.postedBy;
       } else {
-        this.filter.postedBy = '';
+         this.filter.postedBy = '';
       }
     }
   },
   async mounted () {
     const windowData = await Object.fromEntries(new URL(window.location).searchParams.entries());
     if (windowData) {
-      this.filter.currentItem = windowData.currentItem || 0;
+      this.filter.currentItem = windowData.currentItem;
+      console.log(this.filter.currentItem);
       if (windowData.search) {
         this.filter.search = windowData.search;
       }
@@ -128,6 +137,7 @@ export default {
         this.filter.postedBy = windowData.postedBy;
       }
     }
+    await this.getPostsListByParams();
   },
   beforeUnmount () {
     this.clearPostsList();

@@ -1,13 +1,11 @@
 <template>
-  <q-layout view="hHh lpR fFf">
+  <div class="app-wrapper">
     <app-header />
-    <q-page-container>
       <div id="page-container">
         <router-view />
       </div>
-    </q-page-container>
     <app-loader v-if="this.$store.getters.loadProcess" />
-  </q-layout>
+  </div>
 </template>
 
 <script>
@@ -33,6 +31,9 @@ export default {
 </script>
 
 <style lang="scss">
+.app-wrapper {
+  height: 100vh;
+}
 #header * {
 
   font-size: 0.8rem;
@@ -60,5 +61,9 @@ export default {
 
   #page-container {
     padding: 0.8rem 0rem;
+    max-width: 1400px;
+    padding: 20px;
+    width: 100%;
+    margin: 0 auto;
   }
 </style>

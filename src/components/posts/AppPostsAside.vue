@@ -20,10 +20,11 @@
                 add new Post
             </button>
             <div class="search-wrapper">
-                <input type="search" placeholder="Search post..." v-model="search" @input="filter($event)">
+                <app-input type="search" placeholder="Search post..." :value="search || currentFilter.search" @input="filter($event)"/>
             </div>
             <app-post-aside-users-list-wrapper
                 @filter-user="filterUser"
+                :currentUser="currentFilter.postedBy"
             />
         </div>
         </template>
@@ -31,23 +32,25 @@
 </template>
 
 <script>
+import AppInput from '../ui/AppInput.vue';
 // import { mapGetters, mapActions } from 'vuex';
 import AppPostAsideUsersListWrapper from './AppPostAsideUsersListWrapper.vue';
 
 export default {
-    components: { AppPostAsideUsersListWrapper },
+    components: { AppPostAsideUsersListWrapper, AppInput },
     name: 'post-aside',
     data () {
         return {
-            search: null,
+            search: '',
             statusAside: true,
-            userId: null,
+            userId: '',
             debounce: null
         };
     },
     emits: ['filter'],
     props: {
-         usersList: Object
+         usersList: Object,
+         currentFilter: Object
     },
     methods: {
         clearUserId () {
@@ -79,9 +82,9 @@ export default {
                 this.$emit('filter', data);
         }
     },
-    mounted () {
+    created () {
+            this.search = this.currentFilter?.search;
     }
-
 };
 </script>
 

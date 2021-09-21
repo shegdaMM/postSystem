@@ -6,12 +6,14 @@
             @post-update="updatePost"
             @remove-post="removePostDialog"
         />
+        <app-comments :postId="thisPost._id"/>
     </div>
 </template>
 
 <script>
 import AppPost from '@/components/posts/AppPost';
 import { mapGetters, mapActions } from 'vuex';
+import AppComments from '../../components/comments/AppComments.vue';
 
 export default {
     name: 'PostById',
@@ -21,7 +23,8 @@ export default {
     },
     emits: ['post-update', 'remove-post'],
     components: {
-       AppPost
+        AppPost,
+        AppComments
     },
     props: {
         uid: {

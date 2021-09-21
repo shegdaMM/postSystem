@@ -1,5 +1,5 @@
 <template>
-    <q-header bordered class="text-black column justify-center align-stretch my-nav" id="header">
+    <header bordered class="text-black column justify-center align-stretch my-nav my-header" id="header">
         <q-toolbar class="row wrap justify-between col-12">
           <div class="row wrap flex-start items-center">
             <!-- logo -->
@@ -36,7 +36,7 @@
         </q-btn-dropdown>
         </div>
       </q-toolbar>
-    </q-header>
+    </header>
 </template>
 
 <script>
@@ -48,6 +48,8 @@ export default {
 };
 </script>
 
-<style>
-
-</style>
+<style lang="scss" scoped>
+  .my-header {
+    background: rgba(255, 255, 255, 0.849);
+  }
+</style>>
