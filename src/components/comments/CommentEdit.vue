@@ -54,8 +54,8 @@ export default {
         }
     },
     methods: {
-       submit () {
-            this.$emit('form-submit', this.post);
+        submit () {
+                this.$emit('form-submit', this.text);
         },
         isRequired80 (value) {
             if (value && value.trim() && value.length < 80) {

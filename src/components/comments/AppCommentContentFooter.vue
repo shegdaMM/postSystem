@@ -1,8 +1,8 @@
 <template>
-     <footer class="footer">
+  <footer class="footer">
             <section class="footer__control">
                 <div class="likes">
-                    <a class="text" @click="this.$emit('set-likes')" :class="{'like-active' : !this.isLikePost}">
+                    <a class="text" @click="this.$emit('set-likes')" :class="{'like-active' : !this.isLikeComment}">
                         <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCEtLSBHZW5lcmF0b3I6IEFkb2JlIElsbHVzdHJhdG9yIDE5LjAuMCwgU1ZHIEV4cG9ydCBQbHVnLUluIC4gU1ZHIFZlcnNpb246IDYuMDAgQnVpbGQgMCkgIC0tPg0KPHN2ZyB2ZXJzaW9uPSIxLjEiIGlkPSJDYXBhXzEiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgeG1sbnM6eGxpbms9Imh0dHA6Ly93d3cudzMub3JnLzE5OTkveGxpbmsiIHg9IjBweCIgeT0iMHB4Ig0KCSB2aWV3Qm94PSIwIDAgNTAgNTAiIHN0eWxlPSJlbmFibGUtYmFja2dyb3VuZDpuZXcgMCAwIDUwIDUwOyIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+DQo8cGF0aCBzdHlsZT0iZmlsbDojQzAzQTJCOyIgZD0iTTI0Ljg1LDEwLjEyNmMyLjAxOC00Ljc4Myw2LjYyOC04LjEyNSwxMS45OS04LjEyNWM3LjIyMywwLDEyLjQyNSw2LjE3OSwxMy4wNzksMTMuNTQzDQoJYzAsMCwwLjM1MywxLjgyOC0wLjQyNCw1LjExOWMtMS4wNTgsNC40ODItMy41NDUsOC40NjQtNi44OTgsMTEuNTAzTDI0Ljg1LDQ4TDcuNDAyLDMyLjE2NWMtMy4zNTMtMy4wMzgtNS44NC03LjAyMS02Ljg5OC0xMS41MDMNCgljLTAuNzc3LTMuMjkxLTAuNDI0LTUuMTE5LTAuNDI0LTUuMTE5QzAuNzM0LDguMTc5LDUuOTM2LDIsMTMuMTU5LDJDMTguNTIyLDIsMjIuODMyLDUuMzQzLDI0Ljg1LDEwLjEyNnoiLz4NCjxwYXRoIHN0eWxlPSJmaWxsOiNFRDcxNjE7IiBkPSJNNiwxOC4wNzhjLTAuNTUzLDAtMS0wLjQ0Ny0xLTFjMC01LjUxNCw0LjQ4Ni0xMCwxMC0xMGMwLjU1MywwLDEsMC40NDcsMSwxcy0wLjQ0NywxLTEsMQ0KCWMtNC40MTEsMC04LDMuNTg5LTgsOEM3LDE3LjYzMSw2LjU1MywxOC4wNzgsNiwxOC4wNzh6Ii8+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8Zz4NCjwvZz4NCjxnPg0KPC9nPg0KPGc+DQo8L2c+DQo8L3N2Zz4NCg==">
                     </a>
                     <div v-if="likesCount > 0" @click="showLikes = !showLikes">
@@ -15,16 +15,12 @@
                         </span>
                     </div>
                 </div>
-                <div class="moreLink" v-if="!isPostPage">
-                     <router-link :to="
-                     { name: 'PostById', params: { uid: this.post._id }}
-                     ">
-                        More details
-                     </router-link>
+                <div class="moreLink">
+                    <a @click="this.$emit('add-comment')"><i class="fas fa-comment-medical"></i>comment on</a>
                 </div>
             </section>
             <ul class="likesList" v-if="showLikes">
-              <li class="likesItem" v-for="like in post.likes" :key="like">
+              <li class="likesItem" v-for="like in comment.likes" :key="like">
                     <span v-if="likes[like]">
                         <router-link :to="{ name: 'UserById', params: { uid: like }}" class="likeLink">
                             {{likes[like]}}
@@ -42,18 +38,14 @@ export default {
             showLikes: false
         };
     },
-    emits: ['post-update', 'set-likes'],
+    emits: ['comment-update', 'set-likes', 'add-comment'],
     props: {
         likesCount: Number,
-        post: Object,
+        comment: Object,
         makeEdit: Boolean,
         likes: Object,
-        isLikePost: Boolean,
-        isPostPage: Boolean
-    },
-    computed: {
+        isLikeComment: Boolean
     }
-
 };
 </script>
 

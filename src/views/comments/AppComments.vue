@@ -1,14 +1,13 @@
 <template>
-  <app-comment-create
+  <app-comment-get
   :postId="postId"
-  v-if="this.$store.getters.isAuthenticated"
   />
 </template>
 
 <script>
-import AppCommentCreate from './AppCommentCreate.vue';
+import AppCommentGet from '@/components/comments/AppCommentGet';
 export default {
-  components: { AppCommentCreate },
+  components: { AppCommentGet },
     props: {
         postId: {
             type: String,

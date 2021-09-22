@@ -26,6 +26,7 @@ export default {
     this.$store.commit('setUserAlert', this.$toast);
     this.$store.commit('setAuthAlert', this.$toast);
     this.$store.commit('setPostAlert', this.$toast);
+    this.$store.commit('setCommentAlert', this.$toast);
   }
 };
 </script>

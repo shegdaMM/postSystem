@@ -6,6 +6,7 @@ import createPersistedState from 'vuex-persistedstate';
 import users from './users.js';
 import auth from './auth.js';
 import posts from './posts.js';
+import comments from './comments.js';
 
 // const API_URL = process.env.VUE_APP_URL;
 
@@ -41,6 +42,6 @@ export default createStore({
   actions: {
   },
   modules: {
-    users, auth, posts
+    users, auth, posts, comments
   }
 });
