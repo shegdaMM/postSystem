@@ -33,7 +33,7 @@ export default {
 
 <style lang="scss">
 .app-wrapper {
-  height: 100vh;
+  height: 100%;
 }
 #header * {
 

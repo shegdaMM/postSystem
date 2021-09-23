@@ -1,13 +1,48 @@
 <template>
   <article class="commentsItem__wrapper" v-if="comment">
       <app-comment-content-header
+        class="comment-header"
         :commentedBy="commentedBy"
         :comment="comment"
       />
-      <main>
-{{comment}}
+      <main class="comment-body">
+        <div
+            class="control"
+            v-if="makeEdit"
+        >
+            <a
+                class="control-btn"
+                @click="editComment = !editComment"
+            >
+                <span v-if="!editComment"><i class="fas fa-edit"></i> EDIT COMMEN</span>
+                <span v-if="editComment"><i class="fas fa-eye"></i> SHOW COMMENT</span>
+            </a>
+            <a
+                class="control-btn"
+                @click="removeComment"
+                style="color: rgba(255, 0, 0, 0.685);"
+            >
+                <i class="fas fa-trash-alt"></i> REMOVE COMMEN
+            </a>
+        </div>
+        <div class="comment-content">
+            <template v-if="!editComment">
+            <div class="comment-text">
+                {{comment.text}}
+            </div>
+        </template>
+        <template v-if="editComment">
+            <app-comment-new-edit
+                :postId="postId"
+                :followedCommentId="comment._id"
+                :comment="comment"
+                @refresh-comment="editComment = false, this.$emit('comment-update');"
+            />
+        </template>
+        </div>
       </main>
       <app-comment-content-footer
+        class="commment-footer"
         :likesCount="likesCount"
         :comment="comment"
         :makeEdit="makeEdit"
@@ -20,6 +55,7 @@
         v-if="newComment"
         :postId="postId"
         :followedCommentId="comment._id"
+        @refresh-comment="this.$emit('comment-update');"
       />
   </article>
 </template>
@@ -49,7 +85,8 @@ export default {
             UserNameMap: UserNameMap,
             commentedBy: '',
             likes: {},
-            newComment: false
+            newComment: false,
+            editComment: false
         };
     },
     computed: {
@@ -77,7 +114,7 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['likeToComment']),
+        ...mapActions(['likeToComment', 'updateComment', 'deleteComment']),
         async getNameByID (id) {
             const result = await UserNameMap.getUserName(id);
             return result;
@@ -85,11 +122,27 @@ export default {
         showNew () {
             this.newComment = !this.newComment;
         },
+        removeComment () {
+            this.$q.dialog({
+                title: 'Remove this post?',
+                message: 'Are you sure you want to delete your post?',
+                cancel: true,
+                persistent: true,
+                color: 'black'
+            })
+            .onOk(() => {
+                this.removeCommentProcess();
+            });
+        },
+        async removeCommentProcess () {
+            await this.deleteComment({ id: this.comment._id });
+            this.$emit('comment-update');
+        },
         async setLikes () {
             if (!(this.$store.getters.loggedInUser._id === this.comment?.commentedBy)) {
                 const result = await this.likeToComment({ id: this.comment._id });
                 if (result) {
-                    this.$emit('comment-update');
+                   this.$emit('comment-update');
                 }
             } else {
               this.$toast.open({
@@ -109,7 +162,6 @@ export default {
             this.comment.likes.forEach(async (likeUserId) => {
                 const name = await UserNameMap.getUserName(likeUserId);
                 this.likes[likeUserId] = name;
-                console.log(this.likes);
             });
         }
     }
@@ -117,5 +169,35 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.commentsItem__wrapper{
+    background: rgba(255, 255, 255, 0.411);
+    padding: 0.5rem;
+    margin-bottom: 0.25rem;
+    border-radius: 0.5rem;
+}
+.comment-body {
+    .control {
+        font-size: 0.7rem;
+        display: flex;
+        justify-content: flex-end;
+        color: #028165;
+        font-weight: 700;
 
+    }
+    .control-btn {
+        display: inline-block;
+        margin: 0.05rem 0.4rem;
+        padding: 0.2rem;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .comment-content {
+        margin: 0.3rem 0;
+    }
+    .comment-text {
+        padding: 0.25rem 0.5rem;
+        border-radius: 0.2rem;
+        background: rgba(255, 231, 96, 0.541);
+    }
+}
 </style>

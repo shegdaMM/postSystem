@@ -1,25 +1,41 @@
 <template>
+<div class="item-wrapper">
   <app-comment-content
-    :comment="comment.comment"
+    v-if="comment"
+    :comment="comment"
     :postId="postId"
+    @comment-update="this.$emit('comment-update');"
   />
-  <!-- <app-comment-list
-    :childs="comment?.childs"
-  /> -->
+    <div
+        v-if="hasChildren"
+    >
+    <app-comment-item
+                class="inner-comment"
+                v-for="item of comment.children"
+                :key="item._id"
+                :comment="item"
+                :postId="postId"
+                @comment-update="this.$emit('comment-update');"
+    />
+    </div>
+</div>
 </template>
 
 <script>
-// import AppCommentList from '@/components/comments/AppCommentList';
-import AppCommentContent from '@/components/comments/AppCommentContent';
+import AppCommentItem from './AppCommentItem';
+import AppCommentContent from './AppCommentContent';
 export default {
+    name: 'appCommentItem',
     components: {
-      //  AppCommentList
+      AppCommentItem,
       AppCommentContent
     },
     data () {
         return {
+          keyInList: 0
         };
     },
+    emits: ['comment-update'],
     props: {
         comment: {
             type: Object,
@@ -31,10 +47,32 @@ export default {
         }
     },
     computed: {
+      children () {
+        return this.comment.children;
+      },
+      hasChildren () {
+        return this.comment.children.length > 0;
+      }
     }
 };
 </script>
 
 <style lang="scss" scoped>
-
+  .inner-comment {
+    position: relative;
+    margin-left: 1.5rem;
+  }
+  .inner-comment::before {
+    content: '\f3e5';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    position: absolute;
+    width: 1.25rem;
+    font-size: 1rem;
+    height: 1rem;
+    left: -1.5rem;
+    top: -0.2rem;
+    transform: rotate(180deg);
+    color: #028165;
+  }
 </style>

@@ -16,7 +16,7 @@
                     </div>
                 </div>
                 <div class="moreLink">
-                    <a @click="this.$emit('add-comment')"><i class="fas fa-comment-medical"></i>comment on</a>
+                    <a @click="this.$emit('add-comment')"><i class="fas fa-comment-medical"></i> comment this</a>
                 </div>
             </section>
             <ul class="likesList" v-if="showLikes">
@@ -63,7 +63,7 @@ a {
     color: rgba(0, 0, 0, 0.781);
 
     border-top: 0.15rem #028165 solid;
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 0.1rem 0.5rem ;
 }
 
 .footer__control {
@@ -101,6 +101,10 @@ a {
     .moreLink {
         padding: 0 0.25rem;
         color: #028165;
+        a{
+            text-decoration: none;
+            cursor: pointer;
+        }
     }
 }
 
@@ -116,6 +120,8 @@ a {
         a{
             display: block;
             height: 100%;
+            text-decoration: none;
+            cursor: pointer;
         }
         span {
             display: inline-block;

@@ -37,10 +37,13 @@ export default {
         }
     },
     methods: {
-        ...mapActions(['createComment']),
+        ...mapActions(['createComment', 'updateComment']),
         async modify (text) {
-            console.log(text);
-            await this.createComment({ postID: this.postId, text: text, followedCommentID: this.followedCommentId || null });
+            if (this.comment) {
+                await this.updateComment({ id: this.comment._id, text: text });
+            } else {
+                await this.createComment({ postID: this.postId, text: text, followedCommentID: this.followedCommentId || null });
+            }
             this.$emit('refresh-comment');
         }
     }
