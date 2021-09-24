@@ -60,8 +60,7 @@ export default {
             }
         },
         deleteUserById (state) {
-                // remove with map...
-                state.currentUser = null;
+            state.currentUser = null;
         },
         updateCurrentUser (state, user) {
             if (user) {
@@ -117,6 +116,7 @@ export default {
                     commit('UserGoodMessage', 'You remove your account');
                     // remove from map
                     UserNameMap.removeUser(payload.id);
+                    commit.clearUserData();
                     router.push({ path: '/' });
                   }
                 });
@@ -197,6 +197,7 @@ export default {
                     }
                 });
             } catch (error) {
+                console.log(error);
                 commit('UserErrorMessage', error);
             }
             commit('onloadProcess');

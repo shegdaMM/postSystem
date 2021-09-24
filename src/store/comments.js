@@ -63,7 +63,6 @@ export default {
                     state.comments.push(tmpComment);
                 }
             }
-            console.log(state.comments);
         },
         GoodCommentAlert (state, message) {
             state.commentAlert.open({

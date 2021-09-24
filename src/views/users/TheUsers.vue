@@ -1,7 +1,14 @@
 <template>
   <h1>All USERS IN SYSTEM</h1>
-  <user-list v-if="currentUserList" :users="currentUserList" @user-update="getUsersListByParams"/>
-  <pagination :itemOnPage="itemOnPage" :listSize="usersListSize" @list-update="getUsersListByParams"/>
+  <user-list
+    v-if="currentUserList"
+    :users="currentUserList"
+    :key="update"
+    @user-update="getUsersListByParams"/>
+  <pagination
+    :itemOnPage="itemOnPage"
+    :listSize="usersListSize"
+    @list-update="getUsersListByParams"/>
 </template>
 
 <script>
@@ -13,7 +20,8 @@ export default {
   data () {
     return {
       itemOnPage: 10,
-      currentItem: 0
+      currentItem: 0,
+      update: 0
     };
   },
   components: {
@@ -32,6 +40,7 @@ export default {
         limit: this.itemOnPage,
         skip: this.currentItem
       });
+      this.update = this.update + 1;
     }
   },
   mounted () {

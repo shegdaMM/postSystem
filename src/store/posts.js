@@ -44,12 +44,12 @@ export default {
             });
         },
         setPostById (state, post) {
+            state.currentPost = null;
             if (post) {
                 state.currentPost = post;
             }
         },
         deletePostById (state) {
-            // remove with map...
             state.currentPost = null;
         },
         setPostsListSize (state, count) {
@@ -68,6 +68,7 @@ export default {
         },
         updateCurrentPost (state, post) {
             if (post) {
+                state.currentPost = null;
                 state.currentPost = post;
             }
         }
@@ -149,7 +150,6 @@ export default {
                 });
             } catch (error) {
                 resultStatus = false;
-                commit('PostErrorMessage', 'You not add/remove like<br> to this post!');
             }
             return resultStatus;
         },

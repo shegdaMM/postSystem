@@ -1,6 +1,6 @@
 <template>
 <div class="spinner-wrapper" v-if="loadProcess === true">
-  <q-spinner-cube color="white" size="4rem"/>
+  <q-spinner-cube class="spinner" color="white" size="4rem"/>
  </div>
 </template>
 
@@ -31,11 +31,10 @@ export default {
   bottom: 0;
   background: rgba(0, 95, 51, 0.9);
   z-index: 5;
-
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  align-items: center;
-
+}
+.spinner {
+  position: absolute;
+  left: calc(50vw - 2rem);
+  top: calc(50vh - 2rem)
 }
 </style>

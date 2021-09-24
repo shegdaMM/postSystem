@@ -1,11 +1,11 @@
 <template v-if="isLoad">
 <div class="post-list-wrapper">
-    <template v-if="!havePosts">
+    <template v-if="!isPosts">
         <h2 class="postsNotHave">
             Sorry, we not have posts...
         </h2>
     </template>
-    <template v-if="havePosts">
+    <template v-if="isPosts">
        <ul class="post-list">
             <li class="post-list_item"
                 v-for="post in postList"
@@ -37,12 +37,8 @@ export default {
         };
     },
     computed: {
-        havePosts () {
-            let result = false;
-            if (this.postList) {
-                result = this.postList.length > 0;
-            }
-            return result;
+        isPosts () {
+            return this.postList?.length > 0;
         }
     },
     mounted () {

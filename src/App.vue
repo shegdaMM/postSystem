@@ -2,6 +2,7 @@
   <div class="app-wrapper">
     <app-header />
       <div id="page-container">
+        <app-breadcrumbs />
         <router-view />
       </div>
     <app-loader v-if="this.$store.getters.loadProcess" />
@@ -12,11 +13,12 @@
 // import { ref } from 'vue';
 import AppLoader from './components/AppLoader';
 import AppHeader from './components/AppHeader.vue';
+import AppBreadcrumbs from './components/AppBreadcrumbs.vue';
 
 export default {
   name: 'App',
   components: {
-    AppLoader, AppHeader
+    AppLoader, AppHeader, AppBreadcrumbs
   },
   data () {
     return {
@@ -33,7 +35,7 @@ export default {
 
 <style lang="scss">
 .app-wrapper {
-  height: 100%;
+  min-height: 100vh;
 }
 #header * {
 
@@ -47,8 +49,8 @@ export default {
 #header .my-user-menu {
   min-width: 50px;
   img.q-icon {
-    width: 60px;
-    height: 60px;
+    width: 55px;
+    height: 55px;
     display: block;
   }
 }
@@ -61,7 +63,6 @@ export default {
   }
 
   #page-container {
-    padding: 0.8rem 0rem;
     max-width: 1400px;
     padding: 20px;
     width: 100%;

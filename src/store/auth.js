@@ -8,7 +8,7 @@ export default {
         authAlert: null,
         // for auth
         access_token: localStorage.getItem('token') || '',
-        loggedInUser: {},
+        loggedInUser: null,
         isAuthenticated: false
     },
     getters: {
@@ -22,12 +22,11 @@ export default {
         isAuthenticated (state) {
           return state.isAuthenticated;
         },
-        loggedInUser (state) {
-          return state.loggedInUser;
-        }
+        loggedInUser: ({ loggedInUser }) => loggedInUser
     },
     mutations: {
         setAuthAlert (state, authAlert) {
+          state.authAlert = null;
           state.authAlert = authAlert;
         },
         // for auth
@@ -40,7 +39,10 @@ export default {
         });
         },
         setLoggedInUser (state, user) {
+            state.loggedInUser = null;
             state.loggedInUser = user;
+
+            state.isAuthenticated = null;
             state.isAuthenticated = true;
         },
         clearUserData (state) {
@@ -91,11 +93,10 @@ export default {
         },
         logOut: async ({ commit, dispatch }) => {
           commit('clearUserData');
-          localStorage.setItem('token', '');
+          localStorage.setItem('token', null);
           // eslint-disable-next-line dot-notation
           delete axios.defaults.headers.common['Authorization'];
           api();
-          commit('AuthErrorMessage', 'Log out is finished');
           router.push({ path: '/' });
         },
         fetchUser: async ({ commit }) => {

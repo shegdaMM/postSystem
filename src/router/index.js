@@ -16,18 +16,35 @@ const routes = [
   {
     path: '/',
     name: 'TheHome',
-    component: TheHome
+    component: TheHome,
+    meta: {
+      breadcrumb: [
+        { name: 'Home', link: '/' }
+      ]
+    }
   },
   {
     path: '/login',
     name: 'TheLogIn',
-    component: TheLogIn
+    component: TheLogIn,
+    meta: {
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Login' }
+      ]
+    }
   },
   // users
   {
     path: '/users',
     name: 'TheUsers',
-    component: TheUsers
+    component: TheUsers,
+    meta: {
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Users' }
+      ]
+    }
   },
   {
     path: '/user-edit/:uid',
@@ -35,7 +52,11 @@ const routes = [
     component: UserEdit,
     props: true,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Users', link: '/users' }
+      ]
     }
   },
   {
@@ -43,42 +64,83 @@ const routes = [
     name: 'ThisUser',
     component: ThisUser,
     meta: {
-      requiresAuth: true
+      requiresAuth: true,
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Users', link: '/users' }
+      ]
     }
   },
   {
     path: '/user-new/',
     name: 'UserNew',
-    component: UserNew
+    component: UserNew,
+    meta: {
+      breadcrumb: [
+        { name: 'Registration' }
+      ]
+    }
   },
   {
     path: '/user/:uid',
     name: 'UserById',
     component: UserById,
-    props: true
+    props: true,
+    meta: {
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Users', link: '/users' }
+      ]
+    }
   },
   // posts
   {
     path: '/posts',
     name: 'ThePosts',
-    component: ThePosts
+    component: ThePosts,
+    meta: {
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Posts', link: '/posts' }
+      ]
+    }
   },
   {
     path: '/post/:uid',
     name: 'PostById',
     component: PostById,
-    props: true
+    props: true,
+    meta: {
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Posts', link: '/posts' }
+      ]
+    }
   },
   {
     path: '/post-edit/:pid',
     name: 'PostEdit',
     component: PostEdit,
-    props: true
+    props: true,
+    meta: {
+      requiresAuth: true,
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Posts', link: '/posts' }
+      ]
+    }
   },
   {
     path: '/post-new/',
     name: 'ThePostCreate',
-    component: ThePostCreate
+    component: ThePostCreate,
+    meta: {
+      requiresAuth: true,
+      breadcrumb: [
+        { name: 'Home', link: '/' },
+        { name: 'Posts', link: '/posts' }
+      ]
+    }
   }
 ];
 

@@ -1,7 +1,11 @@
 <template>
 <div class="avatar-wrapper">
     <div class="avatar-view">
-        <img :src="image ? `${IMG_URL}${image}` : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
+      <a style="text-decoration: none; cursor: pointer;" @click="this.$router.push({ name: 'UserById', params: { uid: this.ID } })">
+            <img v-if="!image" :key="image" :src="defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
+            <img v-if="image" :key="image" :src="image ? `${IMG_URL}${image}` : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
+
+      </a>
        <template v-if="this.$store.getters.loggedInUser._id === this.ID">
           <span onclick="uploadfile.click()" class="avatar-button">
               <i class="fas fa-cloud-upload-alt"></i>
@@ -55,7 +59,6 @@ export default {
         this.$emit('remove-user');
       },
       editUser () {
-        console.log(`/user-edit/${this.ID}`);
         this.$router.push({ name: 'UserEdit', params: { uid: this.ID } });
       },
       async sendAvatar (event) {
@@ -63,7 +66,10 @@ export default {
             const formData = new FormData();
             formData.append('avatar', this.$refs.file.files[0]);
             const result = await this.putCurrentUserAvatar({ id: this.ID, data: formData });
-            if (result) this.$emit('user-update');
+            if (result) {
+              this.$emit('user-update');
+              // this.image = await this.getCurrentUserAvatar({ avatar: this.avatar });
+            }
         }
       }
   },

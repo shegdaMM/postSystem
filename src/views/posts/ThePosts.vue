@@ -1,25 +1,29 @@
 <template>
   <div class="posts-wrapper">
-    <main class="posts-main">
-      <app-title-page>
-        All POSTS IN SYSTEM
-      </app-title-page>
-      <span v-if="!currentPostsList">Loading...</span>
-      <post-list
-        @post-update="getPostsListByParams(filter.currentItem)"
-        :postList="currentPostsList"
-      />
+    <main>
+        <div class="post-main">
+          <app-title-page>
+            All POSTS IN SYSTEM
+          </app-title-page>
+          <span v-if="!currentPostsList">Loading...</span>
+          <post-list
+            @post-update="getPostsListByParams(filter.currentItem)"
+            :postList="currentPostsList"
+          />
+        </div>
+        <div class="asideList">
+          <app-posts-aside @filter="getFilter" :currentFilter="filter"/>
+        </div>
       <pagination
         :itemOnPage="itemOnPage"
         :listSize="postsListSize"
+        :seeOnPage="2"
         @list-update="getPostsListByParams"
         v-if="currentPostsList.length > 0"
         :propCurrentItem="filter.currentItem"
       />
     </main>
-    <div class="asideList">
-      <app-posts-aside @filter="getFilter" :currentFilter="filter"/>
-    </div>
+
   </div>
 </template>
 
@@ -35,7 +39,7 @@ export default {
     return {
       itemOnPage: 5,
       filter: {
-        currentItem: '',
+        currentItem: Object.fromEntries(new URL(window.location).searchParams.entries()).currentItem,
         search: '',
         postedBy: ''
       },
@@ -62,7 +66,7 @@ export default {
         let isAdd = false;
         if (this.filter.currentItem) {
           item = (isAdd ? '&' : '?') +
-          `currentItem=${this.filter.currentItem}`;
+          `page=${this.filter.currentItem}`;
           isAdd = true;
         }
         if (this.filter.search) {
@@ -96,10 +100,10 @@ export default {
     ...mapActions(['getPostsList', 'clearPostsList']),
     async getPostsListByParams (custum) {
       this.filter.currentItem = custum;
-      const poss = (custum - 1) * this.itemOnPage;
+      const possition = (custum - 1) * this.itemOnPage;
       await this.getPostsList({
         limit: this.itemOnPage || 5,
-        skip: poss || 0,
+        skip: possition || 0,
         search: this.filter.search || null,
         postedBy: this.filter.postedBy || null
       });
@@ -120,7 +124,7 @@ export default {
   async mounted () {
     const windowData = await Object.fromEntries(new URL(window.location).searchParams.entries());
     if (windowData) {
-      this.filter.currentItem = windowData.currentItem;
+      this.filter.currentItem = windowData.page;
       if (windowData.search) {
         this.filter.search = windowData.search;
       }
@@ -128,7 +132,7 @@ export default {
         this.filter.postedBy = windowData.postedBy;
       }
     }
-    await this.getPostsListByParams();
+    await this.getPostsListByParams(this.filter.currentItem);
   },
   beforeUnmount () {
     this.clearPostsList();
@@ -138,10 +142,9 @@ export default {
 </script>
 
 <style>
-    .posts-wrapper{
+    .posts-wrapper > main {
+      width: 100%;
       display: grid;
-      grid-template-columns: 1fr auto;
-      grid-template-rows: 1fr;
-      min-height: calc(100vh - 100px);
+      grid-template-columns: 1fr 80px;
     }
 </style>

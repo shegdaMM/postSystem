@@ -22,7 +22,7 @@ p {
       font-size: 20px; 
     }
 }
-#app .q-toolbar{
+#app .app-header-links{
     margin: 0 auto;
     max-width: 1400px;
     padding: 20px;
@@ -31,8 +31,11 @@ p {
 #app .q-page-container {
     margin: 0 auto;
     max-width: 1400px;
-    padding: 20px;
+    padding: 20px 0;
     width: 100%;
+}
+#page-container {
+    padding: 20px 0;
 }
 
 
@@ -88,7 +91,7 @@ a:active {
 }
 
 #header .q-header .q-tab__content, #header .q-footer .q-tab__content {
-    min-width: auto;
+    max-width: 100%;
 }
 
 #app .q-btn__content {

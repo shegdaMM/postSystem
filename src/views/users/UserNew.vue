@@ -29,8 +29,11 @@
     </q-input>
 </div>
 <div class="user-info">
-    <q-input filled v-model="user.name" type="text" class="form-input" label="Name:" @click="changeState=true">
+    <q-input filled v-model="user.name" type="text" class="form-input"
+    label="Name:" @click="changeState=true"
+    :rules="[val => (val && val.length >= 3) || 'Name mast have minimal 3 symbols']">
     </q-input>
+
     <q-input filled v-model="user.extra_details" class="form-input" type="textarea" label="Details:" @click="changeState=true">
     </q-input>
   </div>

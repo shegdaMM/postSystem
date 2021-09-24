@@ -39,32 +39,7 @@ export default {
         }
     },
     computed: {
-        ...mapGetters(['comments']),
-        commentsTree () {
-                for (const comm of this.currentCommentList) {
-                    const id = comm._id;
-                    // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                    this.obj[id] = { comment: comm, childs: {} };
-                    console.log(this.obj);
-                }
-                // eslint-disable-next-line no-unused-vars
-                const tree = {};
-                for (const comm of Object.values(this.obj)) {
-                    const parrent = comm.comment.followedCommentID;
-                    if (!parrent) {
-                        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                        this.tree[comm.comment._id] = comm;
-                    } else {
-                        // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                        this.obj[parrent].childs[comm.comment._id] = comm;
-                        if (tree[parrent]) {
-                            // eslint-disable-next-line vue/no-side-effects-in-computed-properties
-                            this.tree[parrent] = this.obj[parrent];
-                        }
-                    }
-                }
-                return this.tree;
-        }
+        ...mapGetters(['comments'])
     },
     methods: {
         ...mapActions(['getCommentsByPost', 'clearCommentsByPost'])

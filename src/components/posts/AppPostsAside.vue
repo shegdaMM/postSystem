@@ -1,7 +1,7 @@
 <template>
-    <aside class="posts-control">
+    <aside>
         <template v-if="!statusAside">
-        <div class="posts-control--hidden">
+        <div class="posts-control posts-control--hidden">
             <a @click="statusAside = true">
                 <div><i class="fas fa-chevron-left" style="border: 0.15rem #028165 solid;"></i></div>
                 <div><i class="fas fa-plus"></i></div>
@@ -10,7 +10,7 @@
         </div>
         </template>
         <template v-if="statusAside">
-        <div class="posts-control--show">
+        <div class="posts-control posts-control--show">
             <a @click="statusAside = false" class="hide-btn">
                 <div><i class="fas fa-chevron-right"></i></div>
             </a>
@@ -42,7 +42,7 @@ export default {
     data () {
         return {
             search: '',
-            statusAside: true,
+            statusAside: false,
             userId: '',
             debounce: null
         };
@@ -85,18 +85,22 @@ export default {
     created () {
             this.search = this.currentFilter?.search;
     }
+    // close timer deb
 };
 </script>
 
 <style lang="scss" scoped>
+    aside {
+    }
     .posts-control{
          max-width: 320px;
-         padding: 1rem 0.5rem 1rem 1rem;
+         padding: 1rem 0.5rem 1rem 0.5rem;
          background: rgba(255, 255, 255, 0.671);
          border-radius: 1rem 0 0 1rem;
          border-left: 0.5rem #028165 solid;
          border-right: 0.15rem #028165 solid;
-         margin-top: -20px;
+         margin-top: -32px;
+         position: relative;
     }
 
     .posts-control--hidden {
@@ -104,6 +108,7 @@ export default {
         text-align: center;
         font-size: 1.2rem;
         height: 100%;
+        width: 75px;
 
         div{
             margin: 0.9rem 0;
@@ -121,8 +126,14 @@ export default {
             width: 100%;
         }
     }
-
     // show ...
+        .posts-control--show {
+            position: absolute;
+            right: 0;
+            .hide-btn {
+                height: auto;
+            }
+        }
     .hide-btn {
         display: block;
         height: 100%;

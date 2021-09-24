@@ -19,7 +19,11 @@
                     <i class="fas fa-trash-alt"></i> remove
                 </a>
             </section>
-            <h2>{{post.title}}</h2>
+            <h2>
+                <router-link :to="{ name: 'PostById', params: { uid: this.post._id }}">
+                    {{post.title}}
+                </router-link>
+            </h2>
             <div class="main-wrapper">
                 <section class="post__image-wrapper" v-if="post.image">
                     <img :src="`${API_IMG}${post.image}`" :alt="post.description" class="post__image">
@@ -143,6 +147,7 @@ export default {
 <style lang="scss" scoped>
 a {
     color: #028165;
+    text-decoration: none;
 }
 .isRemove {
     display: none;

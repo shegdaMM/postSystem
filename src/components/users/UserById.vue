@@ -2,8 +2,11 @@
     <section class="user-wrap" v-if="thisUser">
       <app-user-logo
        :avatar="thisUser.avatar ? thisUser.avatar : ''"
-       :name="this.thisUser.name" :ID="this.thisUser._id" class="user-logo"
-            @user-update="userUpdate" @remove-user="removeUserDialog"/>
+       :key="thisUser.avatar"
+       :name="this.thisUser.name"
+       :ID="this.thisUser._id" class="user-logo"
+        @user-update="userUpdate"
+        @remove-user="removeUserDialog"/>
         <app-user :user="thisUser" :ID="this.thisUser._id" class="user-info"/>
     </section>
 </template>
@@ -17,6 +20,7 @@ export default {
   name: 'UserById',
   data () {
       return {
+        userData: this.user
       };
   },
   emits: ['user-update'],
@@ -35,8 +39,8 @@ export default {
     ...mapGetters(['currentUser']),
     thisUser () {
       let result;
-      if (this.user) {
-        result = this.user;
+      if (this.userData) {
+        result = this.userData;
       } else {
         result = this.currentUser;
       }
@@ -44,9 +48,10 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['getUserById', 'clearCurrentUser']),
+    ...mapActions(['getUserById', 'clearCurrentUser', 'removeUserById']),
     async userUpdate () {
       await this.getUserById({ id: this.uid ? this.uid : this.user._id });
+      this.userData = null;
       this.$emit('user-update');
     },
     removeUserDialog () {

@@ -78,6 +78,7 @@ export default {
       console.log(this.changeState);
       if (this.changeState) {
         await this.patchCurrentUser(this.user);
+        this.$router.push({ path: `/user/${this.user._id}` });
       }
     }
   },
@@ -85,6 +86,11 @@ export default {
     if (this.uid) {
       await this.getUserById({ id: this.uid });
       this.user = this.currentUser;
+    }
+  },
+  created () {
+     if (this.$store.getters.loggedInUser._id !== this.uid) {
+      this.$router.go(-1);
     }
   }
 };

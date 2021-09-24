@@ -36,7 +36,7 @@
                 :postId="postId"
                 :followedCommentId="comment._id"
                 :comment="comment"
-                @refresh-comment="editComment = false, this.$emit('comment-update');"
+                @refresh-comment="this.editComment = false, this.$emit('comment-update');"
             />
         </template>
         </div>
@@ -55,7 +55,7 @@
         v-if="newComment"
         :postId="postId"
         :followedCommentId="comment._id"
-        @refresh-comment="this.$emit('comment-update');"
+        @refresh-comment="this.newComment=false, this.$emit('comment-update');"
       />
   </article>
 </template>

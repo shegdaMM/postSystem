@@ -3,7 +3,11 @@
     <section class="user-main">
       <div class="user-text" v-if="user.name">
         <span class="discriptoin">NAME:</span>
-        <span class="user__name">{{user.name}}</span>
+        <span class="user__name">
+          <a style="text-decoration: none; cursor: pointer;" @click="this.$router.push({ name: 'UserById', params: { uid: user._id } })">
+            {{user.name}}
+          </a>
+        </span>
       </div>
   <div class="user-text" v-if="user.email">
     <span class="discriptoin">EMAIL:</span>

@@ -14,13 +14,10 @@ export default createStore({
   plugins: [createPersistedState({ paths: ['auth'] })],
   // namespaced: true,
   state: {
-    // for loader component
     loadProcess: false
-    // userId : userName
   },
   getters: {
     loadProcess (state) {
-      // $q.notify('Some other message');
       return state.loadProcess;
     }
   },
@@ -31,12 +28,6 @@ export default createStore({
     // for loader component
     onloadProcess (state) {
       state.loadProcess = !state.loadProcess;
-    },
-    // set userid to map
-    setToUserIDMap (state, keyvalue) {
-      if (keyvalue[0] && keyvalue[1]) {
-       state.usersIDMap.set(keyvalue[0], keyvalue[1]);
-      }
     }
   },
   actions: {
