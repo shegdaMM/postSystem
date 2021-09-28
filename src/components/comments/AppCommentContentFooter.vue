@@ -15,7 +15,7 @@
                         </span>
                     </div>
                 </div>
-                <div class="moreLink">
+                <div class="moreLink" v-if="this.$store.getters.loggedInUser._id">
                     <a @click="this.$emit('add-comment')"><i class="fas fa-comment-medical"></i> comment this</a>
                 </div>
             </section>

@@ -70,7 +70,7 @@ export default {
         },
         goto (current) {
           this.currentItem = current;
-          this.$emit('list-update', current);
+          this.$emit('list-update', { page: current });
         },
         nextPage () {
           if ((this.currentItem + 1) <= this.pagenationCount) {

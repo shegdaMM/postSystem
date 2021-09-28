@@ -1,25 +1,39 @@
 <template>
   <div class="home">
     <app-title-page>
-        HOME
+       LAST NEWS
     </app-title-page>
-    <app-input v-model="name" />
+    <app-last-posts />
+
+    <app-title-page>
+       STATISTICS
+    </app-title-page>
+    <app-statistics />
+
+    <app-title-page>
+       POSTS DIAGRAMM
+    </app-title-page>
+    <app-posts-date-diagram />
   </div>
 </template>
 
 <script>
 import AppTitlePage from '@/components/ui/AppTitlePage';
-import AppInput from '@/components/ui/AppInput';
+import AppLastPosts from './posts/AppLastPosts.vue';
+import AppStatistics from '@/components/AppStatistics';
+import AppPostsDateDiagram from '@/components/AppPostsDateDiagram';
 
 export default {
   name: 'Home',
   components: {
     AppTitlePage,
-    AppInput
+    AppLastPosts,
+    AppStatistics,
+    AppPostsDateDiagram
   },
   data () {
     return {
-      name: ''
+      name: 'Home'
     };
   },
   computed: {

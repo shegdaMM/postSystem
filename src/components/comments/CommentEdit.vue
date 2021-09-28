@@ -16,7 +16,7 @@
                 :rules="isRequired80"
             />
         </Field>
-        <ErrorMessage name="description" class="error"/>
+        <ErrorMessage name="description" ref="errorMsg" class="error"/>
         </div>
          <div class="my-btn">
             <app-button @submit="submit">
@@ -56,6 +56,9 @@ export default {
     methods: {
         submit () {
                 this.$emit('form-submit', this.text);
+                if (!this.startText) {
+                    this.text = '';
+                }
         },
         isRequired80 (value) {
             if (value && value.trim() && value.length < 80) {

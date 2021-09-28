@@ -57,7 +57,7 @@ export default class UserNameMap {
         if (id in UserNameMap.map) {
             const user = UserNameMap.map[id];
             // if we apdate user more 10 minuts
-            if ((Date.now - user.update) < 600000) {
+            if ((Date.now() - user.update) < 600000) {
                 userName = user.name ? user.name : user.email;
             } else {
                 userName = await UserNameMap.updateUser(id);

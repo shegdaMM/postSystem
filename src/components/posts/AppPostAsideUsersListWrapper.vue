@@ -3,8 +3,8 @@
        USERS LIST
    </app-title-page>
    <app-users-list
+    v-if="currentUser && usersFullList"
     :user-list="usersFullList.filter(item => item[0] === currentUser)"
-    v-if="currentUser"
     :currentUser="currentUser"
     @filter="filterUser"
     />
@@ -51,7 +51,7 @@ export default {
     ],
     methods: {
         loadUserList (current) {
-            this.usersList = this.usersFullList.slice((current - 1) * 14, ((current - 1) * 14) + 14);
+            this.usersList = this.usersFullList.slice((current.page - 1) * 14, ((current.page - 1) * 14) + 14);
         },
         filterUser (userId) {
             if (userId) {

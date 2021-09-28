@@ -16,12 +16,7 @@ const routes = [
   {
     path: '/',
     name: 'TheHome',
-    component: TheHome,
-    meta: {
-      breadcrumb: [
-        { name: 'Home', link: '/' }
-      ]
-    }
+    component: TheHome
   },
   {
     path: '/login',

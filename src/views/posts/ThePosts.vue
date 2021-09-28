@@ -7,7 +7,7 @@
           </app-title-page>
           <span v-if="!currentPostsList">Loading...</span>
           <post-list
-            @post-update="getPostsListByParams(filter.currentItem)"
+            @post-update="getPostsListByParams(filter.page)"
             :postList="currentPostsList"
           />
         </div>
@@ -18,9 +18,9 @@
         :itemOnPage="itemOnPage"
         :listSize="postsListSize"
         :seeOnPage="2"
-        @list-update="getPostsListByParams"
+        @list-update="getFilter"
         v-if="currentPostsList.length > 0"
-        :propCurrentItem="filter.currentItem"
+        :propCurrentItem="filter.page"
       />
     </main>
 
@@ -39,14 +39,10 @@ export default {
     return {
       itemOnPage: 5,
       filter: {
-        currentItem: Object.fromEntries(new URL(window.location).searchParams.entries()).currentItem,
-        search: '',
-        postedBy: ''
-      },
-      oldFilter: {
-        currentItem: '',
-        search: '',
-        postedBy: ''
+        // currentItem: Object.fromEntries(new URL(window.location).searchParams.entries()).currentItem,
+        // page: null
+        // search: null,
+        // postedBy: null
       }
     };
   },
@@ -60,13 +56,13 @@ export default {
     ...mapGetters(['postsListSize', 'currentPostsList'])
   },
   watch: {
-    filter: {
+    /* filter: {
       handler: function () {
         let item, search, postedBy;
         let isAdd = false;
-        if (this.filter.currentItem) {
+        if (this.filter.page) {
           item = (isAdd ? '&' : '?') +
-          `page=${this.filter.currentItem}`;
+          `page=${this.filter.page}`;
           isAdd = true;
         }
         if (this.filter.search) {
@@ -94,37 +90,61 @@ export default {
           }
       },
       deep: true
-    }
+      // , query: { ...this.filter }
+    } */
   },
   methods: {
     ...mapActions(['getPostsList', 'clearPostsList']),
     async getPostsListByParams (custum) {
-      this.filter.currentItem = custum;
+      if (custum) this.filter.page = custum;
       const possition = (custum - 1) * this.itemOnPage;
+      /* const queryObj = {};
+        if (this.filter.page > 1) {
+          queryObj.page = this.filter.page;
+        }
+        if (this.filter.search) {
+          queryObj.search = this.filter.search;
+        }
+        if (this.filter.postedBy) {
+          queryObj.postedBy = this.filter.postedBy;
+        }
+        console.log(queryObj);
+      */
       await this.getPostsList({
         limit: this.itemOnPage || 5,
         skip: possition || 0,
         search: this.filter.search || null,
         postedBy: this.filter.postedBy || null
       });
+      console.log(this.filter);
+      this.$router.push({ name: 'ThePosts', query: { ...this.filter } });
     },
-    getFilter (data) {
-      if (data.search) {
-        this.filter.search = data?.search || '';
+    async getFilter (data) {
+      if (data.page) {
+        if (data.page > 1) {
+          this.filter.page = data?.page;
+        }
       } else {
-        this.filter.search = '';
+        delete this.filter.page;
+        if (data.search) {
+          this.filter.search = data.search;
+        } else {
+           delete this.filter.search;
+        }
+
+        if (data.postedBy) {
+          this.filter.postedBy = data?.postedBy;
+        } else {
+          delete this.filter.postedBy;
+        }
       }
-      if (data.postedBy) {
-        this.filter.postedBy = data?.postedBy;
-      } else {
-         this.filter.postedBy = '';
-      }
+      await this.getPostsListByParams(this.filter?.page > 1 ? this.filter.page : 1);
     }
   },
   async mounted () {
-    const windowData = await Object.fromEntries(new URL(window.location).searchParams.entries());
+    /* const windowData = await Object.fromEntries(new URL(window.location).searchParams.entries());
     if (windowData) {
-      this.filter.currentItem = windowData.page;
+      this.filter.page = windowData.page;
       if (windowData.search) {
         this.filter.search = windowData.search;
       }
@@ -132,7 +152,13 @@ export default {
         this.filter.postedBy = windowData.postedBy;
       }
     }
-    await this.getPostsListByParams(this.filter.currentItem);
+    */
+   if (this.$route.query) {
+      if (this.$route.query.page) this.filter.page = this.$route.query.page;
+      if (this.$route.query.search) this.filter.search = this.$route.query.search;
+      if (this.$route.query.postedBy) this.filter.postedBy = this.$route.query.postedBy;
+   }
+   await this.getPostsListByParams();
   },
   beforeUnmount () {
     this.clearPostsList();

@@ -5,3 +5,7 @@ created () {
   }
 
   
+
+<post-list
+  :postList="currentPostsList"
+/>

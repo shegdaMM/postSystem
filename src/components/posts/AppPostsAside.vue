@@ -15,6 +15,7 @@
                 <div><i class="fas fa-chevron-right"></i></div>
             </a>
             <button class="addPost-btn"
+                v-if="this.$store.getters.loggedInUser._id"
                 @click="$router.push('/post-new')">
                 <i class="fas fa-plus"></i>
                 add new Post
@@ -63,7 +64,7 @@ export default {
             this.debounce = setTimeout(() => {
                 this.search = event.target.value || '';
                 this.sendResponce();
-            }, 1000);
+            }, 500);
         },
         filterUser (userId) {
             if (userId) {
@@ -90,8 +91,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-    aside {
-    }
     .posts-control{
          max-width: 320px;
          padding: 1rem 0.5rem 1rem 0.5rem;

@@ -23,6 +23,11 @@ export default {
     async createNewPost (data) {
       await this.createPost(data);
     }
+  },
+  created () {
+     if (!this.$store.getters.loggedInUser._id) {
+      this.$router.go(-1);
+    }
   }
 };
 </script>
