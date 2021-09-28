@@ -64,4 +64,12 @@ export default {
             flex: 1 1 50%;
         }
     }
+
+    @media screen and (max-width: 721px){
+        .my-last-posts {
+        & > * {
+            flex: 1 1 100%;
+        }
+    }
+    }
 </style>

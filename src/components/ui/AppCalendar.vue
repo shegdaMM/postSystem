@@ -1,11 +1,78 @@
 <template>
   <div class="callendar-range">
+    <div class="q-pa-md full-width">
+          <q-date
+            class="full-width"
+            v-model="dateRange"
+            range
+            @update:model-value="onSubmit"
+            :navigation-min-year-month="minDate"
+          />
+          <div class="row justify-between wrap">
+            <q-radio v-model="type" val="ByDays" label="By Days" />
+            <q-radio v-model="type" val="ByWeeks" label="By Weeks" />
+            <q-radio v-model="type" val="ByMounths" label="By Mounths" />
+            <q-radio v-model="type" val="ByYears" label="By Years" />
+          </div>
+    </div>
+  </div>
+</template>
+<script>
+export default {
+  data () {
+    return {
+       type: 'ByDays',
+       dateRange: { from: this.getLastMounthDate(), to: new Date().toISOString().replace('-', '/').split('T')[0].replace('-', '/') }
+    };
+  },
+  props: {
+    minDate: {
+      type: Date,
+      default: new Date('2021-08').toISOString().replace('-', '/').split('T')[0].replace('-', '/')
+    }
+  },
+  emits: ['current-date-range'],
+  methods: {
+    getLastMounthDate () {
+      const now = new Date();
+      const mounth = now.getMonth() - 1;
+      let result = new Date(now.setMonth(mounth));
+      result = new Date(result.setDate(result.getDate() + 1));
+      result = result.setHours(0, 0, 0, 0);
+      return new Date(result).toISOString().replace('-', '/').split('T')[0].replace('-', '/');
+    },
+    onSubmit () {
+      const range = {
+        from: new Date(this.dateRange.from),
+        to: new Date(this.dateRange.to)
+      };
+      this.$emit('current-date-range', { range: range, type: this.type });
+    }
+  },
+  mounted () {
+     this.onSubmit();
+  }
+};
+</script>
+
+<style lang="scss" scoped>
+  .callendar-range {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  #app .q-date__header {
+    color: black;
+  }
+</style>
+<!-- <template>
+  <div class="callendar-range">
     <div class="row wrap">
               <div class="form-group">
                   <label>Start date </label>
                   <flat-pickr class="form-control"
                               :config="configs.start"
-                              v-model="form.dateStart"
+                              v-model.lazy="form.dateStart"
                               @on-change="onStartChange">
                   </flat-pickr>
               </div>
@@ -29,15 +96,21 @@ export default {
   components: {
     FlatPickr
   },
+  props: {
+    firstDate: {
+      type: Date,
+      default: new Date('2021-08-30')
+    }
+  },
   data () {
     return {
       form: {
-        dateStart: Date.now().setMonth(Date.now().getMonth() - 1),
-        dateEnd: Date.now()
+        dateStart: this.getLastMounthDate(),
+        dateEnd: new Date()
       },
       configs: {
         start: {
-          minDate: null,
+          minDate: this.firstDate,
           maxDate: null
         },
         end: {
@@ -47,6 +120,14 @@ export default {
     };
   },
   methods: {
+    getLastMounthDate () {
+      const now = new Date();
+      const mounth = now.getMonth() - 1;
+      let result = new Date(now.setMonth(mounth));
+      result = result.setHours(0, 0, 0, 0);
+      // return new Date(result).toISOString().split('T')[0];
+      return new Date(result);
+    },
     onStartChange (dateStr) {
       this.configs.end.minDate = dateStr;
     },
@@ -68,3 +149,4 @@ export default {
     padding-right: 1rem;
   }
 </style>
+ -->

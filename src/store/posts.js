@@ -9,7 +9,8 @@ export default {
         postAlert: null,
         currentPost: null,
         postsListSize: 0,
-        currentPostsList: []
+        currentPostsList: [],
+        fullPostsList: []
     },
     getters: {
         postAlert (state) {
@@ -17,6 +18,9 @@ export default {
           },
         currentPost (state) {
             return state.currentPost;
+        },
+        fullPostsList (state) {
+            return state.fullPostsList;
         },
         postsListSize (state) {
             return state.postsListSize;
@@ -60,6 +64,11 @@ export default {
         setCurrentPostsList (state, list) {
             if (list) {
                 state.currentPostsList = list;
+            }
+        },
+        setFullPostsList (state, list) {
+            if (list) {
+                state.fullPostsList = list;
             }
         },
         removePostsList (state) {
@@ -170,7 +179,10 @@ export default {
                 await axios.get(url).then(response => {
                     if (response.status === 200) {
                       commit('setPostsListSize', response.data.pagination.total);
-                      commit('setCurrentPostsList', response.data.data);
+                      if (payload.limit === 0) {
+                        commit('setFullPostsList', response.data.data);
+                      }
+                        commit('setCurrentPostsList', response.data.data);
                     }
                   });
                 } catch (e) {
