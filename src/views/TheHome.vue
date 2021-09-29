@@ -5,10 +5,10 @@
     </app-title-page>
     <app-last-posts />
 
-    <app-title-page>
+   <!-- <app-title-page>
        STATISTICS
     </app-title-page>
-    <app-statistics />
+    <app-statistics /> -->
 
     <app-title-page>
        POSTS DIAGRAMM
@@ -21,7 +21,7 @@
 // <app-posts-date-diagram :postedBy="'612e3c52c46d5405b355464e'"/>
 import AppTitlePage from '@/components/ui/AppTitlePage';
 import AppLastPosts from './posts/AppLastPosts.vue';
-import AppStatistics from '@/components/AppStatistics';
+// import AppStatistics from '@/components/AppStatistics';
 import AppPostsDateDiagram from '@/components/AppPostsDateDiagram';
 
 export default {
@@ -29,7 +29,7 @@ export default {
   components: {
     AppTitlePage,
     AppLastPosts,
-    AppStatistics,
+    // AppStatistics,
     AppPostsDateDiagram
   },
   data () {

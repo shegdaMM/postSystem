@@ -50,6 +50,7 @@
         :isLikeComment="isLikeComment"
         @set-likes="setLikes"
         @add-comment="showNew"
+        :key="likesCount"
       />
       <app-comment-new-edit
         v-if="newComment"
@@ -91,7 +92,7 @@ export default {
     },
     computed: {
         likesCount () {
-            return this.comment?.likes.length;
+            return Object.values(this.likes).length;
         },
         makeEdit () {
             if (this.comment?.commentedBy) {
@@ -103,12 +104,10 @@ export default {
         },
         isLikeComment () {
             let result;
-            if ((this.comment?.likes) && (this.$store.getters.loggedInUser._id)) {
-                this.comment.likes.forEach(element => {
-                    if (element === this.$store.getters.loggedInUser._id) {
-                        result = true;
-                    }
-                });
+            if ((this.likes) && (this.$store.getters.loggedInUser._id)) {
+                if (this.likes[this.$store.getters.loggedInUser._id]) {
+                    result = true;
+                }
             } else result = false;
             return result;
         }
@@ -139,17 +138,24 @@ export default {
             this.$emit('comment-update');
         },
         async setLikes () {
-            if (!(this.$store.getters.loggedInUser._id === this.comment?.commentedBy)) {
-                const result = await this.likeToComment({ id: this.comment._id });
-                if (result) {
-                   this.$emit('comment-update');
+            if (this.likes) {
+                if (!(this.$store.getters.loggedInUser._id === this.comment?.commentedBy)) {
+                    const result = await this.likeToComment({ id: this.comment._id });
+                    if (result) {
+                        // this.$emit('comment-update');
+                         if (this.likes[this.$store.getters.loggedInUser._id]) {
+                            delete this.likes[this.$store.getters.loggedInUser._id];
+                        } else {
+                            this.likes[this.$store.getters.loggedInUser._id] = this.$store.getters.loggedInUser.name || this.$store.getters.loggedInUser.email;
+                        }
+                    }
+                } else {
+                this.$toast.open({
+                message: 'You not can set like<br>to your comment',
+                type: 'info',
+                duration: 5000
+                });
                 }
-            } else {
-              this.$toast.open({
-              message: 'You not can set like<br>to your comment',
-              type: 'info',
-              duration: 5000
-            });
             }
         }
     },

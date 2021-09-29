@@ -45,6 +45,7 @@
         :isPostPage="isPostPage"
         :isLikePost="isLikePost"
         @set-likes="setLikes"
+        :key="likesCount"
      />
 </article>
 </template>
@@ -78,7 +79,7 @@ export default {
     },
     computed: {
         likesCount () {
-            return this.post.likes.length;
+            return Object.values(this.likes).length;
         },
         makeEdit () {
             if (this.post.postedBy) {
@@ -90,12 +91,15 @@ export default {
         },
         isLikePost () {
             let result;
-            if ((this.post.likes) && (this.$store.getters.loggedInUser._id)) {
-                this.post.likes.forEach(element => {
+            if ((this.likes) && (this.$store.getters.loggedInUser._id)) {
+                /* this.likes.forEach(element => {
                     if (element === this.$store.getters.loggedInUser._id) {
                         result = true;
                     }
-                });
+                */
+                if (this.likes[this.$store.getters.loggedInUser._id]) {
+                    result = true;
+                }
             } else result = false;
             return result;
         }
@@ -115,17 +119,24 @@ export default {
             }
         },
         async setLikes () {
-            if (!(this.$store.getters.loggedInUser._id === this.post?.postedBy)) {
-                const result = await this.likeToPost({ id: this.post._id });
-                if (result) {
-                    this.$emit('post-update');
+            if (this.likes) {
+                if (!(this.$store.getters.loggedInUser._id === this.post?.postedBy)) {
+                    const result = await this.likeToPost({ id: this.post._id });
+                    if (result) {
+                        // this.$emit('post-update');
+                        if (this.likes[this.$store.getters.loggedInUser._id]) {
+                            delete this.likes[this.$store.getters.loggedInUser._id];
+                        } else {
+                            this.likes[this.$store.getters.loggedInUser._id] = this.$store.getters.loggedInUser.name || this.$store.getters.loggedInUser.email;
+                        }
+                    }
+                } else {
+                    this.$toast.open({
+                    message: 'You not can set like<br>to your post',
+                    type: 'info',
+                    duration: 5000
+                    });
                 }
-            } else {
-              this.$toast.open({
-              message: 'You not can set like<br>to your post',
-              type: 'info',
-              duration: 5000
-            });
             }
         }
     },

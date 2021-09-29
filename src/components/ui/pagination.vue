@@ -1,5 +1,5 @@
 <template>
- <section class="pagination">
+ <section class="pagination" v-if="pagenationCount > 1">
         <a @click="prevPage" title="previous" class="pagination__item" v-if="pagenationCount > 4">
           <i class="fas fa-angle-left"></i>
         </a>
@@ -8,7 +8,7 @@
         :class="{'pagination__item-active': 1 == this.currentItem}"
         v-if="pagenationCount > 2"
         >
-            <span> {{ 1 }} </span>
+            <span> 1 </span>
         </a>
         <span class="pagination__item pagination__item--more"
         v-if="this.currentItem > 3">...</span>
