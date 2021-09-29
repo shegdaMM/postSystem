@@ -1,19 +1,20 @@
 <template>
   <div class="callendar-range">
-    <div class="q-pa-md full-width">
+    <div class="q-pa-md full-width" v-if="minDate">
+          <div class="row justify-between wrap">
+            <q-radio v-model="type" val="ByDays" label="By Days" @click="onSubmit"/>
+            <q-radio v-model="type" val="ByWeeks" label="By Weeks" @click="onSubmit"/>
+            <q-radio v-model="type" val="ByMounths" label="By Mounths" @click="onSubmit" />
+            <q-radio v-model="type" val="ByYears" label="By Years" @click="onSubmit"/>
+          </div>
           <q-date
             class="full-width"
             v-model="dateRange"
             range
             @update:model-value="onSubmit"
             :navigation-min-year-month="minDate"
+            :navigation-max-year-month="maxDate"
           />
-          <div class="row justify-between wrap">
-            <q-radio v-model="type" val="ByDays" label="By Days" />
-            <q-radio v-model="type" val="ByWeeks" label="By Weeks" />
-            <q-radio v-model="type" val="ByMounths" label="By Mounths" />
-            <q-radio v-model="type" val="ByYears" label="By Years" />
-          </div>
     </div>
   </div>
 </template>
@@ -21,14 +22,23 @@
 export default {
   data () {
     return {
-       type: 'ByDays',
+       type: null,
        dateRange: { from: this.getLastMounthDate(), to: new Date().toISOString().replace('-', '/').split('T')[0].replace('-', '/') }
     };
   },
+  computed: {
+    maxDate () {
+       const year = new Date().getFullYear();
+        let mounth = (new Date().getMonth() + 1);
+        mounth = (mounth > 9) ? mounth : ('0' + mounth);
+        this.onSubmit();
+        return year + '/' + mounth;
+    }
+  },
   props: {
     minDate: {
-      type: Date,
-      default: new Date('2021-08').toISOString().replace('-', '/').split('T')[0].replace('-', '/')
+      type: String,
+      default: null
     }
   },
   emits: ['current-date-range'],
@@ -43,14 +53,15 @@ export default {
     },
     onSubmit () {
       const range = {
-        from: new Date(this.dateRange.from),
-        to: new Date(this.dateRange.to)
+        from: new Date(this.dateRange.from).toISOString().split('T')[0],
+        to: new Date(this.dateRange.to).toISOString().split('T')[0]
       };
       this.$emit('current-date-range', { range: range, type: this.type });
     }
   },
   mounted () {
-     this.onSubmit();
+      this.type = 'ByDays';
+      this.onSubmit();
   }
 };
 </script>

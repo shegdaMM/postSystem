@@ -1,20 +1,24 @@
 <template>
-    <section class="user-wrap" v-if="thisUser">
-      <app-user-logo
-       :avatar="thisUser.avatar ? thisUser.avatar : ''"
-       :key="thisUser.avatar"
-       :name="this.thisUser.name"
-       :ID="this.thisUser._id" class="user-logo"
-        @user-update="userUpdate"
-        @remove-user="removeUserDialog"/>
-        <app-user :user="thisUser" :ID="this.thisUser._id" class="user-info"/>
-    </section>
+    <div class="user-elem-wrapper">
+      <section class="user-wrap" v-if="thisUser">
+        <app-user-logo
+        :avatar="thisUser.avatar ? thisUser.avatar : ''"
+        :key="thisUser.avatar"
+        :name="this.thisUser.name"
+        :ID="this.thisUser._id" class="user-logo"
+          @user-update="userUpdate"
+          @remove-user="removeUserDialog"/>
+          <app-user :user="thisUser" :ID="this.thisUser._id" class="user-info"/>
+      </section>
+      <app-posts-date-diagram :postedBy="uid" v-if="uid"/>
+    </div>
 </template>
 
 <script>
 import AppUser from './AppUser.vue';
 import AppUserLogo from './AppUserLogo.vue';
 import { mapGetters, mapActions } from 'vuex';
+import AppPostsDateDiagram from '@/components/AppPostsDateDiagram';
 
 export default {
   name: 'UserById',
@@ -33,7 +37,7 @@ export default {
       }
   },
   components: {
-    AppUser, AppUserLogo
+    AppUser, AppUserLogo, AppPostsDateDiagram
   },
   computed: {
     ...mapGetters(['currentUser']),
@@ -83,6 +87,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.user-elem-wrapper {
+  width: 100%;
+  height: 100%;
+}
 .user-wrap {
   height: 100%;
   padding: 1.2rem 0.5rem;

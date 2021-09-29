@@ -204,7 +204,7 @@ export default {
         },
         getUsersList: async ({ commit, dispatch }, payload) => {
             commit('onloadProcess');
-            const Url = `${API_URL}/users?limit=${payload.limit}&skip=${payload.skip}`;
+            const Url = `${API_URL}/users?limit=${payload.limit}&skip=${payload.skip * payload.limit}`;
             try {
                 await axios.get(Url).then(response => {
                     if (response.status === 200) {

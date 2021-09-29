@@ -181,8 +181,9 @@ export default {
                       commit('setPostsListSize', response.data.pagination.total);
                       if (payload.limit === 0) {
                         commit('setFullPostsList', response.data.data);
-                      }
+                      } else {
                         commit('setCurrentPostsList', response.data.data);
+                      }
                     }
                   });
                 } catch (e) {

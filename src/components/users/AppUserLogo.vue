@@ -25,6 +25,9 @@
               </li>
           </ul>
         </template>
+         <q-btn @click="this.$router.push({ name: 'ThePosts', query: { postedBy: this.ID } });">
+            Show all posts
+          </q-btn>
     </div>
 </div>
 </template>
