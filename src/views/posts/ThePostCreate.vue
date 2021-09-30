@@ -25,7 +25,7 @@ export default {
     }
   },
   created () {
-     if (!this.$store.getters.loggedInUser._id) {
+     if (!this.$store.getters.loggedInUser?._id) {
       this.$router.go(-1);
     }
   }

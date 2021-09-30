@@ -1,11 +1,11 @@
 <template>
  <section class="pagination" v-if="pagenationCount && (pagenationCount > 1)">
-        <a @click="prevPage" title="previous" class="pagination__item" v-if="pagenationCount > 4">
+        <a @click="prevPage" title="previous" class="pagination__item" v-if="showArrowLeft">
           <span class="fas fa-angle-left"></span>
         </a>
         <a @click="goto(1)"
         class="pagination__item"
-        :class="{'pagination__item-active': 1 == this.currentItem}"
+        :class="{'pagination__item-active': this.currentItem == 1}"
         v-if="pagenationCount > 2"
         >
             <span> 1 </span>
@@ -21,11 +21,11 @@
         <span class="pagination__item pagination__item--more" v-if="this.currentItem < (pagenationCount - 3)">...</span>
         <a @click="goto(pagenationCount)"
         class="pagination__item"
-        :class="{'pagination__item-active': pagenationCount == this.currentItem}"
+        :class="{'pagination__item-active': this.currentItem == pagenationCount}"
         v-if="pagenationCount > 2">
             <span> {{ pagenationCount }} </span>
         </a>
-        <a @click="nextPage" title="next" class="pagination__item" v-if="pagenationCount > 4">
+        <a @click="nextPage" title="next" class="pagination__item" v-if="showArrowRight">
           <span class="fas fa-angle-right"></span>
         </a>
     </section>
@@ -66,11 +66,19 @@ export default {
         paginationCounts () {
             const showCount = +(this.seeOnPage);
             const result = [];
-            for (let i = +this.currentItem - showCount; i < +this.currentItem + showCount; i++) {
+            for (let i = +this.currentItem - showCount; i <= +this.currentItem + showCount; i++) {
                 if (i > 1 && i < this.pagenationCount) {
                     result.push(i);
                 }
             }
+            return result;
+        },
+        showArrowLeft () {
+            const result = this.pagenationCount > 4 && this.currentItem !== 1;
+            return result;
+        },
+        showArrowRight () {
+            const result = this.pagenationCount > 4 && this.currentItem !== this.pagenationCount;
             return result;
         }
     },
@@ -80,14 +88,10 @@ export default {
           this.$emit('list-update', { page: current });
         },
         nextPage () {
-          if ((this.currentItem + 1) <= this.pagenationCount) {
             this.goto(this.currentItem + 1);
-          }
         },
         prevPage () {
-           if ((this.currentItem - 1) > 0) {
             this.goto(this.currentItem - 1);
-          }
         }
     },
     mounted () {

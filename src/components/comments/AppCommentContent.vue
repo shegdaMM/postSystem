@@ -96,7 +96,7 @@ export default {
         },
         makeEdit () {
             if (this.comment?.commentedBy) {
-                if (this.$store.getters.loggedInUser._id === this.comment?.commentedBy) {
+                if (this.$store.getters.loggedInUser?._id === this.comment?.commentedBy) {
                     return true;
                 }
             }
@@ -104,8 +104,8 @@ export default {
         },
         isLikeComment () {
             let result;
-            if ((this.likes) && (this.$store.getters.loggedInUser._id)) {
-                if (this.likes[this.$store.getters.loggedInUser._id]) {
+            if ((this.likes) && (this.$store.getters.loggedInUser?._id)) {
+                if (this.likes[this.$store.getters.loggedInUser?._id]) {
                     result = true;
                 }
             } else result = false;
@@ -139,14 +139,14 @@ export default {
         },
         async setLikes () {
             if (this.likes) {
-                if (!(this.$store.getters.loggedInUser._id === this.comment?.commentedBy)) {
+                if (!(this.$store.getters.loggedInUser?._id === this.comment?.commentedBy)) {
                     const result = await this.likeToComment({ id: this.comment._id });
                     if (result) {
                         // this.$emit('comment-update');
-                         if (this.likes[this.$store.getters.loggedInUser._id]) {
-                            delete this.likes[this.$store.getters.loggedInUser._id];
+                         if (this.likes[this.$store.getters.loggedInUser?._id]) {
+                            delete this.likes[this.$store.getters.loggedInUser?._id];
                         } else {
-                            this.likes[this.$store.getters.loggedInUser._id] = this.$store.getters.loggedInUser.name || this.$store.getters.loggedInUser.email;
+                            this.likes[this.$store.getters.loggedInUser?._id] = this.$store.getters.loggedInUser.name || this.$store.getters.loggedInUser.email;
                         }
                     }
                 } else {

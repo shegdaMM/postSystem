@@ -44,10 +44,11 @@ export default {
       });
     }
   },
-  mounted () {
+  async mounted () {
     if (this.$route.query) {
       if (this.$route.query.page) this.currentItem = this.$route.query.page;
     };
+    await this.getUsersListByParams(this.currentItem || 1);
   },
   beforeUnmount () {
     this.clearUsersList();

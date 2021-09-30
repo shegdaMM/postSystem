@@ -57,7 +57,7 @@ export default {
     methods: {
         likePost (event) {
             event.target.disabled = true;
-            if (this.$store.getters.loggedInUser._id) {
+            if (this.$store.getters.loggedInUser?._id) {
                 this.$emit('set-likes');
             } else {
                 this.$toast.open({

@@ -21,7 +21,7 @@
     <span class="discriptoin">ACCOUNT CREATED:</span>
     <span class="user__dateCreated">{{user.dateCreated}}</span>
   </div>
-  <div class="user-text" v-if="this.$store.getters.loggedInUser._id === this.ID">
+  <div class="user-text" v-if="this.$store.getters.loggedInUser?._id === this.ID">
     <span class="discriptoin">ID:</span>
     <span class="user__id" v-if="user._id">{{user._id}}</span>
   </div>

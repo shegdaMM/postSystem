@@ -89,7 +89,7 @@ export default {
     }
   },
   created () {
-     if (this.$store.getters.loggedInUser._id !== this.uid) {
+     if (this.$store.getters.loggedInUser?._id !== this.uid) {
       this.$router.go(-1);
     }
   }

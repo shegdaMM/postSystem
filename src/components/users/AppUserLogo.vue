@@ -6,7 +6,7 @@
             <img v-if="image" :key="image" :src="image ? `${IMG_URL}${image}` : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
 
       </a>
-       <template v-if="this.$store.getters.loggedInUser._id === this.ID">
+       <template v-if="this.$store.getters.loggedInUser?._id === this.ID">
           <span onclick="uploadfile.click()" class="avatar-button">
               <i class="fas fa-cloud-upload-alt"></i>
               <input type="file" class="p-button-rounded"

@@ -3,7 +3,7 @@
        <li class="users__item" v-for="user in userList" :key="user[0]">
            <input type="radio" :id="user[0]" :value="user[0]" v-model="userId" style="display: none;">
             <label :for="user[0]" @click="$emit('filter', this.userId)">
-                <a @click="userId = user[0]"><i class="far fa-user" :class="{'fas': user[0] === this.$store.getters.loggedInUser._id}"></i> {{user[1].name || user[1].email}}</a>
+                <a @click="userId = user[0]"><i class="far fa-user" :class="{'fas': user[0] === this.$store.getters.loggedInUser?._id}"></i> {{user[1].name || user[1].email}}</a>
             </label>
             <span @click="$emit('filter'), userId=''" class="unCheckUserId" v-if="currentUser === user[0]"><i class="fas fa-times"></i></span>
        </li>

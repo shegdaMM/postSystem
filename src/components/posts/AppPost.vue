@@ -83,7 +83,7 @@ export default {
         },
         makeEdit () {
             if (this.post.postedBy) {
-                if ((this.isPostPage) && (this.$store.getters.loggedInUser._id === this.post?.postedBy)) {
+                if ((this.isPostPage) && (this.$store.getters.loggedInUser?._id === this.post?.postedBy)) {
                     return true;
                 }
             }
@@ -93,7 +93,7 @@ export default {
             let result;
             if ((this.likes) && (this.$store.getters.loggedInUser?._id)) {
                 /* this.likes.forEach(element => {
-                    if (element === this.$store.getters.loggedInUser._id) {
+                    if (element === this.$store.getters.loggedInUser?._id) {
                         result = true;
                     }
                 */
@@ -120,14 +120,14 @@ export default {
         },
         async setLikes () {
             if (this.likes) {
-                if (!(this.$store.getters.loggedInUser._id === this.post?.postedBy)) {
+                if (!(this.$store.getters.loggedInUser?._id === this.post?.postedBy)) {
                     const result = await this.likeToPost({ id: this.post._id });
                     if (result) {
                         // this.$emit('post-update');
-                        if (this.likes[this.$store.getters.loggedInUser._id]) {
-                            delete this.likes[this.$store.getters.loggedInUser._id];
+                        if (this.likes[this.$store.getters.loggedInUser?._id]) {
+                            delete this.likes[this.$store.getters.loggedInUser?._id];
                         } else {
-                            this.likes[this.$store.getters.loggedInUser._id] = this.$store.getters.loggedInUser.name || this.$store.getters.loggedInUser.email;
+                            this.likes[this.$store.getters.loggedInUser?._id] = this.$store.getters.loggedInUser.name || this.$store.getters.loggedInUser.email;
                         }
                     }
                 } else {

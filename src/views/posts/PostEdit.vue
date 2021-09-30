@@ -70,7 +70,7 @@ export default {
         }
     },
     created () {
-        if (this.$store.getters.loggedInUser._id !== this.postedBy) {
+        if (this.$store.getters.loggedInUser?._id !== this.postedBy) {
             this.$router.go(-1);
         }
     },

@@ -15,7 +15,7 @@
                 <div><i class="fas fa-chevron-right"></i></div>
             </a>
             <button class="addPost-btn"
-                v-if="this.$store.getters.loggedInUser._id"
+                v-if="this.$store.getters.loggedInUser?._id"
                 @click="$router.push('/post-new')">
                 <i class="fas fa-plus"></i>
                 add new Post
