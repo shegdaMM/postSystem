@@ -116,12 +116,11 @@ export default {
         search: this.filter.search || null,
         postedBy: this.filter.postedBy || null
       });
-      console.log(this.filter);
       this.$router.push({ name: 'ThePosts', query: { ...this.filter } });
     },
     async getFilter (data) {
       if (data.page) {
-        if (data.page > 1) {
+        if (data.page >= 1) {
           this.filter.page = data?.page;
         }
       } else {

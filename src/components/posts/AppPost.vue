@@ -91,13 +91,13 @@ export default {
         },
         isLikePost () {
             let result;
-            if ((this.likes) && (this.$store.getters.loggedInUser._id)) {
+            if ((this.likes) && (this.$store.getters.loggedInUser?._id)) {
                 /* this.likes.forEach(element => {
                     if (element === this.$store.getters.loggedInUser._id) {
                         result = true;
                     }
                 */
-                if (this.likes[this.$store.getters.loggedInUser._id]) {
+                if (this.likes[this.$store.getters.loggedInUser?._id]) {
                     result = true;
                 }
             } else result = false;

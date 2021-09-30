@@ -8,6 +8,7 @@
     <pagination
       :itemOnPage="itemOnPage"
       :listSize="usersListSize"
+      :propCurrentItem="currentItem"
       @list-update="getUsersListByParams"/>
   </div>
 </template>
