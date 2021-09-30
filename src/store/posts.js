@@ -73,6 +73,7 @@ export default {
         },
         removePostsList (state) {
             state.currentPostsList = [];
+            state.fullPostsList = [];
             state.postsListSize = 0;
         },
         updateCurrentPost (state, post) {

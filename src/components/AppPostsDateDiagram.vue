@@ -210,6 +210,7 @@ export default {
     },
     async mounted () {
       (this.postedBy) ? await this.getPostsList({ limit: 0, postedBy: this.postedBy }) : await this.getPostsList({ limit: 0 });
+      this.upKey = this.upKey + 1;
     },
     beforeUnmount () {
       this.clearPostsList();
