@@ -41,7 +41,7 @@
         :likesCount="likesCount"
         :post="post"
         :makeEdit="makeEdit"
-        :likes="likes"
+        :likes="likesList"
         :isPostPage="isPostPage"
         :isLikePost="isLikePost"
         @set-likes="setLikes"
@@ -102,6 +102,9 @@ export default {
                 }
             } else result = false;
             return result;
+        },
+        likesList () {
+            return this.likes;
         }
     },
     methods: {
