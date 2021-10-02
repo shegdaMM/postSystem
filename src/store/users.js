@@ -127,13 +127,14 @@ export default {
         }, // CROS problems...
         getCurrentUserAvatar: async ({ commit, dispatch }, payload) => {
             commit('onloadProcess');
-            let result;
+            let result = null;
             const apiurl = `${IMG_URL}${payload.avatar}`;
             try {
                 if (payload.avatar) {
                     const res = await fetch(apiurl, { method: 'HEAD' });
+                    console.log(res);
                     if (res.status !== 404) {
-                        result = payload.avatar;
+                        result = `${IMG_URL}${payload.avatar}`;
                     }
                 }
             } catch (error) {

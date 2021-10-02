@@ -174,17 +174,20 @@ a {
 
 .postsItem__wrapper {
     display: flex;
-    justify-content: flex-start;
+    justify-content: stretch;
     flex-direction: column;
     padding: 1rem;
     margin: 0.5rem 0.5rem 0.5rem 0;
 
+    flex-grow: 1;
     background: rgba(255, 255, 255, 0.397);
     clip-path: polygon(0 1rem, 1.5rem 0, calc(100% - 1.5rem) 0, 100% 1rem, 100% calc(100% - 1rem), calc(100% - 1.5rem) 100%, 1.5rem 100%, 0 calc(100% - 1rem));
 }
 
 .main {
-
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
     h2 {
         margin: 0.5rem 0.2rem;
         word-break: break-all;
@@ -199,7 +202,7 @@ a {
         display: flex;
         flex-wrap: wrap;
         justify-content: space-around;
-
+        flex-grow: 1;
         .post__image-wrapper {
             max-width: 300px;
             margin: 0 0.5rem 0rem;

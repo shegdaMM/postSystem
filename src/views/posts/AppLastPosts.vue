@@ -64,6 +64,11 @@ export default {
             flex: 1 1 50%;
         }
     }
+    .my-last-posts-item {
+        .post-wrapper {
+            height: 100%;
+        }
+    }
 
     @media screen and (max-width: 721px){
         .my-last-posts {
