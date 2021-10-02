@@ -3,11 +3,14 @@
     <div class="avatar-view">
       <a style="text-decoration: none; cursor: pointer;"
         @click="routeToUserPage">
-            <img v-if="!image" :key="image" :src="defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
-            <img v-if="image" :key="image" :src="image ? `${IMG_URL}${image}` : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
-
+            <img v-if="getUserAvatar"
+              :key="getUserAvatar"
+              :src="getUserAvatar"
+              :alt="`logo for - ${name}`"
+              class="avatar"
+            >
       </a>
-       <template v-if="this.$store.getters.loggedInUser?._id === this.ID">
+       <template v-if="isLoginUser">
           <span onclick="uploadfile.click()" class="avatar-button">
               <i class="fas fa-cloud-upload-alt"></i>
               <input type="file" class="p-button-rounded"
@@ -26,7 +29,7 @@
               </li>
           </ul>
         </template>
-         <q-btn @click="this.$router.push({ name: 'ThePosts', query: { postedBy: this.ID } });">
+         <q-btn @click="routeToUserPosts">
             Show all posts
           </q-btn>
     </div>
@@ -59,6 +62,16 @@ export default {
     ...mapGetters(['currentUserAvatar']),
     imageUrl () {
       return this.defaultAvatar;
+    },
+    isLoginUser () {
+      return this.$store.getters.loggedInUser?._id === this.ID;
+    },
+    getUserAvatar () {
+      let result = null;
+      if (this.avatar) {
+        result = this.image;
+      }
+      return result || this.defaultAvatar;
     }
   },
   methods: {
@@ -76,16 +89,23 @@ export default {
             const result = await this.putCurrentUserAvatar({ id: this.ID, data: formData });
             if (result) {
               this.$emit('user-update');
-              // this.image = await this.getCurrentUserAvatar({ avatar: this.avatar });
             }
         }
       },
       routeToUserPage () {
         this.$router.push({ name: 'UserById', params: { uid: this.ID } });
+      },
+      routeToUserPosts () {
+        this.$router.push({ name: 'ThePosts', query: { postedBy: this.ID } });
+      },
+      async responceUserAvatar () {
+        this.image = await this.getCurrentUserAvatar({ avatar: this.avatar });
       }
   },
   async mounted () {
-    this.image = await this.getCurrentUserAvatar({ avatar: this.avatar });
+    if (this.avatar) {
+      await this.responceUserAvatar();
+    }
   }
 };
 </script>

@@ -2,16 +2,17 @@
     <aside>
         <template v-if="!statusAside">
         <div class="posts-control posts-control--hidden">
-            <a @click="statusAside = true">
+            <a @click="toggleAsidePanel">
                 <div><i class="fas fa-chevron-left" style="border: 0.15rem #028165 solid;"></i></div>
                 <div><i class="fas fa-plus"></i></div>
-                <div><i class="fas fa-search"></i></div>
+                <div><i class="fas fa-search" :class="{ active : search }"></i></div>
+                <div><i class="fas fa-user-check" :class="{ active : postedBy }"></i></div>
             </a>
         </div>
         </template>
         <template v-if="statusAside">
         <div class="posts-control posts-control--show">
-            <a @click="statusAside = false" class="hide-btn">
+            <a @click="toggleAsidePanel" class="hide-btn">
                 <div><i class="fas fa-chevron-right"></i></div>
             </a>
             <button class="addPost-btn"
@@ -80,6 +81,9 @@ export default {
         },
         filterPostedBy (postedBy) {
             (postedBy) ? this.postedBy = postedBy : this.postedBy = null;
+        },
+        toggleAsidePanel () {
+            this.statusAside = !this.statusAside;
         }
     },
     updated () {
@@ -91,6 +95,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .active {
+        color: rgba(255, 0, 0, 0.856);
+    }
     .posts-control{
          max-width: 320px;
          padding: 1rem 0.5rem 1rem 0.5rem;

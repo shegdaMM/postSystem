@@ -1,18 +1,14 @@
 <template>
   <div class="home">
-    <app-title-page>
-       LAST NEWS
-    </app-title-page>
+    <app-title-page> LAST NEWS </app-title-page>
     <app-last-posts />
 
-   <!-- <app-title-page>
+    <!-- <app-title-page>
        STATISTICS
     </app-title-page>
     <app-statistics /> -->
 
-    <app-title-page>
-       POSTS DIAGRAMM
-    </app-title-page>
+    <app-title-page> POSTS DIAGRAMM </app-title-page>
     <app-posts-date-diagram />
   </div>
 </template>
@@ -35,6 +31,11 @@ export default {
     return {
       name: 'Home'
     };
+  },
+  mounted () {
+    /* this.$nextTick(function () {
+      this.$store.commit('onloadProcess');
+    }); */
   }
 };
 </script>
