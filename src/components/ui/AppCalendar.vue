@@ -1,11 +1,11 @@
 <template>
   <div class="callendar-range">
-    <div class="q-pa-md full-width" v-if="minDate">
-          <div class="row justify-between wrap">
-            <q-radio v-model="type" val="ByDays" label="By Days" @click="onSubmit"/>
-            <q-radio v-model="type" val="ByWeeks" label="By Weeks" @click="onSubmit"/>
-            <q-radio v-model="type" val="ByMounths" label="By Mounths" @click="onSubmit" />
-            <q-radio v-model="type" val="ByYears" label="By Years" @click="onSubmit"/>
+    <div class="full-width" v-if="minDate">
+          <div class="row justify-between wrap ">
+            <q-radio class="col-6 q-mt-none" v-model="type" val="ByDays" label="By Days" @click="onSubmit"/>
+            <q-radio class="col-6 q-mt-none" v-model="type" val="ByWeeks" label="By Weeks" @click="onSubmit"/>
+            <q-radio class="col-6 q-mt-none" v-model="type" val="ByMounths" label="By Mounths" @click="onSubmit" />
+            <q-radio class="col-6 q-mt-none" v-model="type" val="ByYears" label="By Years" @click="onSubmit"/>
           </div>
           <q-date
             class="full-width"
@@ -52,11 +52,13 @@ export default {
       return new Date(result).toISOString().replace('-', '/').split('T')[0].replace('-', '/');
     },
     onSubmit () {
-      const range = {
-        from: new Date(this.dateRange.from).toISOString().split('T')[0],
-        to: new Date(this.dateRange.to).toISOString().split('T')[0]
-      };
-      this.$emit('current-date-range', { range: range, type: this.type });
+      if (this.dateRange?.from && this.dateRange?.to) {
+        const range = {
+          from: new Date(this.dateRange.from).toISOString().split('T')[0],
+          to: new Date(this.dateRange.to).toISOString().split('T')[0]
+        };
+        this.$emit('current-date-range', { range: range, type: this.type });
+      }
     }
   },
   mounted () {
@@ -69,7 +71,7 @@ export default {
 <style lang="scss" scoped>
   .callendar-range {
     width: 100%;
-    max-width: 600px;
+    max-width: 450px;
     margin: 0 auto;
   }
   #app .q-date__header {

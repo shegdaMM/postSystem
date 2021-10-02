@@ -2,11 +2,13 @@
 <template>
 <div class="diagram-wrapper" v-if="fullPostsList.length > 0">
   <app-calendar
+  class="calendar"
     @current-date-range="diagramView"
     v-if="postsObj"
     :minDate="firstPostMounth"
   />
    <app-diagram-chartjs
+    class="diagramm"
     :key="upKey"
     :dataForDiagram="dataForDiagram"
     :options="options"
@@ -222,11 +224,25 @@ export default {
 .diagram-wrapper{
   display: flex;
   align-items: flex-start;
+  margin: 0 1rem;
+
+  & > * {
+    margin: 0.5rem;
+  }
+  .calendar {
+      flex-grow: 1;
+  }
+  .diagramm {
+      flex-grow: 2;
+  }
 }
 
-@media screen and (max-width: 1000px) {
+@media screen and (max-width: 1200px) {
   .diagram-wrapper{
     flex-wrap: wrap;
+    .calendar {
+      margin: 0.5rem auto;
+    }
   }
 }
 </style>

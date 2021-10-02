@@ -33,7 +33,7 @@ export default {
   .chart-js-wrapper {
 
     width: 100%;
-    max-width: 1000px;
+    max-width: 100%;
     background: rgba(255, 255, 255, 0.733);
     padding: 0.5rem 1rem;
     border-radius: 0.5rem;
