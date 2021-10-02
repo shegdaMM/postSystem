@@ -1,10 +1,16 @@
 <template>
     <section class="user-list-wrapper">
-        <div class="user-item-wrapper" v-for="user in users" :key="user._id">
-            <user-by-id :user="user" v-if="user._id" @user-update="$emit('user-update')"/>
-            <span class="user-item-link" @click="this.$router.push({ name: 'UserById', params: { uid: user._id } })">
-              More
-            </span>
+        <div class="user-item-wrapper"
+          v-for="user in users"
+          :key="user._id"
+        >
+          <user-by-id :user="user"
+            v-if="user._id"
+            @user-update="$emit('user-update')"/>
+          <span class="user-item-link"
+            @click="routeToUserProfilePage">
+            More
+          </span>
         </div>
   </section>
 </template>
@@ -18,7 +24,12 @@ export default {
   props: {
       users: Array
   },
-  emits: ['user-update']
+  emits: ['user-update'],
+  methods: {
+    routeToUserProfilePage () {
+      this.$router.push({ name: 'UserById', params: { uid: this.user._id } });
+    }
+  }
 };
 </script>
 

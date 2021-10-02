@@ -4,47 +4,65 @@
       <div class="user-text" v-if="user.name">
         <span class="discriptoin">NAME:</span>
         <span class="user__name">
-          <a style="text-decoration: none; cursor: pointer;" @click="this.$router.push({ name: 'UserById', params: { uid: user._id } })">
-            {{user.name}}
-          </a>
+          <a style="text-decoration: none; cursor: pointer;" @click="linkToShowPost"> {{user.name}} </a>
         </span>
       </div>
-  <div class="user-text" v-if="user.email">
-    <span class="discriptoin">EMAIL:</span>
-    <span class="user__email"><a :href="'mailto:' + user.email">{{user.email}}</a></span>
-  </div>
-  <div class="user-text" v-if="user.extra_details">
-    <span class="discriptoin">DETAILS:</span>
-    <span class="user__extra_details">{{user.extra_details}}</span>
-  </div>
-  <div class="user-text" v-if="user.dateCreated">
-    <span class="discriptoin">ACCOUNT CREATED:</span>
-    <span class="user__dateCreated">{{user.dateCreated}}</span>
-  </div>
-  <div class="user-text" v-if="this.$store.getters.loggedInUser?._id === this.ID">
-    <span class="discriptoin">ID:</span>
-    <span class="user__id" v-if="user._id">{{user._id}}</span>
-  </div>
+      <div class="user-text" v-if="user.email">
+        <span class="discriptoin">EMAIL:</span>
+        <span class="user__email"><a :href="'mailto:' + user.email">{{user.email}}</a></span>
+      </div>
+      <div class="user-text" v-if="user.extra_details">
+        <span class="discriptoin">DETAILS:</span>
+        <span class="user__extra_details">{{user.extra_details}}</span>
+      </div>
+      <div class="user-text" v-if="user.dateCreated">
+        <span class="discriptoin">ACCOUNT CREATED:</span>
+        <span class="user__dateCreated">{{user.dateCreated}}</span>
+      </div>
+      <div class="user-text" v-if="isLoginUser">
+        <span class="discriptoin">ID:</span>
+        <span class="user__id" v-if="user._id">{{user._id}}</span>
+      </div>
+    </section>
+    <section class="user-proffecion">
+      <div class="user-text" v-if="user.profession">
+        <span class="discriptoin">PROFESSION:</span>
+        <span class="user__profession">{{user.profession}}</span>
+      </div>
+      <div class="user-text" v-if="user.skills">
+        <span class="discriptoin">SKILLS</span>
+        <span class="user__skills">{{user.skills}}</span>
+      </div>
+      <div class="user-text" v-if="user.details">
+        <span class="discriptoin">DETAILS: </span>
+        <span class="user__details">{{user.details}}</span>
+      </div>
+    </section>
   </section>
-  <section class="user-proffecion">
-  <div class="user-text" v-if="user.profession">
-    <span class="discriptoin">PROFESSION:</span>
-    <span class="user__profession">{{user.profession}}</span>
-  </div>
-  <div class="user-text" v-if="user.skills">
-    <span class="discriptoin">SKILLS</span>
-    <span class="user__skills">{{user.skills}}</span>
-  </div>
-  <div class="user-text" v-if="user.details">
-    <span class="discriptoin">DETAILS: </span>
-    <span class="user__details">{{user.details}}</span>
-    </div>
-  </section>
-</section>
-  <!-- <span class="discriptoin"></span>
-  <span class="user__v" v-if="user.__v">{{user.__v}}</span>
-  -->
 </template>
+
+<script>
+export default {
+  name: 'vUser',
+  props: {
+    user: {
+      type: Object,
+      required: true
+    },
+    ID: String
+  },
+  computed: {
+    isLoginUser () {
+      return this.$store.getters.loggedInUser?._id === this.ID;
+    }
+  },
+  methods: {
+    linkToShowPost () {
+      this.$router.push({ name: 'UserById', params: { uid: this.user._id } });
+    }
+  }
+};
+</script>
 
 <style lang="scss" scoped>
   hr{
@@ -88,19 +106,3 @@
     }
   }
 </style>
-
-<script>
-
-export default {
-  name: 'vUser',
-  props: {
-    user: {
-      type: Object,
-      required: true
-    },
-    ID: String
-  },
-  mounted () {
-  }
-};
-</script>

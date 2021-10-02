@@ -33,18 +33,18 @@ export default {
         ...mapActions(['getPostsList', 'clearPostsList']),
         async update () {
             await this.getPostsList({
-            limit: 1,
-            skip: 0
-        });
-        if (this.postsListSize > 3) {
-            await this.getPostsList({
-                limit: 3,
-                skip: this.postsListSize - 3
+                limit: 1,
+                skip: 0
             });
-        }
+            if (this.postsListSize > 3) {
+                await this.getPostsList({
+                    limit: 3,
+                    skip: this.postsListSize - 3
+                });
+            }
         }
     },
-    async mounted () {
+    async created () {
         await this.update();
     },
     beforeUnmount () {

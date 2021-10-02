@@ -1,11 +1,19 @@
-<template>
-   <ul class="users" v-if="userList">
+<template v-if="userList">
+   <ul class="users">
        <li class="users__item" v-for="user in userList" :key="user[0]">
-           <input type="radio" :id="user[0]" :value="user[0]" v-model="userId" style="display: none;">
-            <label :for="user[0]" @click="$emit('filter', this.userId)">
-                <a @click="userId = user[0]"><i class="far fa-user" :class="{'fas': user[0] === this.$store.getters.loggedInUser?._id}"></i> {{user[1].name || user[1].email}}</a>
+           <input type="radio"
+            :id="user[0]"
+            :value="user[0]"
+            v-model="selectedUser"
+            class="hide">
+            <label :for="user[0]">
+                <a>
+                    <i class="far fa-user"
+                        :class="{'fas': user[0] === this.isLoginUser}"></i>
+                    {{user[1].name || user[1].email}}
+                </a>
             </label>
-            <span @click="$emit('filter'), userId=''" class="unCheckUserId" v-if="currentUser === user[0]"><i class="fas fa-times"></i></span>
+            <span @click="unSelectedUser" class="unCheckUserId" v-if="currentUser === user[0]"><i class="fas fa-times"></i></span>
        </li>
     </ul>
 </template>
@@ -23,13 +31,32 @@ export default {
     emits: ['filter'],
     data () {
         return {
-            userId: this.ChangeUserId
+            selectedUser: this.currentUser
         };
+    },
+    computed: {
+        isLoginUser () {
+            return this.$store.getters.loggedInUser?._id;
+        }
+    },
+    watch: {
+        selectedUser () {
+            this.selectedUser ? this.$emit('filter', this.selectedUser) : this.$emit('filter');
+        }
+    },
+    methods: {
+        unSelectedUser () {
+            this.selectedUser = null;
+        }
     }
+
 };
 </script>
 
 <style lang="scss" scoped>
+    .hide {
+        display: none;
+    }
      .users__item {
         list-style-type: none;
         position: relative;

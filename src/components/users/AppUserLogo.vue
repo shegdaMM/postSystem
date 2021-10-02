@@ -1,7 +1,8 @@
 <template>
 <div class="avatar-wrapper">
     <div class="avatar-view">
-      <a style="text-decoration: none; cursor: pointer;" @click="this.$router.push({ name: 'UserById', params: { uid: this.ID } })">
+      <a style="text-decoration: none; cursor: pointer;"
+        @click="routeToUserPage">
             <img v-if="!image" :key="image" :src="defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
             <img v-if="image" :key="image" :src="image ? `${IMG_URL}${image}` : defaultAvatar" :alt="`logo for - ${name}`" class="avatar">
 
@@ -29,6 +30,7 @@
             Show all posts
           </q-btn>
     </div>
+    {{currentUserAvatar}}
 </div>
 </template>
 
@@ -54,7 +56,10 @@ export default {
     ID: String
   },
   computed: {
-    ...mapGetters(['currentUserAvatar'])
+    ...mapGetters(['currentUserAvatar']),
+    imageUrl () {
+      return this.defaultAvatar;
+    }
   },
   methods: {
       ...mapActions(['getCurrentUserAvatar', 'putCurrentUserAvatar']),
@@ -74,6 +79,9 @@ export default {
               // this.image = await this.getCurrentUserAvatar({ avatar: this.avatar });
             }
         }
+      },
+      routeToUserPage () {
+        this.$router.push({ name: 'UserById', params: { uid: this.ID } });
       }
   },
   async mounted () {

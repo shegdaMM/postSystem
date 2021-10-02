@@ -19,10 +19,6 @@ import AppComments from '../comments/AppComments.vue';
 
 export default {
     name: 'PostById',
-    data () {
-        return {
-        };
-    },
     emits: ['post-update', 'remove-post'],
     components: {
         AppPost,
@@ -49,9 +45,10 @@ export default {
             } else if (this.uid) {
                 result = this.currentPost;
             }
-
             return result;
         }
+    },
+    watch: {
     },
     methods: {
         ...mapActions(['getPostById', 'clearCurrentPost']),
@@ -68,22 +65,20 @@ export default {
             });
         },
         async removePost () {
-            await this.removePostById({ id: this.uid ? this.uid : this.post._id });
-            this.$emit('post-update');
+            if (this.thisPost?._id) {
+                await this.removePostById({ id: this.thisPost?._id });
+                this.$router.go(-1);
+            }
         },
         async updatePost () {
-            if (this.uid) {
-                await this.getPostById({ id: this.uid });
-            } else {
-                await this.getPostById({ id: this.post._id });
+            if (this.thisPost?._id) {
+                await this.getPostById({ id: this.thisPost?._id });
             }
-            this.$emit('post-update');
         }
-
     },
-    async mounted () {
+    async created () {
         if (this.uid) {
-            await this.getPostById({ id: this.uid });
+             await this.getPostById({ id: this.uid });
         }
     },
     beforeUnmount () {

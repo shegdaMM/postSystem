@@ -2,7 +2,7 @@
     <div class="info">
         <div class="post-text" v-if="currentPost?.dateCreated">
             <span class="discriptoin">POST CREATED:</span>
-            <span class="post__dateCreated">{{this.getDate()}}</span>
+            <span class="post__dateCreated">{{postCreateDate}}</span>
         </div>
          <div class="post-text" v-if="currentPost?._id">
             <span class="discriptoin">ID:</span>
@@ -44,14 +44,8 @@ export default {
         }
     },
     computed: {
-         ...mapGetters(['currentPost'])
-    },
-    methods: {
-        ...mapActions(['getPostById', 'clearCurrentPost', 'patchCurrentPost']),
-        async savePost (data) {
-            await this.patchCurrentPost(data);
-        },
-        getDate () {
+         ...mapGetters(['currentPost']),
+         postCreateDate () {
             const date = new Date(this.currentPost.dateCreated);
             let mounth = date.getUTCMonth() + 1;
             if (mounth < 10) mounth = '0' + mounth;
@@ -60,7 +54,13 @@ export default {
             return result;
         }
     },
-    async mounted () {
+    methods: {
+        ...mapActions(['getPostById', 'clearCurrentPost', 'patchCurrentPost']),
+        async savePost (data) {
+            await this.patchCurrentPost(data);
+        }
+    },
+    async created () {
         if (this.pid) {
             await this.getPostById({ id: this.pid });
             if (this.currentPost?.postedBy) {
@@ -68,10 +68,8 @@ export default {
                 this.postedBy = result;
             }
         }
-    },
-    created () {
-        if (this.$store.getters.loggedInUser?._id !== this.postedBy) {
-            this.$router.go(-1);
+        if (this.$store.getters.loggedInUser?._id !== this.currentPost?.postedBy) {
+           this.$router.go(-1);
         }
     },
     beforeUnmount () {

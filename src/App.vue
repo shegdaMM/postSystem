@@ -5,12 +5,11 @@
         <app-breadcrumbs />
         <router-view />
       </div>
-    <app-loader v-if="this.$store.getters.loadProcess" />
+    <app-loader v-if="isLoaderStatus" />
   </div>
 </template>
 
 <script>
-// import { ref } from 'vue';
 import AppLoader from './components/AppLoader';
 import AppHeader from './components/AppHeader.vue';
 import AppBreadcrumbs from './components/AppBreadcrumbs.vue';
@@ -20,11 +19,12 @@ export default {
   components: {
     AppLoader, AppHeader, AppBreadcrumbs
   },
-  data () {
-    return {
-    };
+  computed: {
+    isLoaderStatus () {
+      return this.$store.getters.loadProcess;
+    }
   },
-  mounted () {
+  created () {
     this.$store.commit('setUserAlert', this.$toast);
     this.$store.commit('setAuthAlert', this.$toast);
     this.$store.commit('setPostAlert', this.$toast);

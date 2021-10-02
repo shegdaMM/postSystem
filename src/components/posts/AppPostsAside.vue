@@ -21,11 +21,11 @@
                 add new Post
             </button>
             <div class="search-wrapper">
-                <app-input type="search" placeholder="Search post..." :value="search || currentFilter.search" @input="filter($event)"/>
+                <app-input type="search" placeholder="Search post..." :value="search" @input="setSearchText($event)"/>
             </div>
             <app-post-aside-users-list-wrapper
-                @filter-user="filterUser"
-                :currentUser="currentFilter.postedBy"
+                @filter-user="filterPostedBy"
+                :currentUser="postedBy"
             />
         </div>
         </template>
@@ -42,9 +42,9 @@ export default {
     name: 'post-aside',
     data () {
         return {
-            search: '',
+            search: null,
             statusAside: false,
-            userId: '',
+            postedBy: null,
             debounce: null
         };
     },
@@ -53,38 +53,38 @@ export default {
          usersList: Object,
          currentFilter: Object
     },
-    methods: {
-        clearUserId () {
-            this.userId = null;
-            console.log('this.userId = null');
-            this.sendResponce();
-        },
-        filter (event) {
-            clearTimeout(this.debounce);
-            this.debounce = setTimeout(() => {
-                this.search = event.target.value || '';
-                this.sendResponce();
-            }, 500);
-        },
-        filterUser (userId) {
-            if (userId) {
-                this.userId = userId;
-                this.sendResponce();
-            } else {
-                this.userId = '';
-                this.sendResponce();
-            }
-        },
-        sendResponce () {
-            const data = {
-                search: this.search,
-                postedBy: this.userId
-            };
-                this.$emit('filter', data);
+    computed: {
+        filter () {
+            let result = {};
+            if (this.search) result.search = this.search;
+            if (this.postedBy) result.postedBy = this.postedBy;
+            if (!(result?.search || result?.postedBy)) result = null;
+            return result;
         }
     },
-    created () {
-            this.search = this.currentFilter?.search;
+    watch: {
+        filter () {
+            if (this.filter?.search || this.filter?.postedBy) {
+                this.$emit('filter', this.filter);
+            } else {
+                this.$emit('filter', null);
+            }
+        }
+    },
+    methods: {
+        setSearchText (event) {
+            clearTimeout(this.debounce);
+            this.debounce = setTimeout(() => {
+                this.search = event.target.value || null;
+            }, 500);
+        },
+        filterPostedBy (postedBy) {
+            (postedBy) ? this.postedBy = postedBy : this.postedBy = null;
+        }
+    },
+    updated () {
+        this.search = this.currentFilter?.search || null;
+        this.postedBy = this.currentFilter?.postedBy || null;
     }
     // close timer deb
 };

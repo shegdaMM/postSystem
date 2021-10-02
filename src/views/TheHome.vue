@@ -18,7 +18,6 @@
 </template>
 
 <script>
-// <app-posts-date-diagram :postedBy="'612e3c52c46d5405b355464e'"/>
 import AppTitlePage from '@/components/ui/AppTitlePage';
 import AppLastPosts from './posts/AppLastPosts.vue';
 // import AppStatistics from '@/components/AppStatistics';
@@ -36,10 +35,6 @@ export default {
     return {
       name: 'Home'
     };
-  },
-  computed: {
-  },
-  mounted () {
   }
 };
 </script>

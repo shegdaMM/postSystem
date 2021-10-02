@@ -2,7 +2,7 @@
 <app-title-page>
   Create new account in system
 </app-title-page>
-<q-form class="edit-form" @submit.stop="createUser">
+<q-form class="edit-form">
 <div class="user-info">
   <q-input class="form-input" filled v-model="user.email" type="email" label="email" hint="Enter valid email"
       :rules="[val => !!val || 'Email is missing', isValidEmail]" ref="email"
@@ -34,20 +34,20 @@
     :rules="[val => (val && val.length >= 3) || 'Name mast have minimal 3 symbols']">
     </q-input>
 
-    <q-input filled v-model="user.extra_details" class="form-input" type="textarea" label="Details:" @click="changeState=true">
+    <q-input filled v-model="user.extra_details" class="form-input" type="textarea" label="Details:">
     </q-input>
   </div>
   <div class="user-profession">
-    <q-input filled v-model="user.profession" type="text" class="form-input" label="Profession:" @click="changeState=true">
+    <q-input filled v-model="user.profession" type="text" class="form-input" label="Profession:" >
     </q-input>
-    <q-input filled v-model="user.skills" class="form-input" type="textarea" label="Skills:" @click="changeState=true">
+    <q-input filled v-model="user.skills" class="form-input" type="textarea" label="Skills:">
     </q-input>
   </div>
   <div class="details">
-     <q-input filled v-model="user.details" class="form-input" type="textarea" label="Details:" @click="changeState=true">
+     <q-input filled v-model="user.details" class="form-input" type="textarea" label="Details:" >
     </q-input>
   </div>
-  <q-btn @click.stop="createUser" v-if="!user._id" color="white" glossy label="CREATE ACCOUNT" />
+  <q-btn @click.stop="createUser" v-if="user.email && user.name && user.password" color="white" glossy label="CREATE ACCOUNT" />
 </q-form>
 </template>
 
@@ -78,7 +78,10 @@ export default {
         isPwd: false
       };
   },
-  computed: {
+  watch: {
+    user () {
+      this.changeState = true;
+    }
   },
   methods: {
     ...mapActions(['createCurentUser']),

@@ -1,26 +1,26 @@
 <template>
-   <app-title-page>
-       USERS LIST
-   </app-title-page>
-   <app-users-list
-    v-if="currentUser && usersFullList"
-    :user-list="usersFullList.filter(item => item[0] === currentUser)"
-    :currentUser="currentUser"
-    @filter="filterUser"
-    />
-   <app-users-list
-    :user-list="usersList"
-    v-if="usersFullList"
-    @filter="filterUser"
-    :currentUser="currentUser"
-    />
-    <span v-if="!usersFullList">Loading...</span>
-   <pagination
-        @list-update="loadUserList"
-        :listSize="usersFullList.length"
-        :itemOnPage="15"
-        :seeOnPage="1"
-    />
+    <div class="users-select-wrapper" v-if="usersFullList">
+        <app-title-page>
+            USERS LIST
+        </app-title-page>
+        <app-users-list
+            :user-list="selectedUserList"
+            :currentUser="selectedUser"
+            @filter="setUser"
+            />
+        <app-users-list
+            :user-list="currentList"
+            @filter="setUser"
+            :currentUser="selectedUser"
+            />
+            <span v-if="!usersFullList">Loading...</span>
+        <pagination
+            @list-update="setPage"
+            :listSize="usersFullList.length"
+            :itemOnPage="15"
+            :seeOnPage="1"
+        />
+    </div>
 </template>
 
 <script>
@@ -39,37 +39,53 @@ export default {
     emits: ['filter-user'],
     data () {
         return {
-            usersFullList: '',
-            usersList: [],
-            userId: ''
+            usersFullList: null,
+            userId: null,
+            page: 1
         };
     },
     props: {
         currentUser: String
     },
-    computed: [
-    ],
-    methods: {
-        loadUserList (current) {
-            this.usersList = this.usersFullList.slice((current.page - 1) * 14, ((current.page - 1) * 14) + 14);
+    computed: {
+        currentList () {
+            let result = null;
+            if (this.page >= 1) {
+                result = this.usersFullList.slice((this.page - 1) * 14, ((this.page - 1) * 14) + 14);
+            }
+            return result;
         },
-        filterUser (userId) {
+        selectedUserList () {
+            return this.usersFullList.filter(item => item[0] === this.userId);
+        },
+        selectedUser () {
+            return this.userId;
+        }
+    },
+    methods: {
+        setPage (data) {
+            this.page = +(data?.page);
+        },
+        setUser (userId) {
             if (userId) {
                 this.userId = userId;
                 this.$emit('filter-user', userId);
             } else {
                 this.$emit('filter-user');
-                this.userId = '';
+                this.userId = null;
             }
         }
     },
     async mounted () {
+        if (this.currentUser) {
+            this.userId = this.currentUser;
+        }
+
         if (Object.entries(UserNameMap.map) > 0) {
             this.usersFullList = Object.entries(UserNameMap.map);
         } else {
              this.usersFullList = Object.entries(await UserNameMap.updateAllMap());
         }
-        this.usersList = this.usersFullList.slice(0, 15);
     }
 };
 </script>

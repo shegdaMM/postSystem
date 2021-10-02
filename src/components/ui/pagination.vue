@@ -1,28 +1,27 @@
 <template>
- <section class="pagination" v-if="pagenationCount && (pagenationCount > 1)">
+ <section class="pagination" v-if="isNeedPagination">
         <a @click="prevPage" title="previous" class="pagination__item" v-if="showArrowLeft">
           <span class="fas fa-angle-left"></span>
         </a>
         <a @click="goto(1)"
         class="pagination__item"
-        :class="{'pagination__item-active': this.currentItem == 1}"
-        v-if="pagenationCount > 2"
+        :class="{'pagination__item-active': this.page == 1}"
         >
             <span> 1 </span>
         </a>
         <span class="pagination__item pagination__item--more"
-        v-if="this.currentItem > 3">...</span>
+        v-if="isMoreLeft">...</span>
         <template v-for="i in  paginationCounts" :key="i">
           <a @click="goto(i)"
-          class="pagination__item" :class="{'pagination__item-active': i == this.currentItem}">
+          class="pagination__item" :class="{'pagination__item-active': i == this.page}">
                 <span> {{ i }} </span>
           </a>
         </template>
-        <span class="pagination__item pagination__item--more" v-if="this.currentItem < (pagenationCount - 3)">...</span>
+        <span class="pagination__item pagination__item--more" v-if="isMoreRight">...</span>
         <a @click="goto(pagenationCount)"
         class="pagination__item"
-        :class="{'pagination__item-active': this.currentItem == pagenationCount}"
-        v-if="pagenationCount > 2">
+        :class="{'pagination__item-active': this.page == pagenationCount}"
+        >
             <span> {{ pagenationCount }} </span>
         </a>
         <a @click="nextPage" title="next" class="pagination__item" v-if="showArrowRight">
@@ -35,7 +34,7 @@
 export default {
     data () {
         return {
-            currentItem: +(this.propCurrentItem)
+            page: +(this.propPage)
         };
     },
     emits: ['list-update'],
@@ -54,7 +53,7 @@ export default {
             type: Number,
             default: 2
         },
-        propCurrentItem: {
+        propPage: {
             type: Number,
             default: 1
         }
@@ -63,41 +62,56 @@ export default {
         pagenationCount () {
             return Math.ceil(this.listSize / this.itemOnPage);
         },
+        isNeedPagination () {
+            return this.pagenationCount && (this.pagenationCount > 1);
+        },
         paginationCounts () {
             const showCount = +(this.seeOnPage);
             const result = [];
-            for (let i = +this.currentItem - showCount; i <= +this.currentItem + showCount; i++) {
+            for (let i = +this.page - showCount; i <= +this.page + showCount; i++) {
                 if (i > 1 && i < this.pagenationCount) {
                     result.push(i);
                 }
             }
             return result;
         },
+        isMoreLeft () {
+            return this.page > 3;
+        },
+        isMoreRight () {
+            return this.page < (this.pagenationCount - 3);
+        },
         showArrowLeft () {
-            const result = this.pagenationCount > 4 && this.currentItem !== 1;
+            const result = this.pagenationCount > 4 && this.page !== 1;
             return result;
         },
         showArrowRight () {
-            const result = this.pagenationCount > 4 && this.currentItem !== this.pagenationCount;
+            const result = this.pagenationCount > 4 && this.page !== this.pagenationCount;
             return result;
+        }
+    },
+    watch: {
+        page () {
+            if (this.page) {
+                this.$emit('list-update', { page: this.page });
+            }
+        },
+        propPage () {
+            this.page = this.propPage;
         }
     },
     methods: {
         goto (current) {
-          this.currentItem = current;
-          this.$emit('list-update', { page: current });
+          this.page = current;
         },
         nextPage () {
-            this.goto(this.currentItem + 1);
+            this.goto(this.page + 1);
         },
         prevPage () {
-            this.goto(this.currentItem - 1);
+            this.goto(this.page - 1);
         }
     },
     mounted () {
-        if (this.propCurrentItem) {
-            this.goto(this.propCurrentItem);
-        }
     }
 };
 </script>

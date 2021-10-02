@@ -1,4 +1,4 @@
-<template v-if="isLoad">
+<template>
 <div class="post-list-wrapper">
     <template v-if="!isPosts">
         <h2 class="postsNotHave">
@@ -31,18 +31,10 @@ export default {
     props: {
         postList: Array
     },
-    data () {
-        return {
-            isLoad: false
-        };
-    },
     computed: {
         isPosts () {
             return this.postList?.length > 0;
         }
-    },
-    mounted () {
-            this.isLoad = true;
     }
 };
 </script>
