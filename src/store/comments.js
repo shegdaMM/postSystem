@@ -14,9 +14,7 @@ export default {
         }
     },
     mutations: {
-        setCommentAlert (state, CommentAlert) {
-            state.commentAlert = CommentAlert;
-        }, // create tree as object in object (not use)
+        // create tree as object in object (not use)
         setCurrentCommentList (state, list) {
             if (list) {
                 state.currentCommentList = list;
@@ -63,20 +61,6 @@ export default {
                     state.comments.push(tmpComment);
                 }
             }
-        },
-        GoodCommentAlert (state, message) {
-            state.commentAlert.open({
-                message: message,
-                type: 'success',
-                duration: 5000
-              });
-        },
-        BedCommentAlert (state, message) {
-            state.commentAlert.open({
-                message: message,
-                type: 'error',
-                duration: 5000
-              });
         }
     },
     actions: {
@@ -92,10 +76,11 @@ export default {
             try {
                 await axios.post(Url, data).then(response => {
                     if (response.status === 200) {
+                        // not work something
                     }
                 });
             } catch (error) {
-                commit('BedCommentAlert', error.message);
+                dispatch('errorNotify', { message: error, place: 'comment' });
             }
             // commit('onloadProcess');
         },
@@ -108,10 +93,9 @@ export default {
                         commit('setCurrentCommentList1', response.data);
                     }
                 });
-            } catch (e) {
-                console.log(e);
+            } catch (error) {
                 if (payload) {
-                    commit('BedCommentAlert', e);
+                    dispatch('errorNotify', { message: error, place: 'comment' });
                 }
             } finally {
                // commit('onloadProcess');
@@ -133,7 +117,7 @@ export default {
                 });
             } catch (error) {
                 resultStatus = false;
-                commit('BedCommentAlert', 'You not add/remove like<br> to this comment!');
+                dispatch('errorNotify', { message: 'You not add/remove like<br> to this comment!', place: 'comment' });
             }
             return resultStatus;
         },
@@ -146,11 +130,11 @@ export default {
             try {
                 await axios.patch(Url, send).then(response => {
                     if (response.status === 200) {
-                        commit('GoodCommentAlert', 'Updated comment');
+                        dispatch('successNotify', { message: 'Updated comment', place: 'comment' });
                     }
                 });
-            } catch (e) {
-                commit('BedCommentAlert', e.error);
+            } catch (error) {
+                dispatch('errorNotify', { message: error, place: 'comment' });
             }
            // commit('onloadProcess');
         },
@@ -162,11 +146,11 @@ export default {
                 await axios.delete(Url).then(response => {
                   if (response.status === 200) {
                     resultStatus = true;
-                    commit('GoodCommentAlert', 'You are deleted comment');
+                    dispatch('successNotify', { message: 'You are deleted comment', place: 'comment' });
                   }
                 });
-            } catch (e) {
-                commit('BedCommentAlert', e.error);
+            } catch (error) {
+                dispatch('errorNotify', { message: error, place: 'comment' });
             }
             // commit('onloadProcess');
             return resultStatus;

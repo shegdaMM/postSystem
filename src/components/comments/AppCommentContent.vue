@@ -50,7 +50,7 @@
         :isLikeComment="isLikeComment"
         @set-likes="setLikes"
         @add-comment="showNew"
-        :key="likesCount"
+        :key="likesList.lenght"
       />
       <app-comment-new-edit
         v-if="newComment"
@@ -110,6 +110,9 @@ export default {
                 }
             } else result = false;
             return result;
+        },
+        likesList () {
+            return this.likes;
         }
     },
     methods: {

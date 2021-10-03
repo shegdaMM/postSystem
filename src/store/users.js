@@ -7,16 +7,12 @@ const API_URL = process.env.VUE_APP_URL;
 const IMG_URL = process.env.VUE_APP_IMG_URL;
 export default {
     state: {
-        userAlert: null,
         currentUser: null,
         usersListSize: 0,
         currentUserList: [],
         userNameList: ''
     },
     getters: {
-        userAlert (state) {
-            return state.userAlert;
-          },
         currentUser (state) {
             return state.currentUser;
         },
@@ -36,23 +32,6 @@ export default {
         }
     },
     mutations: {
-        setUserAlert (state, userAlert) {
-            state.userAlert = userAlert;
-        },
-        UserErrorMessage (state, message) {
-            state.userAlert.open({
-              message: message,
-              type: 'error',
-              duration: 5000
-            });
-        },
-        UserGoodMessage (state, message) {
-            state.userAlert.open({
-              message: message,
-              type: 'success',
-              duration: 5000
-            });
-        },
         // user
         setUserById (state, user) {
             if (user) {
@@ -98,10 +77,10 @@ export default {
                     commit('setUserById', response.data);
                   }
                 });
-              } catch (e) {
+              } catch (error) {
                 // error
                 if (payload.id) {
-                    commit('UserErrorMessage', e);
+                    dispatch('errorNotify', { message: error, place: 'user' });
                 }
               }
             commit('onloadProcess');
@@ -113,15 +92,15 @@ export default {
                 await axios.delete(Url).then(response => {
                   if (response.status === 200) {
                     commit('deleteUserById');
-                    commit('UserGoodMessage', 'You remove your account');
+                    dispatch('successNotify', { message: 'You remove your account', place: 'user' });
                     // remove from map
                     UserNameMap.removeUser(payload.id);
                     commit.clearUserData();
                     router.push({ path: '/' });
                   }
                 });
-              } catch (e) {
-                commit('UserErrorMessage', e);
+              } catch (error) {
+                dispatch('errorNotify', { message: error, place: 'user' });
               }
             commit('onloadProcess');
         }, // CROS problems...
@@ -132,7 +111,6 @@ export default {
             try {
                 if (payload.avatar) {
                     const res = await fetch(apiurl, { method: 'HEAD' });
-                    console.log(res);
                     if (res.status !== 404) {
                         result = `${IMG_URL}${payload.avatar}`;
                     }
@@ -157,11 +135,11 @@ export default {
                 .then(response => {
                     resultStatus = true;
                     commit('setUserById', response.data);
-                    commit('UserGoodMessage', 'You update your avatar!');
+                    dispatch('successNotify', { message: 'You update your avatar', place: 'user' });
                 });
             } catch (error) {
                 resultStatus = false;
-                commit('UserErrorMessage', 'You not update avatar!');
+                dispatch('errorNotify', { message: 'You not update avatar', place: 'user' });
             }
             return resultStatus;
         },
@@ -179,11 +157,11 @@ export default {
                 await axios.patch(Url, send).then(response => {
                     if (response.status === 200) {
                         commit('updateCurrentUser', response.data);
-                        commit('UserGoodMessage', 'You update your account');
+                        dispatch('successNotify', { message: 'You update your account', place: 'user' });
                     }
                 });
             } catch (error) {
-                commit('UserErrorMessage', error);
+                dispatch('errorNotify', { message: error, place: 'user' });
             }
             commit('onloadProcess');
         },
@@ -193,13 +171,12 @@ export default {
             try {
                 await axios.post(Url, payload).then(response => {
                     if (response.status === 200) {
-                        commit('UserGoodMessage', 'You create new account <br> Please login in system');
+                        dispatch('successNotify', { message: 'You create new account <br> Please login in system', place: 'user' });
                         router.push({ path: '/login' });
                     }
                 });
             } catch (error) {
-                console.log(error);
-                commit('UserErrorMessage', error);
+                dispatch('errorNotify', { message: error, place: 'user' });
             }
             commit('onloadProcess');
         },
@@ -214,7 +191,7 @@ export default {
                     }
                 });
             } catch (error) {
-                commit('UserErrorMessage', error);
+                dispatch('errorNotify', { message: error, place: 'user' });
             }
             commit('onloadProcess');
         },
@@ -229,7 +206,6 @@ export default {
             if (payload) {
                 result = await UserNameMap.getUserName(payload);
                 commit('setUserNameList', result);
-                console.log(result);
             } else {
                 if (!UserNameMap.map) {
                    await UserNameMap.updateAllMap();

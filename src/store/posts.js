@@ -6,16 +6,12 @@ const API_URL = process.env.VUE_APP_URL;
 
 export default {
     state: {
-        postAlert: null,
         currentPost: null,
         postsListSize: 0,
         currentPostsList: [],
         fullPostsList: []
     },
     getters: {
-        postAlert (state) {
-            return state.postAlert;
-          },
         currentPost (state) {
             return state.currentPost;
         },
@@ -30,23 +26,6 @@ export default {
         }
     },
     mutations: {
-        setPostAlert (state, postAlert) {
-            state.postAlert = postAlert;
-        },
-        PostErrorMessage (state, message) {
-            state.postAlert.open({
-              message: message,
-              type: 'error',
-              duration: 5000
-            });
-        },
-        PostGoodMessage (state, message) {
-            state.postAlert.open({
-              message: message,
-              type: 'success',
-              duration: 5000
-            });
-        },
         setPostById (state, post) {
             state.currentPost = null;
             if (post) {
@@ -93,10 +72,9 @@ export default {
                       commit('setPostById', response.data);
                     }
                   });
-                } catch (e) {
-                  // error
+                } catch (error) {
                   if (payload.id) {
-                    commit('PostErrorMessage', e);
+                    dispatch('errorNotify', { message: error, place: 'post' });
                   }
                 } finally {
                     commit('onloadProcess');
@@ -109,12 +87,12 @@ export default {
                 await axios.delete(Url).then(response => {
                   if (response.status === 200) {
                     commit('deletePostById');
-                    commit('PostGoodMessage', 'You remove your post');
+                    dispatch('successNotify', { message: 'You remove selected post', place: 'post' });
                     router.push({ path: '/posts' });
                   }
                 });
-              } catch (e) {
-                commit('PostErrorMessage', e);
+              } catch (error) {
+                dispatch('errorNotify', { message: error, place: 'post' });
               } finally {
                 commit('onloadProcess');
             }
@@ -137,11 +115,11 @@ export default {
                 })
                 .then(response => {
                     resultStatus = response.data.image;
-                    commit('PostGoodMessage', 'You update this post image!');
+                    dispatch('successNotify', { message: 'You update image for this post!', place: 'post' });
                 });
             } catch (error) {
                 resultStatus = false;
-                commit('PostErrorMessage', 'You not update post image!');
+                dispatch('errorNotify', { message: 'You not update post image!', place: 'post' });
             } finally {
                 commit('onloadProcess');
             }
@@ -187,10 +165,10 @@ export default {
                       }
                     }
                   });
-                } catch (e) {
+                } catch (error) {
                   // error
                   if (payload) {
-                    commit('PostErrorMessage', e);
+                    dispatch('errorNotify', { message: error, place: 'post' });
                   }
             } finally {
                 commit('onloadProcess');
@@ -205,12 +183,12 @@ export default {
             try {
                 await axios.post(Url, payload).then(response => {
                     if (response.status === 200) {
-                        commit('PostGoodMessage', 'You create post');
+                        dispatch('successNotify', { message: 'You create post', place: 'post' });
                         router.push({ path: `/post/${response.data._id}` });
                     }
                 });
             } catch (error) {
-                commit('PostErrorMessage', error);
+                dispatch('errorNotify', { message: error, place: 'post' });
             }
             commit('onloadProcess');
         },
@@ -226,12 +204,12 @@ export default {
                 await axios.patch(Url, send).then(response => {
                     if (response.status === 200) {
                         commit('updateCurrentPost', response.data);
-                        commit('PostGoodMessage', 'You update post');
+                        dispatch('successNotify', { message: 'You update post', place: 'post' });
                         router.push({ path: `/post/${response.data._id}` });
                     }
                 });
             } catch (error) {
-                commit('PostErrorMessage', error);
+                dispatch('errorNotify', { message: error, place: 'post' });
             }
             commit('onloadProcess');
         }

@@ -28,11 +28,11 @@ export default function axiosSetUp () {
       async function (error) {
         // Do something with response error
         const originalRequest = error.config;
-        if (error.response.status === 401 || error.response.status === 403) {
+        if (error.response?.status === 401 || error.response?.status === 403) {
           store.commit('clearUserData');
           router.push('/login');
           return Promise.reject(error);
-        } else if (error.response.status === 401 && !originalRequest._retry) {
+        } else if (error.response?.status === 401 && !originalRequest._retry) {
           originalRequest._retry = true;
           return axios(originalRequest);
         }

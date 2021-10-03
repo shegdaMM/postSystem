@@ -5,16 +5,12 @@ const API_URL = process.env.VUE_APP_URL;
 
 export default {
     state: {
-        authAlert: null,
         // for auth
         access_token: localStorage.getItem('token') || '',
         loggedInUser: null,
         isAuthenticated: false
     },
     getters: {
-        authAlert (state) {
-          return state.authAlert;
-        },
         // for auth
         access_token (state) {
           return state.access_token;
@@ -25,18 +21,9 @@ export default {
         loggedInUser: ({ loggedInUser }) => loggedInUser
     },
     mutations: {
-        setAuthAlert (state, authAlert) {
-          state.authAlert = null;
-          state.authAlert = authAlert;
-        },
         // for auth
         setAccessToken (state, accessToken) {
-        state.access_token = accessToken;
-        state.authAlert.open({
-          message: 'You are autorizeited!',
-          type: 'info',
-          duration: 5000
-        });
+            state.access_token = accessToken;
         },
         setLoggedInUser (state, user) {
             state.loggedInUser = null;
@@ -49,18 +36,6 @@ export default {
             state.access_token = '';
             state.loggedInUser = {};
             state.isAuthenticated = false;
-            state.authAlert.open({
-            message: 'You are unauthorized!',
-            type: 'info',
-            duration: 5000
-            });
-        },
-        AuthErrorMessage (state, message) {
-            state.authAlert.open({
-            message: message,
-            type: 'error',
-            duration: 5000
-            });
         }
     },
     actions: {
@@ -74,6 +49,7 @@ export default {
                 localStorage.setItem('token', response.data.token);
                 dispatch('fetchUser');
                 api();
+                dispatch('infoNotify', { message: 'You are autorizeited', place: 'auth' });
                 router.push({ path: '/' });
               }
             });
@@ -83,10 +59,11 @@ export default {
             if (Array.isArray(err.error)) {
               for (let i = 0; i < err.error.length; i++) {
                 const el = err.error[i];
-                commit('AuthErrorMessage', el.message);
+                dispatch('errorNotify', { message: el.message, place: 'auth' });
               }
             } else {
                 commit('AuthErrorMessage', err.error);
+                dispatch('errorNotify', { message: err.error, place: 'auth' });
               }
             }
           commit('onloadProcess');
@@ -97,9 +74,10 @@ export default {
           // eslint-disable-next-line dot-notation
           delete axios.defaults.headers.common['Authorization'];
           api();
+          dispatch('successNotify', { message: 'You are unauthorized', place: 'auth' });
           router.push({ path: '/' });
         },
-        fetchUser: async ({ commit }) => {
+        fetchUser: async ({ commit, dispatch }) => {
           const Url = `${API_URL}/auth/user`;
           try {
             await axios.get(Url).then(response => {
@@ -107,9 +85,9 @@ export default {
                 commit('setLoggedInUser', response.data);
               }
             });
-          } catch (e) {
+          } catch (error) {
             // error
-            commit('AuthErrorMessage', e.error);
+            dispatch('errorNotify', { message: error, place: 'auth' });
           }
         }
       }

@@ -45,7 +45,7 @@
         :isPostPage="isPostPage"
         :isLikePost="isLikePost"
         @set-likes="setLikes"
-        :key="likesCount"
+        :key="likesList.lenght"
      />
 </article>
 </template>

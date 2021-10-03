@@ -33,7 +33,6 @@
             Show all posts
           </q-btn>
     </div>
-    {{currentUserAvatar}}
 </div>
 </template>
 

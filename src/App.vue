@@ -6,6 +6,7 @@
         <router-view />
       </div>
     <app-loader v-if="isLoaderStatus" />
+    <app-notify />
   </div>
 </template>
 
@@ -13,22 +14,17 @@
 import AppLoader from './components/AppLoader';
 import AppHeader from './components/AppHeader.vue';
 import AppBreadcrumbs from './components/AppBreadcrumbs.vue';
+import AppNotify from '@/components/ui/AppNotify';
 
 export default {
   name: 'App',
   components: {
-    AppLoader, AppHeader, AppBreadcrumbs
+    AppLoader, AppHeader, AppBreadcrumbs, AppNotify
   },
   computed: {
     isLoaderStatus () {
       return this.$store.getters.loadProcess;
     }
-  },
-  created () {
-    this.$store.commit('setUserAlert', this.$toast);
-    this.$store.commit('setAuthAlert', this.$toast);
-    this.$store.commit('setPostAlert', this.$toast);
-    this.$store.commit('setCommentAlert', this.$toast);
   }
 };
 </script>

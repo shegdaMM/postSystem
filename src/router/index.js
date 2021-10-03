@@ -11,6 +11,7 @@ import UserById from '@/components/users/UserById.vue';
 import PostById from '@/views/posts/PostById';
 import PostEdit from '@/views/posts/PostEdit';
 import ThePostCreate from '@/views/posts/ThePostCreate';
+import NotFound from '@/views/NotFound';
 
 const routes = [
   {
@@ -136,6 +137,10 @@ const routes = [
         { name: 'Posts', link: '/posts' }
       ]
     }
+  },
+  {
+    path: '/:catchAll(.*)',
+    component: NotFound
   }
 ];
 
