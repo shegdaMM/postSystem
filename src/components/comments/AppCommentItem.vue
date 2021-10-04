@@ -75,4 +75,23 @@ export default {
     transform: rotate(180deg);
     color: #028165;
   }
+  @media screen and (max-width: 700px) {
+     .inner-comment {
+      position: relative;
+      margin-left: 0rem;
+    }
+    .inner-comment::before {
+      content: '\f0dd';
+      font-family: "Font Awesome 5 Free";
+      font-weight: 900;
+      position: absolute;
+      width: 1.5rem;
+      font-size: 1.5rem;
+      height: 1rem;
+      left: 0.5rem;
+      top: -1.4rem;
+      transform: none;
+      color: #028165;
+    }
+  }
 </style>

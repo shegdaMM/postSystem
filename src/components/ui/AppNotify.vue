@@ -1,5 +1,5 @@
 <template>
-    <div class="notify" style="display: block">{{this.notify}}</div>
+    <div class="notify" style="display: none"></div>
 </template>
 
 <script>

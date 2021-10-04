@@ -7,13 +7,15 @@
     v-if="postsObj"
     :minDate="firstPostMounth"
   />
-   <app-diagram-chartjs
+  <div class="diagram-show">
+     <app-diagram-chartjs
     class="diagramm"
     :key="upKey"
     :dataForDiagram="dataForDiagram"
     :options="options"
     v-if="currentDiagramData"
   />
+  </div>
 </div>
 </template>
 
@@ -86,7 +88,6 @@ export default {
           }
           const postObjArray = Object.keys(tempObjDate);
           const today = new Date().toISOString().split('T')[0];
-          console.log(postObjArray[0]);
           let possition = postObjArray[0];
           // eslint-disable-next-line no-new-wrappers
           while (possition !== today && possition) {
@@ -232,9 +233,15 @@ export default {
   .calendar {
       flex-grow: 1;
   }
-  .diagramm {
-      flex-grow: 2;
-  }
+}
+
+.diagram-show {
+    overflow-x: auto;
+    flex-grow: 2;
+
+    .diagramm {
+      min-width: 700px;
+    }
 }
 
 @media screen and (max-width: 1200px) {

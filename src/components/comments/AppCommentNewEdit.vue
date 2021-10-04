@@ -1,5 +1,5 @@
 <template>
-<div class="componens-create">
+<div class="componens-create" :key="keyUpdate">
     <comment-edit
         :startText="comment?.text || ''"
         @form-submit="modify"
@@ -20,7 +20,8 @@ export default {
     },
     data () {
         return {
-            debounce: null
+            debounce: null,
+            keyUpdate: 0
         };
     },
     emits: ['refresh-comment'],
@@ -40,8 +41,10 @@ export default {
         ...mapActions(['createComment', 'updateComment']),
         async modify (text) {
             if (this.comment) {
+                this.keyUpdate = this.keyUpdate + 1;
                 await this.updateComment({ id: this.comment._id, text: text });
             } else {
+                this.keyUpdate = this.keyUpdate + 1;
                 await this.createComment({ postID: this.postId, text: text, followedCommentID: this.followedCommentId || null });
             }
             this.$emit('refresh-comment');

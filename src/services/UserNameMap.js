@@ -40,7 +40,6 @@ export default class UserNameMap {
                 }
             });
         } catch (e) {
-            result = '';
         }
         return result;
     };
