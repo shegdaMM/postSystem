@@ -13,7 +13,7 @@
                     {{user[1].name || user[1].email}}
                 </a>
             </label>
-            <span @click="unSelectedUser" class="unCheckUserId" v-if="currentUser === user[0]"><i class="fas fa-times"></i></span>
+            <buttom @click="unSelectedUser" class="unCheckUserId" v-if="currentUser === user[0]"><i class="fas fa-times"></i></buttom>
        </li>
     </ul>
 </template>
@@ -31,7 +31,7 @@ export default {
     emits: ['filter'],
     data () {
         return {
-            selectedUser: this.currentUser
+            selectedUser: null
         };
     },
     computed: {
@@ -41,13 +41,31 @@ export default {
     },
     watch: {
         selectedUser () {
-            this.selectedUser ? this.$emit('filter', this.selectedUser) : this.$emit('filter');
+            if (this.selectedUser) {
+                this.$emit('filter', this.selectedUser);
+            } else {
+                this.$emit('filter');
+            }
+        },
+        currentUser () {
+            if (this.currentUser) {
+                this.selectedUser = this.currentUser;
+            } else {
+                this.selectedUser = null;
+            }
         }
     },
     methods: {
         unSelectedUser () {
             this.selectedUser = null;
         }
+    },
+    mounted () {
+       if (this.currentUser) {
+           this.selectedUser = this.currentUser;
+       } else {
+           this.selectedUser = null;
+       }
     }
 
 };

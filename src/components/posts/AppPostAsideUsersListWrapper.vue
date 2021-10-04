@@ -3,17 +3,17 @@
         <app-title-page>
             USERS LIST
         </app-title-page>
-        <app-users-list
+        <app-user-short-list
             :user-list="selectedUserList"
             :currentUser="selectedUser"
             @filter="setUser"
             />
-        <app-users-list
+        <app-user-short-list
             :user-list="currentList"
             @filter="setUser"
             :currentUser="selectedUser"
             />
-            <span v-if="!usersFullList">Loading...</span>
+        <span v-if="!usersFullList">Loading...</span>
         <pagination
             @list-update="setPage"
             :listSize="usersFullList.length"
@@ -28,13 +28,12 @@
 import AppTitlePage from '../ui/AppTitlePage.vue';
 import Pagination from '../ui/pagination.vue';
 import UserNameMap from '@/services/UserNameMap';
-import AppUsersList from '../users/AppUserShortList.vue';
-
+import AppUserShortList from '@/components/users/AppUserShortList';
 export default {
     components: {
         Pagination,
         AppTitlePage,
-        AppUsersList
+        AppUserShortList
     },
     emits: ['filter-user'],
     data () {
@@ -67,6 +66,7 @@ export default {
             this.page = +(data?.page);
         },
         setUser (userId) {
+            console.log('----');
             if (userId) {
                 this.userId = userId;
                 this.$emit('filter-user', userId);
