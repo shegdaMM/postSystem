@@ -4,12 +4,17 @@
     v-if="comment"
     :comment="comment"
     :postId="postId"
+    :showInnerComment="showInnerComment === 'show'"
+    :isHaveInnerComments="hasChildren"
     @comment-update="this.$emit('comment-update');"
+    @toggle-inner="toggleInnerComments"
   />
-    <div
+   <div
         v-if="hasChildren"
-    >
+   >
     <app-comment-item
+                v-show="showInnerComment === 'show'"
+                :isShowInnerComments="isShowInnerComments"
                 class="inner-comment"
                 v-for="item of comment.children"
                 :key="item._id"
@@ -32,7 +37,8 @@ export default {
     },
     data () {
         return {
-          keyInList: 0
+          keyInList: 0,
+          showInnerComment: 'hide'
         };
     },
     emits: ['comment-update'],
@@ -44,6 +50,10 @@ export default {
         postId: {
             type: String,
             required: true
+        },
+        isShowInnerComments: {
+          type: Boolean,
+          default: false
         }
     },
     computed: {
@@ -53,6 +63,16 @@ export default {
       hasChildren () {
         return this.comment.children.length > 0;
       }
+    },
+    watch: {
+      isShowInnerComments () {
+          this.showInnerComment = this.isShowInnerComments;
+      }
+    },
+    methods: {
+      toggleInnerComments () {
+        this.showInnerComment = this.showInnerComment === 'show' ? 'hide' : 'show';
+      }
     }
 };
 </script>
@@ -61,19 +81,6 @@ export default {
   .inner-comment {
     position: relative;
     margin-left: 1.5rem;
-  }
-  .inner-comment::before {
-    content: '\f3e5';
-    font-family: "Font Awesome 5 Free";
-    font-weight: 900;
-    position: absolute;
-    width: 1.25rem;
-    font-size: 1rem;
-    height: 1rem;
-    left: -1.5rem;
-    top: -0.2rem;
-    transform: rotate(180deg);
-    color: #028165;
   }
   @media screen and (max-width: 700px) {
      .inner-comment {

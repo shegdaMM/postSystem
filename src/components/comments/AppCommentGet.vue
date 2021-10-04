@@ -6,8 +6,13 @@
             v-if="this.$store.getters.isAuthenticated"
             @refresh-comment="getCommentsByPost({ postID: this.postId })"
         />
+        <div class="inner-comments-control-toggle">
+            <q-radio v-model="toggle" val="show" label="Show inners" />
+            <q-radio v-model="toggle" val="hide" label="Hide inners" />
+        </div>
         <section class="comments">
             <app-comment-item
+                :isShowInnerComments="toggle"
                 v-for="comment in comments"
                 :key="comment._id"
                 :comment="comment"
@@ -29,7 +34,8 @@ export default {
     },
     data () {
         return {
-            reload: 0
+            reload: 0,
+            toggle: 'hide'
         };
     },
     props: {

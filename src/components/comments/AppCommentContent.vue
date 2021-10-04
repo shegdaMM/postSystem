@@ -59,6 +59,9 @@
         :followedCommentId="comment._id"
         @refresh-comment="this.newComment=false, this.$emit('comment-update');"
       />
+    <button class="show-inner-comments" @click="toogleInnerComment" v-if="isHaveInnerComments">
+      <i class="fas" :class="{ 'fa-minus-square': showInnerComment, 'fa-plus-square': !showInnerComment}"></i>
+    </button>
   </article>
 </template>
 <script>
@@ -79,9 +82,17 @@ export default {
         postId: {
             type: String,
             required: true
+        },
+        showInnerComment: {
+            type: Boolean,
+            default: false
+        },
+        isHaveInnerComments: {
+            type: Boolean,
+            default: false
         }
     },
-    emits: ['comment-update'],
+    emits: ['comment-update', 'toggle-inner'],
     data () {
         return {
             UserNameMap: UserNameMap,
@@ -168,6 +179,9 @@ export default {
                 });
                 }
             }
+        },
+        toogleInnerComment () {
+            this.$emit('toggle-inner');
         }
     },
     async mounted () {
@@ -188,9 +202,25 @@ export default {
 <style lang="scss" scoped>
 .commentsItem__wrapper{
     background: rgba(255, 255, 255, 0.411);
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 1.5rem 0.5rem;
     margin-bottom: 0.25rem;
     border-radius: 0.5rem;
+}
+.show-inner-comments {
+    background: transparent;
+    border: none;
+    position: absolute;
+
+    i {
+        font-weight: 900;
+        width: 1.2rem;
+        font-size: 1.2rem;
+        height: 1rem;
+        left: 0.5rem;
+        top: -1.4rem;
+        transform: none;
+        color: #028165;
+    }
 }
 .comment-body {
     .control {
