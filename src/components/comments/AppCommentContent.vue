@@ -36,7 +36,7 @@
                 :postId="postId"
                 :followedCommentId="comment._id"
                 :comment="comment"
-                @refresh-comment="this.editComment = false, this.$emit('comment-update');"
+                @refresh-comment="updateComment"
             />
         </template>
         </div>
@@ -148,6 +148,10 @@ export default {
             .onOk(() => {
                 this.removeCommentProcess();
             });
+        },
+        updateComment () {
+            this.editComment = false;
+            this.$emit('comment-update');
         },
         async removeCommentProcess () {
             await this.deleteComment({ id: this.comment._id });

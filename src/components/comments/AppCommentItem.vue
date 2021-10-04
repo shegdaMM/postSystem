@@ -6,7 +6,7 @@
     :postId="postId"
     :showInnerComment="showInnerComment === 'show'"
     :isHaveInnerComments="hasChildren"
-    @comment-update="this.$emit('comment-update');"
+    @comment-update="updateComments"
     @toggle-inner="toggleInnerComments"
   />
    <div
@@ -20,7 +20,7 @@
                 :key="item._id"
                 :comment="item"
                 :postId="postId"
-                @comment-update="this.$emit('comment-update');"
+                @comment-update="updateComments"
     />
     </div>
 </div>
@@ -72,6 +72,10 @@ export default {
     methods: {
       toggleInnerComments () {
         this.showInnerComment = this.showInnerComment === 'show' ? 'hide' : 'show';
+      },
+      updateComments () {
+        this.showInnerComment = 'show';
+        this.$emit('comment-update');
       }
     }
 };
