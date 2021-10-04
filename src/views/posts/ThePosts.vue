@@ -12,7 +12,9 @@
           />
         </div>
         <div class="asideList">
-          <app-posts-aside @filter="setFilter" :currentFilter="filters"/>
+          <app-posts-aside
+            @filter="setFilter"
+            :currentFilter="filters"/>
         </div>
       <pagination
         :itemOnPage="itemOnPage"

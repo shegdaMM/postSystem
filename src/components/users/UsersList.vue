@@ -8,10 +8,11 @@
             v-if="user._id"
             @user-update="$emit('user-update')"/>
           <span class="user-item-link"
-            @click="routeToUserProfilePage">
+            @click="routeToUserProfilePage(user._id)">
             More
           </span>
         </div>
+        {{users}}
   </section>
 </template>
 
@@ -26,8 +27,8 @@ export default {
   },
   emits: ['user-update'],
   methods: {
-    routeToUserProfilePage () {
-      this.$router.push({ name: 'UserById', params: { uid: this.user._id } });
+    routeToUserProfilePage (id) {
+      this.$router.push({ name: 'UserById', params: { uid: id } });
     }
   }
 };
@@ -59,6 +60,7 @@ export default {
       font-family: "Bebas Neue", cursive;
       font-size: 1.2rem;
       color: #00af89;
+      cursor: pointer;
       clip-path: polygon(0 1rem, 1rem 0, 100% 0, 100% calc(100% - 1rem), calc(100% - 1rem) 100%, 0 100%);
     }
 

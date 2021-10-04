@@ -1,5 +1,5 @@
 <template>
-    <aside>
+    <aside class="aside">
         <template v-if="!statusAside">
         <div class="posts-control posts-control--hidden">
             <a @click="toggleAsidePanel">
@@ -10,8 +10,7 @@
             </a>
         </div>
         </template>
-        <template v-if="statusAside">
-        <div class="posts-control posts-control--show">
+        <div class="posts-control posts-control--show" v-show="statusAside">
             <a @click="toggleAsidePanel" class="hide-btn">
                 <div><i class="fas fa-chevron-right"></i></div>
             </a>
@@ -29,7 +28,6 @@
                 :currentUser="postedBy"
             />
         </div>
-        </template>
     </aside>
 </template>
 
@@ -95,6 +93,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+    .aside {
+        position: relative;
+    }
     .active {
         color: rgba(255, 0, 0, 0.856);
     }
@@ -136,6 +137,7 @@ export default {
         .posts-control--show {
             position: absolute;
             right: 0;
+            min-width: 300px;
             .hide-btn {
                 height: auto;
             }
