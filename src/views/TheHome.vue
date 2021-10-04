@@ -15,7 +15,7 @@
 
 <script>
 import AppTitlePage from '@/components/ui/AppTitlePage';
-import AppLastPosts from './posts/AppLastPosts.vue';
+import AppLastPosts from '../components/posts/AppLastPosts.vue';
 // import AppStatistics from '@/components/AppStatistics';
 import AppPostsDateDiagram from '@/components/AppPostsDateDiagram';
 

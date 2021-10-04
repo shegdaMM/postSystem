@@ -15,7 +15,7 @@
 <script>
 import AppPost from '@/components/posts/AppPost';
 import { mapGetters, mapActions } from 'vuex';
-import AppComments from '../comments/AppComments.vue';
+import AppComments from '@/components/comments/AppComments';
 
 export default {
     name: 'PostById',

@@ -28,7 +28,7 @@
 <script>
 import Pagination from '../../components/ui/pagination.vue';
 import { mapGetters, mapActions } from 'vuex';
-import PostList from '@/views/posts/PostList';
+import PostList from '@/components/posts/PostList';
 import AppPostsAside from '@/components/posts/AppPostsAside';
 import AppTitlePage from '../../components/ui/AppTitlePage.vue';
 

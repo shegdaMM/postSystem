@@ -20,7 +20,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex';
 import PostById from '@/views/posts/PostById';
-import FullWidthButtom from '../../components/ui/fullWidthButtom.vue';
+import FullWidthButtom from '../ui/fullWidthButtom.vue';
 
 export default {
     components: {
