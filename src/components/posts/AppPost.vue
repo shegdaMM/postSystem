@@ -217,7 +217,6 @@ a {
         .post__image-wrapper {
             max-width: 300px;
             margin: 0 0.5rem 0rem;
-            height: 100%;
             flex-basis: 250px;
             flex-grow: 1;
             flex-shrink: 1;
