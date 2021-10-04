@@ -60,7 +60,8 @@
         @refresh-comment="this.newComment=false, this.$emit('comment-update');"
       />
     <button class="show-inner-comments" @click="toogleInnerComment" v-if="isHaveInnerComments">
-      <i class="fas" :class="{ 'fa-minus-square': showInnerComment, 'fa-plus-square': !showInnerComment}"></i>
+        <i class="fas" :class="{ 'fa-minus-square': showInnerComment, 'fa-plus-square': !showInnerComment}"></i>
+        <span class="count"> {{innerCounter}}</span>
     </button>
   </article>
 </template>
@@ -90,6 +91,10 @@ export default {
         isHaveInnerComments: {
             type: Boolean,
             default: false
+        },
+        innerCounter: {
+            type: Number,
+            default: 0
         }
     },
     emits: ['comment-update', 'toggle-inner'],
@@ -214,6 +219,11 @@ export default {
     background: transparent;
     border: none;
     position: absolute;
+    width: 2rem;
+
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
     i {
         font-weight: 900;
@@ -224,6 +234,12 @@ export default {
         top: -1.4rem;
         transform: none;
         color: #028165;
+    }
+
+    .count {
+        font-size: 0.8rem;
+        color: #028165;
+
     }
 }
 .comment-body {

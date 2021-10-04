@@ -8,6 +8,7 @@
     :isHaveInnerComments="hasChildren"
     @comment-update="updateComments"
     @toggle-inner="toggleInnerComments"
+    :innerCounter="this.comment.children.length"
   />
    <div
         v-if="hasChildren"
