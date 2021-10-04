@@ -51,6 +51,7 @@
         @set-likes="setLikes"
         @add-comment="showNew"
         :key="likesList.lenght"
+        :isRequest=" isRequest"
       />
       <app-comment-new-edit
         v-if="newComment"
@@ -87,7 +88,8 @@ export default {
             commentedBy: '',
             likes: {},
             newComment: false,
-            editComment: false
+            editComment: false,
+            isRequest: false
         };
     },
     computed: {
@@ -143,7 +145,13 @@ export default {
         async setLikes () {
             if (this.likes) {
                 if (!(this.$store.getters.loggedInUser?._id === this.comment?.commentedBy)) {
-                    const result = await this.likeToComment({ id: this.comment._id });
+                    let result = null;
+                    try {
+                        this.isRequest = true;
+                        result = await await this.likeToComment({ id: this.comment._id });
+                    } finally {
+                        this.isRequest = false;
+                    }
                     if (result) {
                         // this.$emit('comment-update');
                          if (this.likes[this.$store.getters.loggedInUser?._id]) {

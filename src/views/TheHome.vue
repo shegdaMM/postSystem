@@ -32,10 +32,11 @@ export default {
       name: 'Home'
     };
   },
+  created () {
+  },
   mounted () {
-    /* this.$nextTick(function () {
-      this.$store.commit('onloadProcess');
-    }); */
+    this.$nextTick(function () {
+    });
   }
 };
 </script>

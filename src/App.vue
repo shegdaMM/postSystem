@@ -64,4 +64,9 @@ export default {
     width: 100%;
     margin: 0 auto;
   }
+  // transition
+  .moveInUp-enter-active {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+  }
 </style>

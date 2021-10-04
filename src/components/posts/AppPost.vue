@@ -46,6 +46,7 @@
         :isLikePost="isLikePost"
         @set-likes="setLikes"
         :key="likesList.lenght"
+        :isRequest=" isRequest"
      />
 </article>
 </template>
@@ -63,7 +64,8 @@ export default {
             showLikes: false,
             UserNameMap: UserNameMap,
             postedBy: '',
-            likes: {}
+            likes: {},
+            isRequest: false
         };
     },
     props: {
@@ -124,7 +126,13 @@ export default {
         async setLikes () {
             if (this.likes) {
                 if (!(this.$store.getters.loggedInUser?._id === this.post?.postedBy)) {
-                    const result = await this.likeToPost({ id: this.post._id });
+                    let result = null;
+                    try {
+                        this.isRequest = true;
+                        result = await this.likeToPost({ id: this.post._id });
+                    } finally {
+                        this.isRequest = false;
+                    }
                     if (result) {
                         // this.$emit('post-update');
                         if (this.likes[this.$store.getters.loggedInUser?._id]) {

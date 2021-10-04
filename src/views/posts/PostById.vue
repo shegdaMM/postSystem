@@ -48,8 +48,6 @@ export default {
             return result;
         }
     },
-    watch: {
-    },
     methods: {
         ...mapActions(['getPostById', 'clearCurrentPost']),
         removePostDialog () {
