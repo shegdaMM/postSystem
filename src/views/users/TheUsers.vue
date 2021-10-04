@@ -42,6 +42,7 @@ export default {
         limit: this.itemOnPage,
         skip: this.currentItem - 1
       });
+      window.scrollTo(0, 0);
     }
   },
   async mounted () {

@@ -93,6 +93,7 @@ export default {
           search: this.filters?.search || null,
           postedBy: this.filters?.postedBy || null
       });
+      window.scrollTo(0, 0);
     }
   },
   async mounted () {
