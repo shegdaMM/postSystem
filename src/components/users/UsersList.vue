@@ -12,7 +12,6 @@
             More
           </span>
         </div>
-        {{users}}
   </section>
 </template>
 
