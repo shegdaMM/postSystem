@@ -2,8 +2,13 @@
   <div class="app-wrapper">
     <app-header />
       <div id="page-container">
-        <app-breadcrumbs />
-        <router-view />
+          <app-breadcrumbs />
+          <!-- <router-view /> -->
+         <router-view v-slot="{ Component }">
+          <transition name="scale" mode="out-in">
+            <component :is="Component" />
+          </transition>
+        </router-view>
       </div>
     <app-loader v-if="isLoaderStatus" />
     <app-notify />
@@ -18,6 +23,10 @@ import AppNotify from '@/components/ui/AppNotify';
 
 export default {
   name: 'App',
+  data () {
+    return {
+    };
+  },
   components: {
     AppLoader, AppHeader, AppBreadcrumbs, AppNotify
   },
@@ -65,8 +74,14 @@ export default {
     margin: 0 auto;
   }
   // transition
-  .moveInUp-enter-active {
-    opacity: 0;
-    transition: opacity 1s ease-in;
-  }
+  .scale-enter-active,
+.scale-leave-active {
+  transition: all 0.5s ease;
+}
+
+.scale-enter-from,
+.scale-leave-to {
+  opacity: 0;
+  transform: scale(0.9);
+}
 </style>
